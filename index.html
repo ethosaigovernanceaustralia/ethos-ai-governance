@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ethos AI Governance — Australia's AI Management System Standard</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <!-- Preconnect Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-glow" id="cursor"></div>
+
+<!-- Navigation -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="#home" class="nav-logo" onclick="navigate('home')">
+      <img src="assets/logo.svg" alt="Ethos AI Governance" style="height:80px;width:auto"/>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home" data-page="home" onclick="navigate('home'); return false;">Home</a></li>
+      <li><a href="#services" data-page="services" onclick="navigate('services'); return false;">Services</a></li>
+      <li><a href="#compliance" data-page="compliance" onclick="navigate('compliance'); return false;">Compliance Coverage</a></li>
+      <li><a href="#contact" data-page="contact" onclick="navigate('contact'); return false;">Contact</a></li>
+    </ul>
+    <button class="btn-nav" onclick="navigate('contact')">Book a Consultation</button>
+    <div class="nav-toggle" id="navToggle" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#home" onclick="navigate('home'); closeMobileNav();">Home</a>
+  <a href="#services" onclick="navigate('services'); closeMobileNav();">Services</a>
+  <a href="#compliance" onclick="navigate('compliance'); closeMobileNav();">Compliance Coverage</a>
+  <a href="#contact" onclick="navigate('contact'); closeMobileNav();">Contact</a>
+</div>
+
+<!-- App Shell -->
+<div id="app">
+
+  <!-- ===========================
+       HOME PAGE
+  ============================ -->
+  <div id="page-home" class="page">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-eyebrow reveal">
+          <span class="label-eyebrow">— AI Governance Standard —</span>
+        </div>
+        <h1 class="reveal" style="transition-delay:0.1s">
+          The AI Management System Standard for Australian Business
+        </h1>
+        <p class="hero-sub reveal" style="transition-delay:0.2s">
+          Ethos implements ISO/IEC 42001:2023 so your organisation is governed, compliant, and enterprise-ready.
+        </p>
+        <div class="hero-ctas reveal" style="transition-delay:0.3s">
+          <button class="btn-primary" onclick="navigate('contact')">
+            Book a Consultation
+            <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+          </button>
+          <button class="btn-outline" onclick="navigate('home')">Learn about ISO 42001</button>
+        </div>
+
+        <!-- Interactive ISO 42001 Journey Dashboard -->
+        <div class="mockup-wrapper reveal" style="transition-delay:0.4s;max-width:560px">
+          <div class="mockup-glow"></div>
+          <div class="journey-dashboard">
+
+            <!-- Header -->
+            <div class="jd-header">
+              <span class="jd-eyebrow">Your ISO 42001 Journey</span>
+              <div class="jd-score-pill" id="jdOverallScore">
+                <span class="material-symbols-outlined" style="font-size:0.875rem;font-variation-settings:'FILL' 1">trending_up</span>
+                On Track
+              </div>
+            </div>
+
+            <!-- Timeline Steps -->
+            <div class="jd-timeline">
+
+              <!-- Step 1: Complete -->
+              <div class="jd-step complete" data-step="1">
+                <div class="jd-step-left">
+                  <div class="jd-node complete">
+                    <span class="material-symbols-outlined" style="font-size:1rem;font-variation-settings:'FILL' 1,'wght' 700">check</span>
+                  </div>
+                  <div class="jd-connector"></div>
+                </div>
+                <div class="jd-step-body">
+                  <div class="jd-step-top">
+                    <div>
+                      <p class="jd-step-title">Gap Assessment</p>
+                      <p class="jd-step-sub">12 gaps identified across 6 clauses</p>
+                    </div>
+                    <span class="jd-badge complete">Complete</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 2: Active -->
+              <div class="jd-step active" data-step="2">
+                <div class="jd-step-left">
+                  <div class="jd-node active">2</div>
+                  <div class="jd-connector"></div>
+                </div>
+                <div class="jd-step-body">
+                  <div class="jd-step-top">
+                    <div>
+                      <p class="jd-step-title active">Implementation <span style="color:var(--brass)">— Active</span></p>
+                      <p class="jd-step-sub">Policies, controls, risk registers in progress</p>
+                    </div>
+                  </div>
+                  <!-- Progress bar -->
+                  <div class="jd-progress-wrap" style="margin-top:0.75rem">
+                    <div class="jd-progress-bar">
+                      <div class="jd-progress-fill" id="implProgress" style="width:0%"></div>
+                    </div>
+                    <span class="jd-progress-label" id="implLabel">65% complete</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3: Pending -->
+              <div class="jd-step pending" data-step="3">
+                <div class="jd-step-left">
+                  <div class="jd-node pending">3</div>
+                  <div class="jd-connector"></div>
+                </div>
+                <div class="jd-step-body">
+                  <div class="jd-step-top">
+                    <div>
+                      <p class="jd-step-title pending">Internal Audit</p>
+                      <p class="jd-step-sub">Verify conformance against ISO 42001</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 4: Pending -->
+              <div class="jd-step pending last" data-step="4">
+                <div class="jd-step-left">
+                  <div class="jd-node pending">4</div>
+                </div>
+                <div class="jd-step-body">
+                  <div class="jd-step-top">
+                    <div>
+                      <p class="jd-step-title pending">Certified Ready</p>
+                      <p class="jd-step-sub">Full audit-ready AIMS delivered</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /timeline -->
+
+            <!-- Active Clauses -->
+            <div class="jd-clauses">
+              <p class="jd-clauses-label">Active Clauses</p>
+              <div class="jd-clause-list">
+
+                <div class="jd-clause done">
+                  <div class="jd-clause-check done">
+                    <span class="material-symbols-outlined" style="font-size:0.75rem;font-variation-settings:'FILL' 1,'wght' 700">check</span>
+                  </div>
+                  <span class="jd-clause-text">AI risk register established</span>
+                  <span class="jd-clause-pill">Clause 6.1</span>
+                </div>
+
+                <div class="jd-clause done">
+                  <div class="jd-clause-check done">
+                    <span class="material-symbols-outlined" style="font-size:0.75rem;font-variation-settings:'FILL' 1,'wght' 700">check</span>
+                  </div>
+                  <span class="jd-clause-text">Responsible AI use policy</span>
+                  <span class="jd-clause-pill">Clause 5.2</span>
+                </div>
+
+                <div class="jd-clause inprogress">
+                  <div class="jd-clause-check inprogress">
+                    <span style="display:block;width:8px;height:8px;border-radius:50%;background:var(--brass)"></span>
+                  </div>
+                  <span class="jd-clause-text" style="color:var(--brass);font-weight:500">AI system inventory</span>
+                  <span class="jd-clause-pill inprogress">In progress</span>
+                </div>
+
+              </div>
+            </div>
+
+          </div><!-- /journey-dashboard -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="trust-bar">
+      <div class="container">
+        <p class="trust-bar-label">Trusted Regulatory Frameworks</p>
+        <div class="trust-track stagger-children">
+          <span class="trust-item">🇦🇺 Privacy Act</span>
+          <span class="trust-item">ISO/IEC 42001</span>
+          <span class="trust-item">🇪🇺 EU AI Act</span>
+          <span class="trust-item">NIST AI RMF</span>
+          <span class="trust-item">SOC 2</span>
+          <span class="trust-item">🇬🇧 UK ICO</span>
+          <span class="trust-item">🇺🇸 FTC Guidance</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header centered reveal">
+          <h2>One Engagement. Complete AI Governance.</h2>
+          <p>From gap assessment to certified-ready — Ethos delivers your entire AI Management System in a single structured engagement.</p>
+        </div>
+        <div class="service-cards stagger-children">
+          <div class="service-card" onclick="navigate('services')">
+            <div>
+              <span class="material-symbols-outlined service-card-icon">account_balance</span>
+              <h3>ISO 42001 Implementation</h3>
+            </div>
+            <p>Build your full AI Management System from the ground up, tailored to Australian operational realities.</p>
+          </div>
+          <div class="service-card" onclick="navigate('services')">
+            <div>
+              <span class="material-symbols-outlined service-card-icon">rule</span>
+              <h3>Compliance Audit</h3>
+            </div>
+            <p>Assess and close every gap with technical precision and legal clarity against international standards.</p>
+          </div>
+          <div class="service-card" onclick="navigate('services')">
+            <div>
+              <span class="material-symbols-outlined service-card-icon">assignment_turned_in</span>
+              <h3>Remediation Plan</h3>
+            </div>
+            <p>Prescribe exactly what needs to change with actionable, prioritized roadmaps for engineering and legal teams.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Methodology Accordion -->
+    <section class="section methodology">
+      <div class="container">
+        <div class="methodology-grid">
+          <div>
+            <div class="reveal">
+              <span class="label-eyebrow">— The Methodology —</span>
+              <h2 style="margin-top:1rem;font-size:clamp(2rem,4vw,3rem);color:var(--navy);font-weight:600;max-width:440px">
+                End-to-End Governance At Every Stage
+              </h2>
+            </div>
+            <ul class="method-steps" id="methodSteps" style="margin-top:2.5rem">
+              <li class="method-step open reveal" data-index="0" style="transition-delay:0.1s">
+                <div class="step-header" onclick="toggleStep(0)">
+                  <span class="step-num">01</span>
+                  <span class="step-title">Gap Assessment</span>
+                </div>
+                <div class="step-body">Comprehensive mapping of existing processes against ISO/IEC 42001 requirements to identify critical exposures and governance deficits.</div>
+              </li>
+              <li class="method-step reveal" data-index="1" style="transition-delay:0.15s">
+                <div class="step-header" onclick="toggleStep(1)">
+                  <span class="step-num">02</span>
+                  <span class="step-title">Framework Design</span>
+                </div>
+                <div class="step-body">Developing bespoke policies, risk registers, and control mechanisms tailored to your unique AI deployment and business context.</div>
+              </li>
+              <li class="method-step reveal" data-index="2" style="transition-delay:0.2s">
+                <div class="step-header" onclick="toggleStep(2)">
+                  <span class="step-num">03</span>
+                  <span class="step-title">Implementation</span>
+                </div>
+                <div class="step-body">Embedding governance controls into operational workflows, technical systems, and team processes with hands-on support.</div>
+              </li>
+              <li class="method-step reveal" data-index="3" style="transition-delay:0.25s">
+                <div class="step-header" onclick="toggleStep(3)">
+                  <span class="step-num">04</span>
+                  <span class="step-title">Internal Audit</span>
+                </div>
+                <div class="step-body">Structured internal audit process to verify compliance readiness against the standard's requirements before external certification.</div>
+              </li>
+              <li class="method-step reveal" data-index="4" style="transition-delay:0.3s">
+                <div class="step-header" onclick="toggleStep(4)">
+                  <span class="step-num">05</span>
+                  <span class="step-title">Remediation</span>
+                </div>
+                <div class="step-body">Targeted corrective actions and continuous improvement cycles to close identified gaps and strengthen governance posture.</div>
+              </li>
+              <li class="method-step reveal" data-index="5" style="transition-delay:0.35s">
+                <div class="step-header" onclick="toggleStep(5)">
+                  <span class="step-num">06</span>
+                  <span class="step-title">International Mapping</span>
+                </div>
+                <div class="step-body">Cross-jurisdictional alignment mapping your AI governance to EU AI Act, NIST, UK ICO, and FTC requirements simultaneously.</div>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Quote Panel -->
+          <div class="quote-panel reveal-right">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3wnnrquDhtX4_-FGCc3xrIpi9M6RfTZR-wFmnrJFGvWGHjKFoUlnN7ziXG2dxFm36C8EXpZiLuP_DLgx1qJ2jsh6uq2GN_ncKxZYpWA16j_iIxCNtXdnn6iij-4Jnm7QljVzz98sa82jNfnWZZ6y5D6_9258tKT-4onrOVGjTKOwzpwhCa32p17R7gKaSttatjQk0B2VacajP-hXERL_qJj3XKBCcZrWNbJwdRUQpROr_qqQ7EvrRojZsJLK37_2k5_FY2iUP4Ag"
+              alt="Governance visualization"
+            />
+            <div class="quote-overlay">
+              <div class="quote-glass">
+                <blockquote>"Trust is not given; it is computed, audited, and verified."</blockquote>
+                <div class="quote-rule"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Ethos -->
+    <section class="section">
+      <div class="container">
+        <div class="why-grid stagger-children">
+          <div class="why-item">
+            <span class="material-symbols-outlined why-icon">verified</span>
+            <h5>ISO Specialists</h5>
+            <p>Dedicated focus on the 42001 standard for specialized implementation depth.</p>
+          </div>
+          <div class="why-item">
+            <span class="material-symbols-outlined why-icon">gavel</span>
+            <h5>Legal Context</h5>
+            <p>Deep understanding of the Australian Privacy Act and upcoming AI regulations.</p>
+          </div>
+          <div class="why-item">
+            <span class="material-symbols-outlined why-icon">terminal</span>
+            <h5>Tech First</h5>
+            <p>Our consultants are AI-literate, understanding underlying LLM architecture.</p>
+          </div>
+          <div class="why-item">
+            <span class="material-symbols-outlined why-icon">public</span>
+            <h5>Global Ready</h5>
+            <p>Alignment with EU AI Act and NIST ensures your business can scale globally.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Industry Tabs -->
+    <section class="section" style="background:white;border-top:0.5px solid rgba(196,198,207,0.2);border-bottom:0.5px solid rgba(196,198,207,0.2)">
+      <div class="container">
+        <div class="section-header centered reveal">
+          <h2>Specialised Governance Support</h2>
+        </div>
+        <div class="industry-tabs-nav">
+          <button class="tab-btn active" onclick="switchTab('ai-startups')">AI Startups</button>
+          <button class="tab-btn" onclick="switchTab('enterprise')">Enterprise</button>
+          <button class="tab-btn" onclick="switchTab('financial')">Financial Services</button>
+          <button class="tab-btn" onclick="switchTab('health')">Health &amp; Government</button>
+        </div>
+
+        <!-- Tab: AI Startups -->
+        <div class="tab-panel active" id="tab-ai-startups">
+          <div class="tab-content">
+            <h3>Accelerate Venture Acceptance</h3>
+            <p>For AI-native startups, ISO 42001 is the ultimate 'license to operate' in enterprise markets. We help you bake governance into your product development lifecycle, reducing sales friction with Fortune 500 legal teams.</p>
+            <ul class="checklist">
+              <li><span class="material-symbols-outlined">check_circle</span> Technical Guardrail Implementation</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Model Documentation &amp; Transparency Reports</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Enterprise Procurement Readiness</li>
+            </ul>
+          </div>
+          <div class="tab-image">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcpzSIvrqMP6bUipdlQZVt7Bmexcds-8SYEMtc66z4OQ0TIAVPtTEhFoRi07Q3YVdxqOSvisxChLesOuRWAncYERoRZX7iF3JCZR-9qqmzByCDSLTUdyRhpdy0rKBIA3sCtyQBWhIdGYmS2NyC9z8ytU7jwh7GJgBaSZ36HqkCt1iGlf18MhvGIw_KXiAfq8ZLGv7q7MxaTMfz4xVMVb4Js_M_FKslHNKjbNd2K2olWaajFH83lEBhgcGwnCw-Q13SWbjKXfbMg7s" alt="AI Startup team"/>
+          </div>
+        </div>
+
+        <!-- Tab: Enterprise -->
+        <div class="tab-panel" id="tab-enterprise">
+          <div class="tab-content">
+            <h3>Enterprise-Scale Governance</h3>
+            <p>For large organisations deploying AI across multiple business units, we provide scalable governance frameworks that satisfy board-level accountability requirements and external audit obligations.</p>
+            <ul class="checklist">
+              <li><span class="material-symbols-outlined">check_circle</span> Multi-Jurisdiction Compliance Mapping</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Board-Level Reporting Frameworks</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Vendor Ecosystem Governance</li>
+            </ul>
+          </div>
+          <div class="tab-image">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQHJ6C3rHzh3fnn2M5RZvWpiSsE66gA_Gj_szNKSES6vGPYcUjK01udJ5nMOU-Ijee2JkjSyqtzNliSZkyWXTev2v5B3GB8ZxVHDzTsBV1L6-3kQtyX046cLcWYtczB2663KlcltzKOMBoRlWPurHlChx_C8_So1sz6YwmpFqBQyeddiBFWw9olPQ-JkYoo1T_HFJjdHfcWNCw_M9Owuu6koFK_ScuAs2jtYB1P2hUq_g-Jid-S-52aZZJl2Dr67gHhBwmK45NdOE" alt="Enterprise office"/>
+          </div>
+        </div>
+
+        <!-- Tab: Financial -->
+        <div class="tab-panel" id="tab-financial">
+          <div class="tab-content">
+            <h3>Regulated Industry Precision</h3>
+            <p>Financial services organisations face dual regulatory exposure — prudential regulation and AI governance. Ethos maps your AI systems across APRA, ASIC, and ISO 42001 simultaneously.</p>
+            <ul class="checklist">
+              <li><span class="material-symbols-outlined">check_circle</span> APRA CPS 230 Alignment</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Algorithmic Bias Testing Frameworks</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Consumer Duty Compliance</li>
+            </ul>
+          </div>
+          <div class="tab-image">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZv1-YDeNnEvkAzCD6p-Qie0srNCf8v7xo7A12wZn6g9_5vDeB7Xi73rUqDwTfYWVp8Wnhn6wPv77Lhropwd9dCP7Vk3VfexwAnL_nsOHfFu5Wa1IuIdc4sShgOQs93EuHbgLO1PgbwhDD6bMzGnuCU4i4u4rw0VoyOeqqk3MDglPhDf1hBFFbfBqhw_JQ2SexxxyyUL7Ik5fjgoPzCh964ci0cYeDvxAxt5IyRjuKPod5IS52qSdDmWfmt0hJnNqHMjB7lIx840" alt="Financial district"/>
+          </div>
+        </div>
+
+        <!-- Tab: Health -->
+        <div class="tab-panel" id="tab-health">
+          <div class="tab-content">
+            <h3>Mission-Critical AI Safety</h3>
+            <p>Healthcare AI and government deployment require the highest standards of explainability, bias mitigation, and safety validation. We build governance structures fit for life-affecting algorithmic decisions.</p>
+            <ul class="checklist">
+              <li><span class="material-symbols-outlined">check_circle</span> TGA AI as Medical Device Alignment</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Public Sector Ethics Compliance</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Explainability &amp; Audit Trail Systems</li>
+            </ul>
+          </div>
+          <div class="tab-image">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3wnnrquDhtX4_-FGCc3xrIpi9M6RfTZR-wFmnrJFGvWGHjKFoUlnN7ziXG2dxFm36C8EXpZiLuP_DLgx1qJ2jsh6uq2GN_ncKxZYpWA16j_iIxCNtXdnn6iij-4Jnm7QljVzz98sa82jNfnWZZ6y5D6_9258tKT-4onrOVGjTKOwzpwhCa32p17R7gKaSttatjQk0B2VacajP-hXERL_qJj3XKBCcZrWNbJwdRUQpROr_qqQ7EvrRojZsJLK37_2k5_FY2iUP4Ag" alt="Healthcare"/>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+      <div style="position:relative;z-index:1">
+        <h2 class="font-headline reveal">The #1 ISO 42001 Implementation Partner for Australian Business</h2>
+        <button class="btn-primary btn-brass reveal" onclick="navigate('contact')" style="transition-delay:0.1s">
+          Book a Consultation
+          <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+        </button>
+        <p class="reveal" style="transition-delay:0.2s">Certified compliance starts here.</p>
+      </div>
+    </section>
+
+  </div><!-- /home page -->
+
+
+  <!-- ===========================
+       SERVICES PAGE
+  ============================ -->
+  <div id="page-services" class="page">
+
+    <section class="page-hero">
+      <div class="container">
+        <span class="label-eyebrow reveal">— Our Capabilities —</span>
+        <h1 class="font-headline reveal" style="transition-delay:0.1s;margin-top:1rem">
+          Precision Governance for Artificial Intelligence.
+        </h1>
+        <div class="editorial-indent reveal" style="transition-delay:0.2s;margin-top:1.5rem;max-width:640px">
+          <p style="font-size:1.0625rem;color:var(--muted);line-height:1.75">
+            Ethos provides a structured suite of services designed to translate complex regulatory requirements into actionable organisational standards. From initial assessment to global certification, we ensure your AI systems are sovereign, secure, and compliant.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid -->
+    <section style="padding-bottom:6rem">
+      <div class="container">
+        <div class="bento-grid stagger-children">
+
+          <!-- Card 01 -->
+          <div class="bento-card col-3">
+            <div>
+              <span class="bento-num">01</span>
+              <h3>Gap Assessment</h3>
+              <p>A rigorous diagnostic of your current AI ecosystem against emerging regulatory landscapes and industry benchmarks. We identify systemic risks and governance deficits before they become liabilities.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="material-symbols-outlined">analytics</span>
+              <a class="bento-link" href="#" onclick="return false">View Scope</a>
+            </div>
+          </div>
+
+          <!-- Card 02 -->
+          <div class="bento-card col-3">
+            <div>
+              <span class="bento-num">02</span>
+              <h3>ISO 42001 Implementation</h3>
+              <p>End-to-end guidance for the world's first AI Management System standard. We architect your internal controls, documentation, and risk management frameworks to achieve sovereign certification readiness.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="material-symbols-outlined">verified_user</span>
+              <a class="bento-link" href="#" onclick="return false">View Scope</a>
+            </div>
+          </div>
+
+          <!-- Card 03 -->
+          <div class="bento-card col-2">
+            <div>
+              <span class="bento-num">03</span>
+              <h3>AI Governance Framework</h3>
+              <p style="font-size:0.875rem">Bespoke policy development that aligns with corporate values and international ethics standards.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="material-symbols-outlined">account_tree</span>
+            </div>
+          </div>
+
+          <!-- Card 04 -->
+          <div class="bento-card col-2">
+            <div>
+              <span class="bento-num">04</span>
+              <h3>Vendor Requirements Framework</h3>
+              <p style="font-size:0.875rem">Third-party risk management protocols for AI supply chains, managing data sovereignty and algorithmic transparency.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="material-symbols-outlined">partner_exchange</span>
+            </div>
+          </div>
+
+          <!-- Card 05 -->
+          <div class="bento-card col-2">
+            <div>
+              <span class="bento-num">05</span>
+              <h3>Compliance Audit &amp; Remediation</h3>
+              <p style="font-size:0.875rem">Post-implementation verification and corrective action planning to maintain continuous compliance.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="material-symbols-outlined">policy</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Methodology Pair -->
+        <div class="methodology-pair">
+          <div class="method-image reveal-left">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-d5FlcDlbtNQKyKViiu5YNNHzUaC44lVahpJB22Yubl5E6mFuLpi_yJ81Mryp1fCDud9g4wijTgqI6i4E2jDd7DqSlq6XFSk4Mz76TtMFHqpr9s00yZH-OIR22wooksyz0QIhJ7kBz11Yo8RLyZbLrKXuHFSVC2gZGqnXpMrUeQk_al5xBDubfO-a2Dvp9iDOaQ7F25N-Fw1UTEKdYbq7JcZWEbRseicMP216BNlMGK9lPkau7VZwdRDVGPZSGWZYR4c0JrpQC10"
+              alt="Strategic methodology"
+            />
+            <div class="method-image-badge">
+              <p>Standardised Excellence Since 2024</p>
+            </div>
+          </div>
+          <div class="reveal-right">
+            <span class="label-eyebrow">— Methodology —</span>
+            <h2 style="font-size:2.5rem;color:var(--navy);margin:1rem 0 1.5rem;font-weight:700;line-height:1.1">
+              Beyond Compliance: Strategic Assurance.
+            </h2>
+            <p style="color:var(--muted);line-height:1.75;margin-bottom:1.5rem">
+              We do not merely provide checklists. Our approach integrates into your existing operational fabric, ensuring that governance becomes an enabler of innovation rather than a bottleneck.
+            </p>
+            <ul class="checklist">
+              <li><span class="material-symbols-outlined">check_circle</span> Jurisdictional alignment with EU AI Act, AU Guidelines, and NIST.</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Quantifiable risk scoring for algorithmic impact.</li>
+              <li><span class="material-symbols-outlined">check_circle</span> Board-level reporting and executive literacy sessions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /services page -->
+
+
+  <!-- ===========================
+       COMPLIANCE PAGE
+  ============================ -->
+  <div id="page-compliance" class="page">
+
+    <section class="page-hero">
+      <div class="container">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:2rem">
+          <div>
+            <span class="label-eyebrow reveal">— Global Jurisdictions —</span>
+            <h1 class="font-headline reveal" style="transition-delay:0.1s;margin-top:1rem;max-width:700px">
+              Compliance Coverage &amp; Regulatory Mapping.
+            </h1>
+            <p class="reveal" style="transition-delay:0.2s;color:var(--muted);font-size:1.0625rem;margin-top:1.25rem;max-width:500px;line-height:1.75">
+              Navigate the complexities of international AI regulation with our audited framework mappings.
+            </p>
+          </div>
+          <div class="reveal" style="transition-delay:0.3s;display:flex;align-items:center;gap:1rem;color:var(--muted)">
+            <span class="material-symbols-outlined" style="font-size:2rem">language</span>
+            <div>
+              <p style="font-size:0.625rem;letter-spacing:0.15em;text-transform:uppercase">Last Updated</p>
+              <p style="font-weight:700;font-size:0.875rem;color:var(--navy)">October 2024</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding-bottom:0">
+      <div class="container">
+        <!-- Jurisdiction Tabs -->
+        <div class="jurisdiction-tabs reveal">
+          <button class="jurisdiction-btn active" onclick="switchJurisdiction('au')">Australia (AU)</button>
+          <button class="jurisdiction-btn" onclick="switchJurisdiction('eu')">European Union (EU)</button>
+          <button class="jurisdiction-btn" onclick="switchJurisdiction('uk')">United Kingdom (UK)</button>
+          <button class="jurisdiction-btn" onclick="switchJurisdiction('us')">United States (US)</button>
+        </div>
+
+        <!-- AU Panel -->
+        <div class="jurisdiction-panel active" id="panel-au">
+          <div>
+            <div class="jurisdiction-sidebar-img">
+              <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVZv1-YDeNnEvkAzCD6p-Qie0srNCf8v7xo7A12wZn6g9_5vDeB7Xi73rUqDwTfYWVp8Wnhn6wPv77Lhropwd9dCP7Vk3VfexwAnL_nsOHfFu5Wa1IuIdc4sShgOQs93EuHbgLO1PgbwhDD6bMzGnuCU4i4u4rw0VoyOeqqk3MDglPhDf1hBFFbfBqhw_JQ2SexxxyyUL7Ik5fjgoPzCh964ci0cYeDvxAxt5IyRjuKPod5IS52qSdDmWfmt0hJnNqHMjB7lIx840" alt="Australian Government Building"/>
+            </div>
+            <div style="margin-top:1.5rem">
+              <h3 style="font-family:var(--font-headline);font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem">Australian AI Ethics Framework</h3>
+              <p style="color:var(--muted);line-height:1.7;font-size:0.9375rem;margin-bottom:1.25rem">Australia's approach emphasizes voluntary ethical principles paired with existing legislative hooks in privacy and consumer law.</p>
+              <div style="display:flex;align-items:start;gap:0.75rem;padding:1rem;background:var(--surface-low)">
+                <span class="material-symbols-outlined" style="color:var(--brass)">verified_user</span>
+                <div>
+                  <p style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);font-weight:600">Primary Focus</p>
+                  <p style="font-weight:600;color:var(--navy);font-size:0.9375rem">Fairness &amp; Privacy Act Alignment</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compliance-cards stagger-children">
+            <div class="compliance-card">
+              <span class="c-num">01</span>
+              <h4>Privacy Act 1988</h4>
+              <p>Automated decision-making disclosure requirements under the proposed reforms to the Privacy Act.</p>
+              <span class="compliance-badge">Mandatory Compliance</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">02</span>
+              <h4>AS/NZS ISO/IEC 42001</h4>
+              <p>Alignment with the joint Australian and New Zealand standard for AI Management Systems.</p>
+              <span class="compliance-badge">Strategic Alignment</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">03</span>
+              <h4>Consumer Law (ACL)</h4>
+              <p>Protection against misleading conduct and unfair contract terms in algorithmic outcomes.</p>
+              <span class="compliance-badge">Liability Mapping</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">04</span>
+              <h4>Online Safety Act</h4>
+              <p>Duty of care assessments for AI-driven content moderation and recommendation engines.</p>
+              <span class="compliance-badge">Risk Assessment</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EU Panel -->
+        <div class="jurisdiction-panel" id="panel-eu">
+          <div>
+            <div style="background:var(--navy);height:15rem;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:4rem">🇪🇺</span>
+            </div>
+            <div style="margin-top:1.5rem">
+              <h3 style="font-family:var(--font-headline);font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem">EU AI Act Framework</h3>
+              <p style="color:var(--muted);line-height:1.7;font-size:0.9375rem;margin-bottom:1.25rem">The world's first comprehensive AI regulation, establishing risk-based requirements across all AI systems deployed in the EU market.</p>
+              <div style="display:flex;align-items:start;gap:0.75rem;padding:1rem;background:var(--surface-low)">
+                <span class="material-symbols-outlined" style="color:var(--brass)">gavel</span>
+                <div>
+                  <p style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);font-weight:600">Primary Focus</p>
+                  <p style="font-weight:600;color:var(--navy);font-size:0.9375rem">Risk Classification &amp; Prohibited AI</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compliance-cards stagger-children">
+            <div class="compliance-card">
+              <span class="c-num">01</span>
+              <h4>Risk Classification</h4>
+              <p>Categorise AI systems as unacceptable risk, high risk, limited risk, or minimal risk under Article 6.</p>
+              <span class="compliance-badge">Mandatory</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">02</span>
+              <h4>High-Risk AI Requirements</h4>
+              <p>Technical documentation, conformity assessments, and registration in the EU database.</p>
+              <span class="compliance-badge">Certification Required</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">03</span>
+              <h4>GPAI Model Obligations</h4>
+              <p>General-purpose AI model transparency, evaluation, and systemic risk management requirements.</p>
+              <span class="compliance-badge">Emerging Obligation</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">04</span>
+              <h4>Post-Market Monitoring</h4>
+              <p>Ongoing monitoring systems and incident reporting to national authorities under Article 72.</p>
+              <span class="compliance-badge">Continuous Compliance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- UK Panel -->
+        <div class="jurisdiction-panel" id="panel-uk">
+          <div>
+            <div style="background:var(--navy);height:15rem;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:4rem">🇬🇧</span>
+            </div>
+            <div style="margin-top:1.5rem">
+              <h3 style="font-family:var(--font-headline);font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem">UK ICO &amp; AI Principles</h3>
+              <p style="color:var(--muted);line-height:1.7;font-size:0.9375rem;margin-bottom:1.25rem">The UK adopts a principles-based approach, delegating sector-specific AI regulation to existing regulators rather than creating new law.</p>
+              <div style="display:flex;align-items:start;gap:0.75rem;padding:1rem;background:var(--surface-low)">
+                <span class="material-symbols-outlined" style="color:var(--brass)">balance</span>
+                <div>
+                  <p style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);font-weight:600">Primary Focus</p>
+                  <p style="font-weight:600;color:var(--navy);font-size:0.9375rem">Principles-Based Sector Regulation</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compliance-cards stagger-children">
+            <div class="compliance-card">
+              <span class="c-num">01</span>
+              <h4>UK GDPR &amp; DPA 2018</h4>
+              <p>Automated decision-making rights and data protection impact assessments for AI systems.</p>
+              <span class="compliance-badge">Active Obligation</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">02</span>
+              <h4>ICO AI Auditing Framework</h4>
+              <p>Accountability, transparency, and fairness standards for AI systems processing personal data.</p>
+              <span class="compliance-badge">Guidance Compliance</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">03</span>
+              <h4>AI Safety Institute</h4>
+              <p>Frontier AI safety evaluations and voluntary commitments for advanced AI systems.</p>
+              <span class="compliance-badge">Voluntary Framework</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">04</span>
+              <h4>Sector Regulator Guidance</h4>
+              <p>FCA, PRA, CQC, Ofcom sector-specific AI guidance integration into governance frameworks.</p>
+              <span class="compliance-badge">Sector Specific</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- US Panel -->
+        <div class="jurisdiction-panel" id="panel-us">
+          <div>
+            <div style="background:var(--navy);height:15rem;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:4rem">🇺🇸</span>
+            </div>
+            <div style="margin-top:1.5rem">
+              <h3 style="font-family:var(--font-headline);font-size:1.75rem;color:var(--navy);margin-bottom:0.75rem">US AI Regulatory Landscape</h3>
+              <p style="color:var(--muted);line-height:1.7;font-size:0.9375rem;margin-bottom:1.25rem">The US relies on a mosaic of executive orders, sector regulations, and the NIST AI Risk Management Framework rather than unified federal legislation.</p>
+              <div style="display:flex;align-items:start;gap:0.75rem;padding:1rem;background:var(--surface-low)">
+                <span class="material-symbols-outlined" style="color:var(--brass)">account_balance</span>
+                <div>
+                  <p style="font-size:0.625rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--muted);font-weight:600">Primary Focus</p>
+                  <p style="font-weight:600;color:var(--navy);font-size:0.9375rem">NIST AI RMF &amp; Executive Orders</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="compliance-cards stagger-children">
+            <div class="compliance-card">
+              <span class="c-num">01</span>
+              <h4>NIST AI Risk Management</h4>
+              <p>GOVERN, MAP, MEASURE, MANAGE — the four-function framework for AI risk management.</p>
+              <span class="compliance-badge">Best Practice Standard</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">02</span>
+              <h4>Executive Order 14110</h4>
+              <p>Safe, secure, and trustworthy AI development requirements for federal contractors and high-risk AI.</p>
+              <span class="compliance-badge">Federal Obligation</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">03</span>
+              <h4>FTC AI Guidance</h4>
+              <p>Unfair or deceptive acts in AI-powered products, automated decision systems and bias requirements.</p>
+              <span class="compliance-badge">Consumer Protection</span>
+            </div>
+            <div class="compliance-card">
+              <span class="c-num">04</span>
+              <h4>State AI Laws</h4>
+              <p>Colorado, Texas, and California AI legislation creating a patchwork of state-level obligations.</p>
+              <span class="compliance-badge">Emerging Legislation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interoperability Dark Section -->
+    <section class="interop" style="margin-top:5rem">
+      <div class="container">
+        <div class="interop-grid">
+          <div class="reveal-left">
+            <span class="label-eyebrow">— Inter-Operability —</span>
+            <h2 class="font-headline" style="margin-top:1rem">Unified Governance Interface.</h2>
+            <p style="color:rgba(255,255,255,0.65);font-size:1.0625rem;line-height:1.75;max-width:400px">
+              Our 'Compliance Engine' maps common controls across all four jurisdictions, allowing you to build once and deploy globally.
+            </p>
+            <div class="interop-stats">
+              <div class="interop-stat">
+                <span class="stat-val">82%</span>
+                <span class="stat-label">Overlap between AU Privacy Reform and EU GDPR framework.</span>
+              </div>
+              <div class="interop-stat">
+                <span class="stat-val">ISO</span>
+                <span class="stat-label">The universal foundation for all Ethos-governed platforms.</span>
+              </div>
+            </div>
+          </div>
+          <div class="exec-summary reveal-right">
+            <h3 class="font-headline">Executive Summary</h3>
+            <div class="exec-row">
+              <span class="exec-label">Risk Categorization</span>
+              <span class="exec-value">Aligned (EU/US)</span>
+            </div>
+            <div class="exec-row">
+              <span class="exec-label">Data Sovereignty</span>
+              <span class="exec-value">AU Specific</span>
+            </div>
+            <div class="exec-row">
+              <span class="exec-label">Transparency Mandates</span>
+              <span class="exec-value">Unified</span>
+            </div>
+            <div class="exec-row">
+              <span class="exec-label">Algorithmic Bias Testing</span>
+              <span class="exec-value">ISO 42001 Base</span>
+            </div>
+            <button class="exec-download">Download Global Mapping Report</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-box reveal">
+          <span class="material-symbols-outlined">verified</span>
+          <h2 class="font-headline">Ready to secure your AI operations?</h2>
+          <p>Consult with our lead governance specialists to determine your specific jurisdictional requirements and audit path.</p>
+          <div class="cta-buttons">
+            <button class="btn-primary" onclick="navigate('contact')">Book a Consultation</button>
+            <button class="btn-outline">View Pricing</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /compliance page -->
+
+
+  <!-- ===========================
+       CONTACT PAGE
+  ============================ -->
+  <div id="page-contact" class="page">
+    <div class="container">
+      <div class="contact-grid">
+
+        <!-- Left: Info -->
+        <div class="contact-info">
+          <span class="label-eyebrow contact-eyebrow reveal">— Secure Consultation —</span>
+          <h1 class="font-headline reveal" style="transition-delay:0.1s">
+            Initiate Governance Inquiry
+          </h1>
+          <p class="reveal" style="transition-delay:0.2s">
+            Establish your organisation's ethical AI framework with Australia's leading specialists in ISO/IEC 42001 compliance. Our practitioners provide the clarity required for high-stakes deployment.
+          </p>
+
+          <div class="reveal" style="transition-delay:0.3s">
+            <div class="contact-detail">
+              <span class="material-symbols-outlined">corporate_fare</span>
+              <div>
+                <h4>Sydney Headquarters</h4>
+                <p>Level 42, International Towers<br/>Barangaroo NSW 2000</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal" style="transition-delay:0.35s">
+            <div class="contact-detail">
+              <span class="material-symbols-outlined">mail</span>
+              <div>
+                <h4>Digital Registry</h4>
+                <p>inquiry@ethosgovernance.com.au</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image -->
+          <div class="contact-image-wrap reveal" style="transition-delay:0.4s">
+            <img
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQHJ6C3rHzh3fnn2M5RZvWpiSsE66gA_Gj_szNKSES6vGPYcUjK01udJ5nMOU-Ijee2JkjSyqtzNliSZkyWXTev2v5B3GB8ZxVHDzTsBV1L6-3kQtyX046cLcWYtczB2663KlcltzKOMBoRlWPurHlChx_C8_So1sz6YwmpFqBQyeddiBFWw9olPQ-JkYoo1T_HFJjdHfcWNCw_M9Owuu6koFK_ScuAs2jtYB1P2hUq_g-Jid-S-52aZZJl2Dr67gHhBwmK45NdOE"
+              alt="Ethos HQ Sydney"
+            />
+            <p class="contact-image-quote">"Integrity is the bedrock of automation."</p>
+          </div>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="contact-form-wrap reveal-right" style="transition-delay:0.2s">
+          <form id="contactForm" onsubmit="handleFormSubmit(event)">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="fullname">Full Identity</label>
+                <input type="text" id="fullname" name="fullname" placeholder="Johnathan Sterling"/>
+              </div>
+              <div class="form-group">
+                <label for="email">Liaison Email</label>
+                <input type="email" id="email" name="email" placeholder="j.sterling@enterprise.com"/>
+              </div>
+              <div class="form-group full">
+                <label for="org">Organisation / Legal Entity</label>
+                <input type="text" id="org" name="org" placeholder="Sterling Global Systems"/>
+              </div>
+              <div class="form-group full">
+                <label for="message">Brief of Inquiry</label>
+                <textarea id="message" name="message" rows="5" placeholder="Outline your governance requirements or specific ISO/IEC 42001 objectives..."></textarea>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <div class="form-status">
+                <span class="status-dot"></span>
+                Awaiting Submission
+              </div>
+              <button type="submit" class="btn-primary">
+                Submit Inquiry
+                <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+              </button>
+            </div>
+
+            <!-- Success message (hidden) -->
+            <div id="formSuccess" style="display:none;margin-top:1.5rem;padding:1rem;background:rgba(168,131,58,0.08);border:0.5px solid rgba(168,131,58,0.3)">
+              <p style="font-size:0.8125rem;color:var(--navy);font-weight:600">
+                <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle;margin-right:0.5rem;color:var(--brass)">check_circle</span>
+                Inquiry received. A governance specialist will contact you within 24 hours.
+              </p>
+            </div>
+          </form>
+          <div class="form-security">
+            <span class="material-symbols-outlined">lock</span>
+            <span>End-to-End Encrypted Communication Pathway</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /contact page -->
+
+</div><!-- /app -->
+
+<!-- Footer -->
+<footer id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="assets/logo.svg" alt="Ethos AI Governance" style="height:76px;width:auto;filter:brightness(0) invert(0.9)"/>
+        <p>Australia's premium consultancy for AI standards and regulatory compliance. Providing sovereign assurance for the automated age.</p>
+      </div>
+      <div class="footer-col">
+        <h6>Capabilities</h6>
+        <ul>
+          <li><a href="#" onclick="navigate('services');return false">ISO Gap Assessment</a></li>
+          <li><a href="#" onclick="navigate('services');return false">Legal Alignment</a></li>
+          <li><a href="#" onclick="navigate('services');return false">Internal Audit</a></li>
+          <li><a href="#" onclick="navigate('services');return false">Remediation Plans</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Frameworks</h6>
+        <ul>
+          <li><a href="#" onclick="navigate('compliance');return false">ISO/IEC 42001</a></li>
+          <li><a href="#" onclick="navigate('compliance');return false">NIST AI RMF</a></li>
+          <li><a href="#" onclick="navigate('compliance');return false">EU AI Act</a></li>
+          <li><a href="#" onclick="navigate('compliance');return false">AU Privacy Act</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h6>Connect</h6>
+        <ul>
+          <li><a href="#" onclick="navigate('contact');return false">Book Consultation</a></li>
+          <li><a href="#" onclick="return false">Privacy Policy</a></li>
+          <li><a href="#" onclick="return false">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Ethos AI Governance. Australia's AI Governance Standard.</p>
+      <div class="footer-icons">
+        <span class="material-symbols-outlined">language</span>
+        <span class="material-symbols-outlined">shield</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
