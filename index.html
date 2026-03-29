@@ -79,56 +79,138 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="particles-container" id="particles"></div>
-    <div class="container hero-inner">
-      <div class="hero-content">
-        <div class="hero-eyebrow" id="hero-eyebrow">Australian AI Governance Specialists</div>
-        <h1 class="hero-h1" id="hero-h1">AI Governance Built for Australian AI Vendors</h1>
-        <p class="hero-sub" id="hero-sub">Ethos helps companies that build and sell AI products establish governance frameworks, meet Australian obligations, and prepare for ISO/IEC 42001:2023 certification.</p>
-        <div class="hero-ctas" id="hero-ctas">
-          <button class="btn-primary btn-lg" onclick="navigate('contact')">Get Your Free Governance Audit</button>
-          <button class="btn-outline btn-lg" onclick="document.getElementById('product-ladder').scrollIntoView({behavior:'smooth'})">See How It Works</button>
-        </div>
-      </div>
-      <div class="hero-visual" id="hero-visual">
-        <div class="hero-card">
-          <div class="hero-card-header">
-            <span class="hero-card-dot red"></span>
-            <span class="hero-card-dot amber"></span>
-            <span class="hero-card-dot green"></span>
-            <span style="margin-left:auto;font-size:0.7rem;color:var(--muted)">Governance Audit Report</span>
-          </div>
-          <div class="hero-card-body">
-            <div class="tl-row">
-              <span class="tl-label">Data Governance</span>
-              <span class="tl-indicator green-dot"></span>
-            </div>
-            <div class="tl-row">
-              <span class="tl-label">AI Risk Management</span>
-              <span class="tl-indicator amber-dot"></span>
-            </div>
-            <div class="tl-row">
-              <span class="tl-label">Transparency</span>
-              <span class="tl-indicator red-dot"></span>
-            </div>
-            <div class="tl-row">
-              <span class="tl-label">Third-Party AI</span>
-              <span class="tl-indicator amber-dot"></span>
-            </div>
-            <div class="tl-row">
-              <span class="tl-label">Incident Response</span>
-              <span class="tl-indicator green-dot"></span>
-            </div>
-          </div>
-          <div class="hero-card-footer">
-            <span class="badge-pill">3 critical gaps identified</span>
-          </div>
-        </div>
+
+    <div class="hero-top">
+      <div class="hero-eyebrow" id="hero-eyebrow">Australian AI Governance Specialists</div>
+      <h1 class="hero-h1" id="hero-h1"><span class="hero-underline">Stop</span> Losing Enterprise Deals to Governance Questions You Can't Answer</h1>
+      <p class="hero-sub" id="hero-sub">Ethos gives Australian AI vendors a complete, deployment-ready governance framework &mdash; so the next time a prospect asks &ldquo;show us your AI governance,&rdquo; you hand them a document, not an excuse.</p>
+      <div class="hero-ctas" id="hero-ctas">
+        <button class="hero-cta-btn" onclick="navigate('contact')">Get Your Free AI Governance Audit &rarr;</button>
       </div>
     </div>
-    <div class="hero-scroll-hint">
-      <span class="material-symbols-outlined">keyboard_arrow_down</span>
+
+    <div class="cards-section" id="heroPanorama">
+      <div class="cards-stage">
+
+        <!-- CARD 0: AUDIT REPORT -->
+        <div class="product-card pos-left" id="pcard0" onclick="focusPCard(0)">
+          <div class="pc-header">
+            <span class="pc-title">Governance Audit Report</span>
+            <span class="pc-badge badge-red">&#9888; 3 Gaps</span>
+          </div>
+          <div class="pc-body">
+            <div class="audit-score-row">
+              <div class="audit-ring">
+                <svg viewBox="0 0 60 60">
+                  <circle class="ring-track" cx="30" cy="30" r="26"/>
+                  <circle class="ring-fill" id="auditRing" cx="30" cy="30" r="26"/>
+                </svg>
+                <div class="ring-label">42%</div>
+              </div>
+              <div class="audit-score-text">
+                <div class="audit-score-title">ISO 42001 Readiness</div>
+                <div class="audit-score-sub">8 domains &middot; 24 controls scanned</div>
+              </div>
+            </div>
+            <div class="audit-row" data-c0><span class="audit-row-label">Data Governance</span><span class="audit-dot dot-green"></span></div>
+            <div class="audit-row" data-c0><span class="audit-row-label">AI Risk Management</span><span class="audit-dot dot-amber"></span></div>
+            <div class="audit-row" data-c0><span class="audit-row-label">Transparency</span><span class="audit-dot dot-red-c"></span></div>
+            <div class="audit-row" data-c0><span class="audit-row-label">Third-Party AI</span><span class="audit-dot dot-red-c"></span></div>
+            <div class="audit-row" data-c0><span class="audit-row-label">Incident Response</span><span class="audit-dot dot-green"></span></div>
+            <div class="audit-summary" id="auditSummary">&#9888; 3 critical gaps &mdash; Action recommended</div>
+          </div>
+        </div>
+
+        <!-- CARD 1: ISO CLAUSE TRACKER -->
+        <div class="product-card pos-center" id="pcard1" onclick="focusPCard(1)">
+          <div class="pc-header">
+            <span class="pc-title">ISO 42001 Clause Tracker</span>
+            <span class="pc-badge badge-green">&#10003; On Track</span>
+          </div>
+          <div class="pc-body">
+            <div class="clause-item" data-c1>
+              <div class="clause-top">
+                <span class="clause-name">AI Policy</span>
+                <span class="clause-ref ref-done">Clause 5.2 &#10003;</span>
+              </div>
+              <div class="clause-check"><span class="clause-check-icon">&#10003;</span> Documented, approved, communicated</div>
+            </div>
+            <div class="clause-item" data-c1>
+              <div class="clause-top">
+                <span class="clause-name">Risk Assessment</span>
+                <span class="clause-ref ref-wip">Clause 6.1</span>
+              </div>
+              <div class="clause-desc">Risk register built &mdash; control mapping in progress</div>
+              <div class="clause-bar"><div class="clause-bar-fill fill-amber" id="cb1"></div></div>
+            </div>
+            <div class="clause-item" data-c1>
+              <div class="clause-top">
+                <span class="clause-name">Operational Controls</span>
+                <span class="clause-ref ref-wip">Clause 8.1</span>
+              </div>
+              <div class="clause-desc">Monitoring and logging frameworks being embedded</div>
+              <div class="clause-bar"><div class="clause-bar-fill fill-amber" id="cb2"></div></div>
+            </div>
+            <div class="clause-item" data-c1>
+              <div class="clause-top">
+                <span class="clause-name">Internal Audit</span>
+                <span class="clause-ref ref-todo">Clause 9.2</span>
+              </div>
+              <div class="clause-desc">Scheduled &mdash; pending implementation completion</div>
+              <div class="clause-bar"><div class="clause-bar-fill fill-dim" id="cb3"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 2: RISK REGISTER -->
+        <div class="product-card pos-right" id="pcard2" onclick="focusPCard(2)">
+          <div class="pc-header">
+            <span class="pc-title">AI Risk Register</span>
+            <span class="pc-badge badge-gold">4 Systems</span>
+          </div>
+          <div class="pc-body">
+            <div class="rr-table-header">
+              <span class="rr-th">AI System</span>
+              <span class="rr-th">Risk</span>
+              <span class="rr-th">Owner</span>
+            </div>
+            <div class="rr-row" data-c2>
+              <div><div class="rr-system">Customer Chatbot</div><div class="rr-system-sub">GPT-4 &middot; Customer-facing</div></div>
+              <span class="rr-risk-badge risk-high">High</span>
+              <span class="rr-owner">J. Chen</span>
+            </div>
+            <div class="rr-row" data-c2>
+              <div><div class="rr-system">Fraud Detection</div><div class="rr-system-sub">Internal &middot; Automated</div></div>
+              <span class="rr-risk-badge risk-high">High</span>
+              <span class="rr-owner">S. Patel</span>
+            </div>
+            <div class="rr-row" data-c2>
+              <div><div class="rr-system">Resume Screener</div><div class="rr-system-sub">Vendor API &middot; HR</div></div>
+              <span class="rr-risk-badge risk-med">Medium</span>
+              <span class="rr-owner">L. Nguyen</span>
+            </div>
+            <div class="rr-row" data-c2>
+              <div><div class="rr-system">Internal Copilot</div><div class="rr-system-sub">M365 &middot; Staff use</div></div>
+              <span class="rr-risk-badge risk-low">Low</span>
+              <span class="rr-owner">M. Torres</span>
+            </div>
+            <div class="rr-alert" id="rrAlert">&#9203; 1 system overdue for review</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="card-dots">
+        <div class="card-dot" id="pdot0" onclick="focusPCard(0)"></div>
+        <div class="card-dot active" id="pdot1" onclick="focusPCard(1)"></div>
+        <div class="card-dot" id="pdot2" onclick="focusPCard(2)"></div>
+      </div>
     </div>
+
+    <div class="trust-bar">
+      <span class="trust-label">Helping Australian AI Vendors Get Governance-Ready</span>
+    </div>
+
   </section>
 
   <!-- PROBLEM SECTION -->

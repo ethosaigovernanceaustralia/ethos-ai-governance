@@ -416,6 +416,128 @@ function initPage() {
   });
 }
 
+// ─── Hero Panoramic Carousel ─────────────────────
+(function() {
+  const CIRC = 2 * Math.PI * 26;
+
+  const animConfigs = {
+    0: {
+      run() {
+        const ring = document.getElementById('auditRing');
+        if (!ring) return;
+        ring.style.transition = 'stroke-dashoffset 1.4s ease';
+        ring.style.strokeDashoffset = CIRC - (0.42 * CIRC);
+        document.querySelectorAll('[data-c0]').forEach((r, i) => {
+          r.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          setTimeout(() => r.classList.add('pano-anim-in'), 200 + i * 130);
+        });
+        const sum = document.getElementById('auditSummary');
+        if (sum) { sum.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; setTimeout(() => sum.classList.add('pano-anim-in'), 1100); }
+      },
+      reset() {
+        const ring = document.getElementById('auditRing');
+        if (ring) { ring.style.transition = 'none'; ring.style.strokeDashoffset = CIRC; }
+        document.querySelectorAll('[data-c0]').forEach(r => { r.style.transition = 'none'; r.classList.remove('pano-anim-in'); });
+        const sum = document.getElementById('auditSummary');
+        if (sum) { sum.style.transition = 'none'; sum.classList.remove('pano-anim-in'); }
+      }
+    },
+    1: {
+      run() {
+        document.querySelectorAll('[data-c1]').forEach((item, i) => {
+          item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          setTimeout(() => item.classList.add('pano-anim-in'), 200 + i * 210);
+        });
+        const bars = [['cb1', '65%', 700], ['cb2', '35%', 1000], ['cb3', '6%', 1250]];
+        bars.forEach(([id, w, delay]) => {
+          const el = document.getElementById(id);
+          if (el) { el.style.transition = 'width 1.2s ease'; setTimeout(() => { el.style.width = w; }, delay); }
+        });
+      },
+      reset() {
+        document.querySelectorAll('[data-c1]').forEach(item => { item.style.transition = 'none'; item.classList.remove('pano-anim-in'); });
+        ['cb1','cb2','cb3'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.transition = 'none'; el.style.width = '0%'; } });
+      }
+    },
+    2: {
+      run() {
+        document.querySelectorAll('[data-c2]').forEach((r, i) => {
+          r.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          setTimeout(() => r.classList.add('pano-anim-in'), 200 + i * 140);
+        });
+        const alert = document.getElementById('rrAlert');
+        if (alert) { alert.style.transition = 'opacity 0.5s ease, transform 0.5s ease'; setTimeout(() => alert.classList.add('pano-anim-in'), 1000); }
+      },
+      reset() {
+        document.querySelectorAll('[data-c2]').forEach(r => { r.style.transition = 'none'; r.classList.remove('pano-anim-in'); });
+        const alert = document.getElementById('rrAlert');
+        if (alert) { alert.style.transition = 'none'; alert.classList.remove('pano-anim-in'); }
+      }
+    }
+  };
+
+  let pOrder = [0, 1, 2]; // [left, center, right]
+  let pCenter = 1;
+  let pLoopTimer = null;
+  let pAnimTimer = null;
+
+  function setPanoPositions() {
+    const cards = [document.getElementById('pcard0'), document.getElementById('pcard1'), document.getElementById('pcard2')];
+    const dots  = [document.getElementById('pdot0'),  document.getElementById('pdot1'),  document.getElementById('pdot2')];
+    if (!cards[0]) return;
+    cards.forEach(c => c.classList.remove('pos-left', 'pos-center', 'pos-right'));
+    dots.forEach(d => d.classList.remove('active'));
+    cards[pOrder[0]].classList.add('pos-left');
+    cards[pOrder[1]].classList.add('pos-center');
+    cards[pOrder[2]].classList.add('pos-right');
+    dots[pOrder[1]].classList.add('active');
+  }
+
+  function pStartLoop() {
+    clearTimeout(pLoopTimer);
+    clearTimeout(pAnimTimer);
+    pLoopTimer = setTimeout(() => {
+      Object.values(animConfigs).forEach(c => c.reset());
+      void document.body.offsetWidth;
+      pAnimTimer = setTimeout(() => {
+        Object.values(animConfigs).forEach(c => c.run());
+        pStartLoop();
+      }, 600);
+    }, 5200);
+  }
+
+  window.focusPCard = function(cardIndex) {
+    if (cardIndex === pCenter) return;
+    clearTimeout(pLoopTimer);
+    clearTimeout(pAnimTimer);
+    Object.values(animConfigs).forEach(c => c.reset());
+    void document.body.offsetWidth;
+    if (cardIndex === pOrder[0]) {
+      pOrder = [pOrder[2], pOrder[0], pOrder[1]];
+    } else if (cardIndex === pOrder[2]) {
+      pOrder = [pOrder[1], pOrder[2], pOrder[0]];
+    }
+    pCenter = pOrder[1];
+    setPanoPositions();
+    setTimeout(() => Object.values(animConfigs).forEach(c => c.run()), 400);
+    pStartLoop();
+  };
+
+  function initPanorama() {
+    setPanoPositions();
+    setTimeout(() => Object.values(animConfigs).forEach(c => c.run()), 350);
+    pStartLoop();
+  }
+
+  const panoEl = document.getElementById('heroPanorama');
+  if (panoEl) {
+    const obs = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { initPanorama(); obs.disconnect(); }
+    }, { threshold: 0.1 });
+    obs.observe(panoEl);
+  }
+})();
+
 // ─── Boot ────────────────────────────────────────
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initPage);
