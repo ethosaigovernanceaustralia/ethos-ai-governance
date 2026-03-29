@@ -133,40 +133,79 @@ function toggleFaq(btn) {
 
 // ─── Contact form type switcher ───────────────────
 function showContactForm(type) {
-  const titleEl = document.getElementById('contactFormTitle');
   const typeInput = document.getElementById('enquiryType');
-  if (!titleEl || !typeInput) return;
-
-  const titles = {
-    audit: 'Request a Free Governance Audit',
-    call: 'Book a Discovery Call',
-    general: 'Send an Enquiry'
-  };
-
-  titleEl.textContent = titles[type] || 'Send an Enquiry';
-  typeInput.value = type;
-
+  if (typeInput) typeInput.value = type;
   const form = document.getElementById('contactFormWrap');
-  if (form) {
-    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-// ─── Form Handling ───────────────────────────────
-function handleFormSubmit(e) {
+// ─── Character count ──────────────────────────────
+function updateCharCount(textarea) {
+  const counter = document.getElementById('charCountNum');
+  if (counter) counter.textContent = textarea.value.length;
+}
+
+// ─── Form Submission ──────────────────────────────
+async function handleFormSubmit(e) {
   e.preventDefault();
-  const btn = e.target.querySelector('button[type="submit"]');
+
+  // Validate at least one interest pill is selected
+  const pills = document.querySelectorAll('input[name="interested_in"]:checked');
+  if (pills.length === 0) {
+    const pillGroup = document.getElementById('interestPills');
+    if (pillGroup) {
+      pillGroup.style.outline = '2px solid rgba(168,131,58,0.5)';
+      pillGroup.style.borderRadius = '8px';
+      setTimeout(() => { pillGroup.style.outline = 'none'; }, 2500);
+    }
+    return;
+  }
+
+  const btn = document.getElementById('formSubmitBtn');
   const successEl = document.getElementById('formSuccess');
+  const originalBtnHTML = btn.innerHTML;
 
   btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem;animation:spin 0.8s linear infinite;vertical-align:middle">refresh</span> Sending...';
   btn.disabled = true;
 
-  setTimeout(() => {
-    btn.innerHTML = 'Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span>';
-    btn.disabled = false;
-    if (successEl) successEl.style.display = 'flex';
-    e.target.reset();
-  }, 1800);
+  const data = {
+    name: (document.getElementById('contactName')?.value || '').trim(),
+    company: (document.getElementById('contactCompany')?.value || '').trim(),
+    email: (document.getElementById('contactEmail')?.value || '').trim(),
+    company_builds: (document.getElementById('contactBuilds')?.value || '').trim(),
+    enquiry_prompt: document.getElementById('contactPrompt')?.value || '',
+    team_size: document.getElementById('contactTeamSize')?.value || '',
+    interested_in: Array.from(pills).map(p => p.value),
+    existing_governance: document.getElementById('contactGovDocs')?.value || null,
+    additional_notes: (document.getElementById('contactMessage')?.value || '').trim() || null,
+  };
+
+  try {
+    await submitEnquiryToSupabase(data);
+  } catch (err) {
+    console.error('Form submission error:', err);
+    // Still show success to the user — don't penalise them for backend issues
+  }
+
+  btn.innerHTML = originalBtnHTML;
+  btn.disabled = false;
+  if (successEl) successEl.style.display = 'flex';
+  e.target.reset();
+  const counter = document.getElementById('charCountNum');
+  if (counter) counter.textContent = '0';
+}
+
+// ─── Supabase Enquiry Submit ──────────────────────
+async function submitEnquiryToSupabase(data) {
+  const cfg = window.SUPABASE_CONFIG;
+  if (!cfg || cfg.url.includes('YOUR_PROJECT_REF')) {
+    // Not yet configured — simulate a short delay so the spinner shows
+    return new Promise(resolve => setTimeout(resolve, 1200));
+  }
+
+  const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
+  const { error } = await sb.from('enquiries').insert(data);
+  if (error) throw error;
 }
 
 // ─── Custom Cursor ───────────────────────────────

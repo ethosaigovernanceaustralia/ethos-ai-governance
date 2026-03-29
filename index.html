@@ -48,6 +48,9 @@
       <li><a href="#resources" data-page="resources" onclick="navigate('resources'); return false;">Resources</a></li>
       <li><a href="#faq" data-page="faq" onclick="navigate('faq'); return false;">FAQ</a></li>
       <li><a href="#contact" data-page="contact" onclick="navigate('contact'); return false;">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
     </ul>
     <button class="btn-nav" onclick="navigate('contact')">Get Free Audit</button>
     <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
@@ -69,6 +72,7 @@
     <li><a href="#resources" onclick="navigate('resources'); closeMobileNav(); return false;">Resources</a></li>
     <li><a href="#faq" onclick="navigate('faq'); closeMobileNav(); return false;">FAQ</a></li>
     <li><a href="#contact" onclick="navigate('contact'); closeMobileNav(); return false;">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
   </ul>
   <button class="btn-primary" style="margin-top:2rem;width:100%;" onclick="navigate('contact'); closeMobileNav();">Get Free Audit</button>
 </div>
@@ -1435,9 +1439,13 @@
 
       <!-- Contact Form -->
       <div class="contact-form-wrap" id="contactFormWrap" data-aos="fade-up">
-        <h3 class="contact-form-title" id="contactFormTitle">Send an Enquiry</h3>
-        <form id="contactForm" onsubmit="handleFormSubmit(event)">
+        <div class="contact-form-header">
+          <h3 class="contact-form-title">Get in Touch</h3>
+          <p class="contact-form-sub">Tell us about your company and what you're looking for. We'll get back to you within one business day.</p>
+        </div>
+        <form id="contactForm" onsubmit="handleFormSubmit(event)" novalidate>
           <input type="hidden" id="enquiryType" name="enquiry_type" value="general"/>
+
           <div class="form-row">
             <div class="form-group">
               <label for="contactName">Name <span class="required">*</span></label>
@@ -1448,30 +1456,77 @@
               <input type="text" id="contactCompany" name="company" required placeholder="Your company name"/>
             </div>
           </div>
+
           <div class="form-group">
-            <label for="contactEmail">Email <span class="required">*</span></label>
-            <input type="email" id="contactEmail" name="email" required placeholder="your@company.com"/>
+            <label for="contactEmail">Work Email <span class="required">*</span></label>
+            <input type="email" id="contactEmail" name="email" required placeholder="you@company.com"/>
           </div>
+
           <div class="form-group">
-            <label for="contactType">What best describes your company?</label>
-            <select id="contactType" name="company_type">
+            <label for="contactBuilds">What does your company build? <span class="required">*</span></label>
+            <input type="text" id="contactBuilds" name="company_builds" required placeholder="e.g. AI-powered fraud detection platform, NLP API for legal documents"/>
+            <span class="form-helper">Ethos works exclusively with companies that build and sell AI products or services.</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contactPrompt">What prompted your enquiry? <span class="required">*</span></label>
+              <select id="contactPrompt" name="enquiry_prompt" required>
+                <option value="">Select one...</option>
+                <option value="enterprise_governance">Enterprise client requiring governance documentation</option>
+                <option value="investor_board">Investor or board governance question</option>
+                <option value="iso42001">Preparing for ISO 42001 certification</option>
+                <option value="procurement">Upcoming procurement or tender</option>
+                <option value="proactive">Proactive - want to get ahead of regulation</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="contactTeamSize">Team size <span class="required">*</span></label>
+              <select id="contactTeamSize" name="team_size" required>
+                <option value="">Select one...</option>
+                <option value="1-10">1-10</option>
+                <option value="11-50">11-50</option>
+                <option value="51-200">51-200</option>
+                <option value="200+">200+</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>What are you interested in? <span class="required">*</span></label>
+            <div class="pill-group" id="interestPills">
+              <label class="pill-option"><input type="checkbox" name="interested_in" value="free_audit"/><span>Free AI Governance Audit</span></label>
+              <label class="pill-option"><input type="checkbox" name="interested_in" value="toolkit"/><span>Baseline Compliance Toolkit</span></label>
+              <label class="pill-option"><input type="checkbox" name="interested_in" value="iso_pathway"/><span>ISO 42001 Readiness Pathway</span></label>
+              <label class="pill-option"><input type="checkbox" name="interested_in" value="retainer"/><span>Governance Retainer</span></label>
+              <label class="pill-option"><input type="checkbox" name="interested_in" value="general"/><span>General enquiry</span></label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="contactGovDocs">Do you have existing governance documentation?</label>
+            <select id="contactGovDocs" name="existing_governance">
               <option value="">Select one...</option>
-              <option value="saas">AI SaaS</option>
-              <option value="platform">AI Platform Provider</option>
-              <option value="api">AI API or Model Provider</option>
-              <option value="other">Other AI Vendor</option>
+              <option value="comprehensive">Yes, comprehensive documentation in place</option>
+              <option value="some_gaps">Some policies but gaps exist</option>
+              <option value="nothing_formal">Nothing formal yet</option>
+              <option value="not_sure">Not sure</option>
             </select>
           </div>
+
           <div class="form-group">
-            <label for="contactMessage">Message</label>
-            <textarea id="contactMessage" name="message" rows="5" placeholder="Tell us about your situation and what you're looking for..."></textarea>
+            <label for="contactMessage">Anything else we should know?</label>
+            <textarea id="contactMessage" name="additional_notes" rows="4" maxlength="500" placeholder="Optional - any additional context about your situation" oninput="updateCharCount(this)"></textarea>
+            <span class="char-count"><span id="charCountNum">0</span>/500</span>
           </div>
-          <button type="submit" class="btn-primary btn-submit">
+
+          <button type="submit" class="btn-submit-full" id="formSubmitBtn">
             Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span>
           </button>
           <div id="formSuccess" style="display:none" class="form-success">
-            <span class="material-symbols-outlined" style="color:#22c55e;vertical-align:middle">check_circle</span>
-            Enquiry received - we'll be in touch within one business day.
+            <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
+            Thanks for your enquiry. We'll be in touch within one business day.
           </div>
         </form>
       </div>
@@ -1515,6 +1570,8 @@
 
 </main><!-- /pages -->
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="portal/config.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

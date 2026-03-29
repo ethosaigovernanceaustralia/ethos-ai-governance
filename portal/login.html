@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Client Portal - Ethos AI Governance</title>
+  <link rel="stylesheet" href="portal.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- Logo -->
+  <a href="/" class="login-logo">
+    <img src="../assets/logo-icon.svg" alt="Ethos"/>
+    <span class="login-logo-wordmark">
+      <span class="login-logo-brand">ETHOS</span>
+      <span class="login-logo-tagline">AI Governance</span>
+    </span>
+  </a>
+
+  <!-- Login Card -->
+  <div class="login-card">
+    <div class="login-card-header">
+      <h1 class="login-card-title">Client Portal</h1>
+      <p class="login-card-sub">Sign in to access your governance workspace.</p>
+    </div>
+
+    <!-- Error / Success messages -->
+    <div class="auth-error" id="authError" style="display:none">
+      <span class="material-symbols-outlined" style="font-size:1.1rem">error</span>
+      <span id="authErrorMsg">Invalid email or password.</span>
+    </div>
+
+    <div class="auth-success" id="authSuccess" style="display:none">
+      <span class="material-symbols-outlined" style="font-size:1.1rem">check_circle</span>
+      <span id="authSuccessMsg">Check your email for a password reset link.</span>
+    </div>
+
+    <!-- Sign In Form -->
+    <form id="loginForm" novalidate>
+      <div class="p-form-group">
+        <label class="p-label" for="loginEmail">Email</label>
+        <input class="p-input" type="email" id="loginEmail" placeholder="you@company.com" required autocomplete="email"/>
+      </div>
+      <div class="p-form-group">
+        <label class="p-label" for="loginPassword">Password</label>
+        <input class="p-input" type="password" id="loginPassword" placeholder="Your password" required autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="btn-gold btn-gold-full" id="loginBtn" style="margin-top:0.5rem">
+        Sign In
+        <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+      </button>
+    </form>
+
+    <a href="#" class="forgot-link" id="forgotLink">Forgot your password?</a>
+  </div>
+
+  <p class="login-tagline">Secure document exchange for Ethos clients</p>
+
+</div>
+
+<!-- Supabase JS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="portal.js"></script>
+<script>
+(async () => {
+  // If already logged in, redirect immediately
+  const session = await getSession();
+  if (session) {
+    const profile = await getProfile(session.user.id);
+    window.location.href = profile?.role === 'admin' ? '/portal/admin' : '/portal/dashboard';
+    return;
+  }
+
+  // ─── Sign In ───────────────────────────────────────────────
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    const errEl = document.getElementById('authError');
+
+    errEl.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Signing in...';
+
+    const sb = getSupabase();
+    if (!sb) {
+      document.getElementById('authErrorMsg').textContent = 'Portal not configured yet. Please check back soon.';
+      errEl.style.display = 'flex';
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>';
+      return;
+    }
+
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      document.getElementById('authErrorMsg').textContent =
+        error.message.includes('Invalid') ? 'Invalid email or password.' : error.message;
+      errEl.style.display = 'flex';
+      btn.disabled = false;
+      btn.innerHTML = 'Sign In <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>';
+      return;
+    }
+
+    const profile = await getProfile(data.user.id);
+    window.location.href = profile?.role === 'admin' ? '/portal/admin' : '/portal/dashboard';
+  });
+
+  // ─── Forgot Password ───────────────────────────────────────
+  document.getElementById('forgotLink').addEventListener('click', async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById('loginEmail').value.trim();
+    if (!email) {
+      document.getElementById('authErrorMsg').textContent = 'Enter your email address above, then click Forgot your password.';
+      document.getElementById('authError').style.display = 'flex';
+      return;
+    }
+
+    const sb = getSupabase();
+    if (!sb) return;
+
+    await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/portal/login'
+    });
+
+    document.getElementById('authError').style.display = 'none';
+    document.getElementById('authSuccessMsg').textContent = 'Check your email for a password reset link.';
+    document.getElementById('authSuccess').style.display = 'flex';
+  });
+})();
+</script>
+</body>
+</html>

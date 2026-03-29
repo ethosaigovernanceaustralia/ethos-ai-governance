@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Workspace - Ethos AI Governance</title>
+  <link rel="stylesheet" href="portal.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- Full-page loader -->
+<div class="page-loader" id="pageLoader">
+  <div class="spinner spinner-navy"></div>
+</div>
+
+<!-- Nav -->
+<nav class="portal-nav">
+  <a href="/" class="portal-nav-logo">
+    <img src="../assets/logo-icon.svg" alt="Ethos"/>
+    <span class="portal-nav-wordmark">
+      <span class="portal-nav-brand">ETHOS</span>
+      <span class="portal-nav-tagline">AI Governance</span>
+    </span>
+  </a>
+  <span class="portal-nav-badge">Client Portal</span>
+  <div class="portal-nav-user">
+    <span class="portal-nav-user-name" id="navUserName"></span>
+    <button class="portal-nav-signout" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="portal-page">
+  <div class="portal-main">
+
+    <!-- Header -->
+    <div class="dash-header">
+      <div>
+        <h1 class="dash-welcome" id="dashWelcome">Welcome</h1>
+        <p class="dash-subtitle" id="dashCompany"></p>
+      </div>
+    </div>
+
+    <!-- No engagement state -->
+    <div id="noEngagementState" style="display:none">
+      <div class="portal-card" style="margin-bottom:2rem">
+        <div class="portal-card-body">
+          <div class="empty-state" style="padding:3rem">
+            <span class="material-symbols-outlined empty-state-icon">hourglass_empty</span>
+            <div class="empty-state-title">Your workspace is being set up</div>
+            <p class="empty-state-text">We'll be in touch shortly. If you have any questions, contact us at hello@ethosaigovernance.com.au</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Engagement + Documents (shown when engagement exists) -->
+    <div id="workspaceContent" style="display:none">
+
+      <!-- Engagement Card -->
+      <div class="engagement-card" id="engagementCard">
+        <div class="engagement-icon">
+          <span class="material-symbols-outlined">verified_user</span>
+        </div>
+        <div class="engagement-info">
+          <div class="engagement-type" id="engagementTypeLabel"></div>
+          <div class="engagement-name" id="engagementName"></div>
+          <div class="engagement-notes" id="engagementNotes"></div>
+        </div>
+        <span class="status-badge status-active" id="engagementStatusBadge">Active</span>
+      </div>
+
+      <!-- Document Panels -->
+      <div class="doc-panels">
+
+        <!-- Your Documents -->
+        <div class="doc-panel">
+          <div class="doc-panel-header">
+            <div class="doc-panel-title">
+              <span class="material-symbols-outlined">upload_file</span>
+              Your Documents
+            </div>
+            <button class="btn-navy" onclick="openUploadModal()" style="font-size:0.8125rem;padding:0.5rem 1rem">
+              <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
+              Upload
+            </button>
+          </div>
+          <div class="doc-panel-body">
+            <div class="file-list" id="clientDocList">
+              <div class="empty-state">
+                <span class="material-symbols-outlined empty-state-icon">folder_open</span>
+                <div class="empty-state-title">No documents yet</div>
+                <p class="empty-state-text">Upload your existing policies and governance documentation using the button above.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- From Ethos -->
+        <div class="doc-panel">
+          <div class="doc-panel-header">
+            <div class="doc-panel-title">
+              <span class="material-symbols-outlined">description</span>
+              From Ethos
+            </div>
+          </div>
+          <div class="doc-panel-body">
+            <div class="file-list" id="ethosDocList">
+              <div class="empty-state">
+                <span class="material-symbols-outlined empty-state-icon">inbox</span>
+                <div class="empty-state-title">No deliverables yet</div>
+                <p class="empty-state-text">We'll upload your audit reports, toolkit documents and deliverables here as they're ready.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /workspaceContent -->
+
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-overlay" id="uploadModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Upload a Document</h2>
+      <button class="modal-close" onclick="closeUploadModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+      <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
+      <div class="drop-zone-text">Drop your PDF here, or click to browse</div>
+      <div class="drop-zone-sub">PDF files only. Maximum 25MB.</div>
+      <input type="file" id="fileInput" accept=".pdf,application/pdf"/>
+    </div>
+
+    <!-- Selected file preview -->
+    <div class="selected-file" id="selectedFile">
+      <span class="material-symbols-outlined" style="color:#dc2626;font-size:1.25rem">picture_as_pdf</span>
+      <span class="selected-file-name" id="selectedFileName"></span>
+      <span class="selected-file-size" id="selectedFileSize"></span>
+      <button class="btn-danger-ghost" onclick="clearSelectedFile()">
+        <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
+      </button>
+    </div>
+
+    <!-- Description field -->
+    <div class="p-form-group">
+      <label class="p-label" for="uploadDescription">What is this document? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <input class="p-input" type="text" id="uploadDescription" placeholder="e.g. Current privacy policy, data handling procedures"/>
+    </div>
+
+    <!-- Progress -->
+    <div class="upload-progress" id="uploadProgress">
+      <div class="upload-progress-bar">
+        <div class="upload-progress-fill" id="uploadProgressFill"></div>
+      </div>
+      <div class="upload-progress-text" id="uploadProgressText">Uploading...</div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button class="btn-outline" onclick="closeUploadModal()" style="flex:1">Cancel</button>
+      <button class="btn-gold" id="uploadBtn" onclick="handleUpload()" style="flex:2" disabled>
+        <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
+        Upload Document
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="portal.js"></script>
+<script>
+let _currentSession = null;
+let _currentProfile = null;
+let _currentEngagement = null;
+let _selectedFile = null;
+
+// ─── Init ──────────────────────────────────────────────────────
+(async () => {
+  _currentSession = await requireAuth();
+  if (!_currentSession) return;
+
+  _currentProfile = await getProfile(_currentSession.user.id);
+  if (!_currentProfile) { window.location.href = '/portal/login'; return; }
+
+  // Redirect admins to admin dashboard
+  if (_currentProfile.role === 'admin') {
+    window.location.href = '/portal/admin'; return;
+  }
+
+  // Populate nav
+  const firstName = _currentProfile.full_name.split(' ')[0];
+  document.getElementById('navUserName').textContent = _currentProfile.full_name;
+  document.getElementById('dashWelcome').textContent = `Welcome, ${firstName}`;
+  document.getElementById('dashCompany').textContent = _currentProfile.company_name || '';
+
+  // Load engagements
+  const engagements = await getEngagements(_currentProfile.id);
+
+  if (!engagements.length) {
+    document.getElementById('noEngagementState').style.display = 'block';
+    hideLoader();
+    return;
+  }
+
+  _currentEngagement = engagements[0];
+  document.getElementById('workspaceContent').style.display = 'block';
+
+  // Populate engagement card
+  document.getElementById('engagementTypeLabel').textContent = 'Active Engagement';
+  document.getElementById('engagementName').textContent = engagementLabel(_currentEngagement.engagement_type);
+  document.getElementById('engagementNotes').textContent = _currentEngagement.notes || '';
+  const badge = document.getElementById('engagementStatusBadge');
+  badge.textContent = _currentEngagement.status.charAt(0).toUpperCase() + _currentEngagement.status.slice(1);
+  badge.className = `status-badge status-${_currentEngagement.status}`;
+
+  // Load documents
+  await refreshDocuments();
+
+  hideLoader();
+})();
+
+// ─── Documents ─────────────────────────────────────────────────
+
+async function refreshDocuments() {
+  if (!_currentEngagement) return;
+  const docs = await getDocuments(_currentEngagement.id);
+
+  const clientDocs = docs.filter(d => d.document_type === 'client_upload');
+  const ethosDocs = docs.filter(d => d.document_type === 'ethos_deliverable' || d.document_type === 'shared_working');
+
+  renderDocList('clientDocList', clientDocs, true);
+  renderDocList('ethosDocList', ethosDocs, false);
+}
+
+function renderDocList(containerId, docs, showDelete) {
+  const el = document.getElementById(containerId);
+
+  if (!docs.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <span class="material-symbols-outlined empty-state-icon">${showDelete ? 'folder_open' : 'inbox'}</span>
+        <div class="empty-state-title">${showDelete ? 'No documents yet' : 'No deliverables yet'}</div>
+        <p class="empty-state-text">${showDelete
+          ? 'Upload your existing policies and governance documentation using the button above.'
+          : "We'll upload your audit reports, toolkit documents and deliverables here as they're ready."
+        }</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = docs.map(doc => `
+    <div class="file-item">
+      <div class="file-icon">PDF</div>
+      <div class="file-info">
+        <div class="file-name" title="${escHtml(doc.file_name)}">${escHtml(doc.file_name)}</div>
+        <div class="file-meta">
+          <span>${formatFileSize(doc.file_size_bytes)}</span>
+          <span style="opacity:0.4">·</span>
+          <span>${formatDate(doc.created_at)}</span>
+          ${doc.scan_status === 'pending_review' ? '<span class="status-badge scan-pending" style="font-size:0.65rem;padding:2px 7px">Processing</span>' : ''}
+          ${doc.scan_status === 'flagged' ? '<span class="status-badge scan-flagged" style="font-size:0.65rem;padding:2px 7px">Flagged</span>' : ''}
+        </div>
+        ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
+      </div>
+      <div class="file-actions">
+        <button class="file-action-btn" onclick="downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')" title="Download">
+          <span class="material-symbols-outlined">download</span>
+        </button>
+        ${showDelete ? `<button class="file-action-btn delete" onclick="handleDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+          <span class="material-symbols-outlined">delete</span>
+        </button>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function handleDeleteDoc(docId, filePath) {
+  if (!confirm('Delete this document? This cannot be undone.')) return;
+  const ok = await deleteDocument(docId, filePath);
+  if (ok) {
+    showToast('Document deleted.', 'success');
+    await refreshDocuments();
+  }
+}
+
+// ─── Upload Modal ──────────────────────────────────────────────
+
+function openUploadModal() {
+  document.getElementById('uploadModalOverlay').classList.add('open');
+}
+
+function closeUploadModal() {
+  document.getElementById('uploadModalOverlay').classList.remove('open');
+  clearSelectedFile();
+  document.getElementById('uploadDescription').value = '';
+  document.getElementById('uploadProgress').classList.remove('visible');
+  document.getElementById('uploadProgressFill').style.width = '0%';
+}
+
+document.getElementById('fileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) setSelectedFile(file);
+});
+
+// Drag and drop
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) setSelectedFile(file);
+});
+
+function setSelectedFile(file) {
+  _selectedFile = file;
+  document.getElementById('selectedFileName').textContent = file.name;
+  document.getElementById('selectedFileSize').textContent = formatFileSize(file.size);
+  document.getElementById('selectedFile').classList.add('visible');
+  document.getElementById('uploadBtn').disabled = false;
+}
+
+function clearSelectedFile() {
+  _selectedFile = null;
+  document.getElementById('fileInput').value = '';
+  document.getElementById('selectedFile').classList.remove('visible');
+  document.getElementById('uploadBtn').disabled = true;
+}
+
+async function handleUpload() {
+  if (!_selectedFile || !_currentEngagement) return;
+
+  const btn = document.getElementById('uploadBtn');
+  const description = document.getElementById('uploadDescription').value.trim();
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Uploading...';
+  document.getElementById('uploadProgress').classList.add('visible');
+
+  try {
+    await uploadDocument(
+      _selectedFile,
+      _currentEngagement.id,
+      _currentProfile.id,
+      description,
+      'client_upload',
+      (pct) => {
+        document.getElementById('uploadProgressFill').style.width = `${pct}%`;
+        document.getElementById('uploadProgressText').textContent = `Uploading... ${pct}%`;
+      }
+    );
+    showToast('Document uploaded successfully.', 'success');
+    closeUploadModal();
+    await refreshDocuments();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">upload</span> Upload Document';
+  }
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

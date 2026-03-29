@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Ethos AI Governance Portal</title>
+  <link rel="stylesheet" href="portal.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<div class="page-loader" id="pageLoader">
+  <div class="spinner spinner-navy"></div>
+</div>
+
+<!-- Nav -->
+<nav class="portal-nav">
+  <a href="/" class="portal-nav-logo">
+    <img src="../assets/logo-icon.svg" alt="Ethos"/>
+    <span class="portal-nav-wordmark">
+      <span class="portal-nav-brand">ETHOS</span>
+      <span class="portal-nav-tagline">AI Governance</span>
+    </span>
+  </a>
+  <span class="portal-nav-badge" style="background:rgba(13,37,69,0.08);color:var(--navy);border-color:var(--border)">Admin</span>
+  <div class="portal-nav-user">
+    <span class="portal-nav-user-name" id="navAdminName"></span>
+    <button class="portal-nav-signout" onclick="signOut()">Sign out</button>
+  </div>
+</nav>
+
+<!-- Admin Layout -->
+<div class="portal-page">
+<div class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-section">
+      <span class="admin-sidebar-label">Navigation</span>
+      <div class="client-list" style="padding:0">
+        <button class="admin-nav-item active" id="navClients" onclick="showView('clients')">
+          <span class="material-symbols-outlined">group</span> Clients
+        </button>
+        <button class="admin-nav-item" id="navEnquiries" onclick="showView('enquiries')">
+          <span class="material-symbols-outlined">mail</span> Enquiries
+          <span class="status-badge status-new" id="newEnquiriesBadge" style="margin-left:auto;display:none"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="admin-sidebar-divider"></div>
+
+    <div class="admin-sidebar-section">
+      <span class="admin-sidebar-label">Clients</span>
+      <div class="client-list" id="clientSidebarList">
+        <div style="padding:1rem;font-size:0.8125rem;color:var(--muted)">Loading...</div>
+      </div>
+    </div>
+
+    <div class="admin-sidebar-section" style="margin-top:auto;padding-top:1rem">
+      <button class="btn-gold" onclick="openInviteModal()" style="width:100%;font-size:0.875rem">
+        <span class="material-symbols-outlined" style="font-size:1rem">person_add</span>
+        Invite Client
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- ─── Stats Row ─── -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card">
+        <div class="stat-label">Total Clients</div>
+        <div class="stat-value" id="statClients">–</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Engagements</div>
+        <div class="stat-value" id="statEngagements">–</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">New Enquiries</div>
+        <div class="stat-value" id="statEnquiries">–</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Documents</div>
+        <div class="stat-value" id="statDocs">–</div>
+      </div>
+    </div>
+
+    <!-- ─── Clients View ─── -->
+    <div id="viewClients">
+      <div class="portal-section-title">
+        <span>Clients</span>
+        <button class="btn-navy" onclick="openInviteModal()">
+          <span class="material-symbols-outlined" style="font-size:1rem">person_add</span>
+          Invite Client
+        </button>
+      </div>
+
+      <!-- Client workspace (shown when a client is selected) -->
+      <div id="clientWorkspace" style="display:none">
+        <div class="portal-card" style="margin-bottom:1.5rem">
+          <div class="portal-card-header">
+            <div>
+              <div class="portal-card-title" id="wsClientName"></div>
+              <div style="font-size:0.8125rem;color:var(--muted);margin-top:2px" id="wsClientEmail"></div>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:center">
+              <span class="status-badge" id="wsEngagementBadge"></span>
+              <button class="btn-outline" onclick="closeClientWorkspace()" style="font-size:0.8rem;padding:0.4rem 0.875rem">
+                <span class="material-symbols-outlined" style="font-size:0.9rem">arrow_back</span>
+                All clients
+              </button>
+            </div>
+          </div>
+          <div class="portal-card-body">
+            <div class="engagement-card" style="margin-bottom:0">
+              <div class="engagement-icon">
+                <span class="material-symbols-outlined">verified_user</span>
+              </div>
+              <div class="engagement-info">
+                <div class="engagement-type">Engagement</div>
+                <div class="engagement-name" id="wsEngagementName">No engagement yet</div>
+                <div class="engagement-notes" id="wsEngagementNotes"></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
+                <select class="p-select" id="wsEngagementStatus" onchange="handleUpdateEngagementStatus()" style="width:140px;font-size:0.8125rem;padding:0.4rem 0.75rem">
+                  <option value="active">Active</option>
+                  <option value="paused">Paused</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doc panels -->
+        <div class="doc-panels">
+          <div class="doc-panel">
+            <div class="doc-panel-header">
+              <div class="doc-panel-title">
+                <span class="material-symbols-outlined">upload_file</span>
+                Client Documents
+              </div>
+            </div>
+            <div class="doc-panel-body">
+              <div class="file-list" id="wsClientDocList"></div>
+            </div>
+          </div>
+
+          <div class="doc-panel">
+            <div class="doc-panel-header">
+              <div class="doc-panel-title">
+                <span class="material-symbols-outlined">description</span>
+                From Ethos
+              </div>
+              <button class="btn-navy" onclick="openAdminUploadModal()" style="font-size:0.8125rem;padding:0.5rem 1rem">
+                <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
+                Upload Deliverable
+              </button>
+            </div>
+            <div class="doc-panel-body">
+              <div class="file-list" id="wsEthosDocList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- All clients table (shown when no client selected) -->
+      <div id="clientsTable">
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Company</th>
+                <th>Engagement</th>
+                <th>Status</th>
+                <th>Joined</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="clientsTableBody">
+              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Enquiries View ─── -->
+    <div id="viewEnquiries" style="display:none">
+      <div class="portal-section-title">Enquiries</div>
+
+      <div style="display:grid;grid-template-columns:1fr 360px;gap:1.5rem">
+
+        <!-- Table -->
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Company</th>
+                <th>Prompted by</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="enquiriesTableBody">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detail panel -->
+        <div class="enquiry-detail-panel" id="enquiryDetail">
+          <div class="empty-state" style="padding:2rem">
+            <span class="material-symbols-outlined empty-state-icon">mail</span>
+            <div class="empty-state-title">Select an enquiry</div>
+            <p class="empty-state-text">Click a row to view the full details.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</div>
+
+<!-- Invite Client Modal -->
+<div class="modal-overlay" id="inviteModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Invite a Client</h2>
+      <button class="modal-close" onclick="closeInviteModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <p style="font-size:0.875rem;color:var(--muted);margin-bottom:1.5rem">Supabase will send them an email to set their password and access their workspace.</p>
+
+    <div class="auth-error" id="inviteError" style="display:none">
+      <span class="material-symbols-outlined" style="font-size:1.1rem">error</span>
+      <span id="inviteErrorMsg">Something went wrong.</span>
+    </div>
+
+    <div class="p-form-row" style="margin-bottom:1rem">
+      <div class="p-form-group" style="margin-bottom:0">
+        <label class="p-label" for="inviteName">Full Name *</label>
+        <input class="p-input" type="text" id="inviteName" placeholder="Jane Smith"/>
+      </div>
+      <div class="p-form-group" style="margin-bottom:0">
+        <label class="p-label" for="inviteCompany">Company *</label>
+        <input class="p-input" type="text" id="inviteCompany" placeholder="Acme AI"/>
+      </div>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="inviteEmail">Work Email *</label>
+      <input class="p-input" type="email" id="inviteEmail" placeholder="jane@acmeai.com"/>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="inviteEngagement">Engagement Type</label>
+      <select class="p-select" id="inviteEngagement">
+        <option value="">None yet</option>
+        <option value="free_audit">Free Governance Audit</option>
+        <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
+        <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
+        <option value="retainer">Governance Retainer</option>
+        <option value="iso_pathway">ISO 42001 Readiness Pathway</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
+      <button class="btn-outline" onclick="closeInviteModal()" style="flex:1">Cancel</button>
+      <button class="btn-gold" id="inviteBtn" onclick="handleInviteClient()" style="flex:2">
+        <span class="material-symbols-outlined" style="font-size:1rem">send</span>
+        Send Invitation
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Upload Modal -->
+<div class="modal-overlay" id="adminUploadOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Upload Deliverable</h2>
+      <button class="modal-close" onclick="closeAdminUploadModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="drop-zone" id="adminDropZone" onclick="document.getElementById('adminFileInput').click()">
+      <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
+      <div class="drop-zone-text">Drop the PDF here, or click to browse</div>
+      <div class="drop-zone-sub">PDF files only. Maximum 25MB.</div>
+      <input type="file" id="adminFileInput" accept=".pdf,application/pdf"/>
+    </div>
+
+    <div class="selected-file" id="adminSelectedFile">
+      <span class="material-symbols-outlined" style="color:#dc2626;font-size:1.25rem">picture_as_pdf</span>
+      <span class="selected-file-name" id="adminSelectedFileName"></span>
+      <span class="selected-file-size" id="adminSelectedFileSize"></span>
+      <button class="btn-danger-ghost" onclick="clearAdminFile()">
+        <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
+      </button>
+    </div>
+
+    <div class="p-form-group">
+      <label class="p-label" for="adminUploadDescription">Description <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <input class="p-input" type="text" id="adminUploadDescription" placeholder="e.g. Governance Audit Report - March 2026"/>
+    </div>
+
+    <div class="upload-progress" id="adminUploadProgress">
+      <div class="upload-progress-bar">
+        <div class="upload-progress-fill" id="adminUploadFill"></div>
+      </div>
+      <div class="upload-progress-text" id="adminUploadText">Uploading...</div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button class="btn-outline" onclick="closeAdminUploadModal()" style="flex:1">Cancel</button>
+      <button class="btn-gold" id="adminUploadBtn" onclick="handleAdminUpload()" style="flex:2" disabled>
+        <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
+        Upload to Client Workspace
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="portal.js"></script>
+<script>
+let _adminProfile = null;
+let _allClients = [];
+let _selectedClientId = null;
+let _selectedEngagementId = null;
+let _adminSelectedFile = null;
+let _allEnquiries = [];
+let _selectedEnquiry = null;
+
+// ─── Init ──────────────────────────────────────────────────────
+(async () => {
+  const ctx = await requireAdmin();
+  if (!ctx) return;
+
+  _adminProfile = ctx.profile;
+  document.getElementById('navAdminName').textContent = _adminProfile.full_name;
+
+  await Promise.all([loadClients(), loadEnquiries()]);
+  hideLoader();
+})();
+
+// ─── View switcher ─────────────────────────────────────────────
+function showView(view) {
+  document.getElementById('viewClients').style.display = view === 'clients' ? 'block' : 'none';
+  document.getElementById('viewEnquiries').style.display = view === 'enquiries' ? 'block' : 'none';
+  document.getElementById('navClients').className = 'admin-nav-item' + (view === 'clients' ? ' active' : '');
+  document.getElementById('navEnquiries').className = 'admin-nav-item' + (view === 'enquiries' ? ' active' : '');
+}
+
+// ─── Clients ───────────────────────────────────────────────────
+async function loadClients() {
+  _allClients = await getAllClients();
+
+  const engagements = await getAllEngagements();
+  const engMap = {};
+  engagements.forEach(e => { if (!engMap[e.client_id]) engMap[e.client_id] = e; });
+
+  // Stats
+  document.getElementById('statClients').textContent = _allClients.length;
+  document.getElementById('statEngagements').textContent = engagements.filter(e => e.status === 'active').length;
+
+  // Sidebar client list
+  const sidebarList = document.getElementById('clientSidebarList');
+  if (!_allClients.length) {
+    sidebarList.innerHTML = `<div style="padding:0.75rem;font-size:0.8125rem;color:var(--muted)">No clients yet</div>`;
+  } else {
+    sidebarList.innerHTML = _allClients.map(c => `
+      <button class="client-list-item" id="sidebarClient_${c.id}" onclick="selectClient('${c.id}')">
+        <div class="client-avatar">${getInitials(c.full_name)}</div>
+        <div class="client-list-info">
+          <div class="client-list-name">${escHtml(c.full_name)}</div>
+          <div class="client-list-company">${escHtml(c.company_name || '')}</div>
+        </div>
+      </button>
+    `).join('');
+  }
+
+  // Main table
+  const tbody = document.getElementById('clientsTableBody');
+  if (!_allClients.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No clients yet. Use "Invite Client" to get started.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = _allClients.map(c => {
+    const eng = engMap[c.id];
+    return `
+      <tr style="cursor:pointer" onclick="selectClient('${c.id}')">
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="client-avatar" style="width:28px;height:28px;font-size:0.65rem">${getInitials(c.full_name)}</div>
+            <span style="font-weight:500">${escHtml(c.full_name)}</span>
+          </div>
+        </td>
+        <td style="color:var(--muted)">${escHtml(c.company_name || '–')}</td>
+        <td>${eng ? escHtml(engagementLabel(eng.engagement_type)) : '<span style="color:var(--muted)">None</span>'}</td>
+        <td>${eng ? `<span class="status-badge status-${eng.status}">${eng.status.charAt(0).toUpperCase()+eng.status.slice(1)}</span>` : '–'}</td>
+        <td style="color:var(--muted)">${formatDate(c.created_at)}</td>
+        <td><button class="btn-ghost" onclick="event.stopPropagation();selectClient('${c.id}')">View</button></td>
+      </tr>
+    `;
+  }).join('');
+}
+
+async function selectClient(clientId) {
+  _selectedClientId = clientId;
+  const client = _allClients.find(c => c.id === clientId);
+  if (!client) return;
+
+  // Highlight sidebar item
+  document.querySelectorAll('.client-list-item').forEach(el => el.classList.remove('active'));
+  const sidebarItem = document.getElementById(`sidebarClient_${clientId}`);
+  if (sidebarItem) sidebarItem.classList.add('active');
+
+  // Show workspace, hide table
+  document.getElementById('clientsTable').style.display = 'none';
+  document.getElementById('clientWorkspace').style.display = 'block';
+
+  // Populate header
+  document.getElementById('wsClientName').textContent = client.full_name + (client.company_name ? ` — ${client.company_name}` : '');
+  document.getElementById('wsClientEmail').textContent = client.email;
+
+  // Load engagement
+  const engagements = await getEngagements(clientId);
+  if (engagements.length) {
+    const eng = engagements[0];
+    _selectedEngagementId = eng.id;
+    document.getElementById('wsEngagementName').textContent = engagementLabel(eng.engagement_type);
+    document.getElementById('wsEngagementNotes').textContent = eng.notes || '';
+    const badge = document.getElementById('wsEngagementBadge');
+    badge.textContent = eng.status.charAt(0).toUpperCase() + eng.status.slice(1);
+    badge.className = `status-badge status-${eng.status}`;
+    document.getElementById('wsEngagementStatus').value = eng.status;
+  } else {
+    _selectedEngagementId = null;
+    document.getElementById('wsEngagementName').textContent = 'No engagement set';
+    document.getElementById('wsEngagementBadge').textContent = '';
+  }
+
+  // Load documents
+  await refreshWorkspaceDocs();
+
+  // Show client view
+  showView('clients');
+}
+
+function closeClientWorkspace() {
+  _selectedClientId = null;
+  _selectedEngagementId = null;
+  document.getElementById('clientWorkspace').style.display = 'none';
+  document.getElementById('clientsTable').style.display = 'block';
+  document.querySelectorAll('.client-list-item').forEach(el => el.classList.remove('active'));
+}
+
+async function refreshWorkspaceDocs() {
+  if (!_selectedEngagementId) {
+    document.getElementById('wsClientDocList').innerHTML = `<div class="empty-state"><p class="empty-state-text">No engagement set for this client yet.</p></div>`;
+    document.getElementById('wsEthosDocList').innerHTML = '';
+    return;
+  }
+  const docs = await getDocuments(_selectedEngagementId);
+  renderAdminDocList('wsClientDocList', docs.filter(d => d.document_type === 'client_upload'), false);
+  renderAdminDocList('wsEthosDocList', docs.filter(d => d.document_type !== 'client_upload'), true);
+}
+
+function renderAdminDocList(containerId, docs, showDelete) {
+  const el = document.getElementById(containerId);
+  if (!docs.length) {
+    el.innerHTML = `<div class="empty-state"><span class="material-symbols-outlined empty-state-icon">folder_open</span><p class="empty-state-text">No documents yet.</p></div>`;
+    return;
+  }
+  el.innerHTML = docs.map(doc => `
+    <div class="file-item">
+      <div class="file-icon">PDF</div>
+      <div class="file-info">
+        <div class="file-name" title="${escHtml(doc.file_name)}">${escHtml(doc.file_name)}</div>
+        <div class="file-meta">
+          <span>${formatFileSize(doc.file_size_bytes)}</span>
+          <span style="opacity:0.4">·</span>
+          <span>${formatDate(doc.created_at)}</span>
+          <span class="status-badge scan-${doc.scan_status}" style="font-size:0.65rem;padding:2px 7px">${doc.scan_status === 'pending_review' ? 'Needs review' : doc.scan_status}</span>
+        </div>
+        ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
+        ${doc.profiles ? `<div style="font-size:0.7rem;color:var(--muted);margin-top:2px">Uploaded by: ${escHtml(doc.profiles.full_name)}</div>` : ''}
+      </div>
+      <div class="file-actions">
+        <button class="file-action-btn" onclick="downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')" title="Download">
+          <span class="material-symbols-outlined">download</span>
+        </button>
+        ${showDelete ? `
+        <button class="file-action-btn" onclick="markReviewed('${doc.id}')" title="Mark reviewed">
+          <span class="material-symbols-outlined">check_circle</span>
+        </button>
+        <button class="file-action-btn delete" onclick="handleAdminDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+          <span class="material-symbols-outlined">delete</span>
+        </button>` : `
+        <button class="file-action-btn delete" onclick="handleAdminDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+          <span class="material-symbols-outlined">delete</span>
+        </button>`}
+      </div>
+    </div>
+  `).join('');
+}
+
+async function markReviewed(docId) {
+  const sb = getSupabase();
+  if (!sb) return;
+  await sb.from('documents').update({ scan_status: 'reviewed' }).eq('id', docId);
+  await refreshWorkspaceDocs();
+  showToast('Marked as reviewed.', 'success');
+}
+
+async function handleAdminDeleteDoc(docId, filePath) {
+  if (!confirm('Delete this document? This cannot be undone.')) return;
+  const ok = await deleteDocument(docId, filePath);
+  if (ok) { showToast('Document deleted.', 'success'); await refreshWorkspaceDocs(); }
+}
+
+async function handleUpdateEngagementStatus() {
+  if (!_selectedEngagementId) return;
+  const status = document.getElementById('wsEngagementStatus').value;
+  const ok = await updateEngagementStatus(_selectedEngagementId, status);
+  if (ok) showToast('Engagement status updated.', 'success');
+}
+
+// ─── Admin Upload Modal ────────────────────────────────────────
+function openAdminUploadModal() {
+  if (!_selectedEngagementId) { showToast('No engagement set for this client.', 'error'); return; }
+  document.getElementById('adminUploadOverlay').classList.add('open');
+}
+
+function closeAdminUploadModal() {
+  document.getElementById('adminUploadOverlay').classList.remove('open');
+  clearAdminFile();
+  document.getElementById('adminUploadDescription').value = '';
+  document.getElementById('adminUploadProgress').classList.remove('visible');
+}
+
+document.getElementById('adminFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) setAdminFile(file);
+});
+
+const adminDZ = document.getElementById('adminDropZone');
+adminDZ.addEventListener('dragover', (e) => { e.preventDefault(); adminDZ.classList.add('drag-over'); });
+adminDZ.addEventListener('dragleave', () => adminDZ.classList.remove('drag-over'));
+adminDZ.addEventListener('drop', (e) => {
+  e.preventDefault(); adminDZ.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) setAdminFile(file);
+});
+
+function setAdminFile(file) {
+  _adminSelectedFile = file;
+  document.getElementById('adminSelectedFileName').textContent = file.name;
+  document.getElementById('adminSelectedFileSize').textContent = formatFileSize(file.size);
+  document.getElementById('adminSelectedFile').classList.add('visible');
+  document.getElementById('adminUploadBtn').disabled = false;
+}
+
+function clearAdminFile() {
+  _adminSelectedFile = null;
+  document.getElementById('adminFileInput').value = '';
+  document.getElementById('adminSelectedFile').classList.remove('visible');
+  document.getElementById('adminUploadBtn').disabled = true;
+}
+
+async function handleAdminUpload() {
+  if (!_adminSelectedFile || !_selectedEngagementId || !_selectedClientId) return;
+  const btn = document.getElementById('adminUploadBtn');
+  const desc = document.getElementById('adminUploadDescription').value.trim();
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Uploading...';
+  document.getElementById('adminUploadProgress').classList.add('visible');
+
+  try {
+    await uploadDocument(
+      _adminSelectedFile,
+      _selectedEngagementId,
+      _selectedClientId,
+      desc,
+      'ethos_deliverable',
+      (pct) => {
+        document.getElementById('adminUploadFill').style.width = `${pct}%`;
+        document.getElementById('adminUploadText').textContent = `Uploading... ${pct}%`;
+      }
+    );
+    showToast('Deliverable uploaded to client workspace.', 'success');
+    closeAdminUploadModal();
+    await refreshWorkspaceDocs();
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">upload</span> Upload to Client Workspace';
+  }
+}
+
+// ─── Invite Client Modal ───────────────────────────────────────
+function openInviteModal() {
+  document.getElementById('inviteModalOverlay').classList.add('open');
+  document.getElementById('inviteError').style.display = 'none';
+}
+
+function closeInviteModal() {
+  document.getElementById('inviteModalOverlay').classList.remove('open');
+  ['inviteName','inviteCompany','inviteEmail'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('inviteEngagement').value = '';
+}
+
+async function handleInviteClient() {
+  const fullName = document.getElementById('inviteName').value.trim();
+  const companyName = document.getElementById('inviteCompany').value.trim();
+  const email = document.getElementById('inviteEmail').value.trim();
+  const engagementType = document.getElementById('inviteEngagement').value || null;
+
+  if (!fullName || !companyName || !email) {
+    document.getElementById('inviteErrorMsg').textContent = 'Please fill in all required fields.';
+    document.getElementById('inviteError').style.display = 'flex';
+    return;
+  }
+
+  const btn = document.getElementById('inviteBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+  document.getElementById('inviteError').style.display = 'none';
+
+  try {
+    await inviteClient(fullName, email, companyName, engagementType);
+    showToast(`Invitation sent to ${email}`, 'success');
+    closeInviteModal();
+    await loadClients();
+  } catch (err) {
+    document.getElementById('inviteErrorMsg').textContent = err.message;
+    document.getElementById('inviteError').style.display = 'flex';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">send</span> Send Invitation';
+  }
+}
+
+// ─── Enquiries ─────────────────────────────────────────────────
+async function loadEnquiries() {
+  _allEnquiries = await getEnquiries();
+
+  const newCount = _allEnquiries.filter(e => e.status === 'new').length;
+  document.getElementById('statEnquiries').textContent = newCount;
+  document.getElementById('statDocs').textContent = '–';
+
+  const badge = document.getElementById('newEnquiriesBadge');
+  if (newCount > 0) {
+    badge.textContent = newCount;
+    badge.style.display = 'inline-flex';
+  }
+
+  const tbody = document.getElementById('enquiriesTableBody');
+  if (!_allEnquiries.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No enquiries yet.</td></tr>`;
+    return;
+  }
+
+  const promptLabels = {
+    enterprise_governance: 'Enterprise governance',
+    investor_board: 'Investor / board',
+    iso42001: 'ISO 42001 prep',
+    procurement: 'Procurement / tender',
+    proactive: 'Proactive',
+    other: 'Other'
+  };
+
+  tbody.innerHTML = _allEnquiries.map(enq => `
+    <tr class="enquiry-row" onclick="selectEnquiry('${enq.id}')">
+      <td style="font-weight:500">${escHtml(enq.name)}</td>
+      <td style="color:var(--muted)">${escHtml(enq.company)}</td>
+      <td style="color:var(--muted)">${promptLabels[enq.enquiry_prompt] || enq.enquiry_prompt}</td>
+      <td><span class="status-badge status-${enq.status}">${enq.status.charAt(0).toUpperCase()+enq.status.slice(1)}</span></td>
+      <td style="color:var(--muted)">${formatDate(enq.created_at)}</td>
+    </tr>
+  `).join('');
+}
+
+function selectEnquiry(enquiryId) {
+  _selectedEnquiry = _allEnquiries.find(e => e.id === enquiryId);
+  if (!_selectedEnquiry) return;
+
+  const interestLabels = {
+    free_audit: 'Free AI Governance Audit',
+    toolkit: 'Baseline Compliance Toolkit',
+    iso_pathway: 'ISO 42001 Readiness Pathway',
+    retainer: 'Governance Retainer',
+    general: 'General enquiry'
+  };
+
+  const enq = _selectedEnquiry;
+  document.getElementById('enquiryDetail').innerHTML = `
+    <div style="margin-bottom:1.25rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem">
+      <div>
+        <div style="font-family:var(--font-headline);font-size:1.125rem;font-weight:700;color:var(--navy)">${escHtml(enq.name)}</div>
+        <div style="font-size:0.875rem;color:var(--muted)">${escHtml(enq.company)}</div>
+      </div>
+      <select class="p-select" onchange="handleEnquiryStatusChange('${enq.id}',this.value)" style="width:130px;font-size:0.8rem;padding:0.375rem 0.625rem">
+        <option value="new" ${enq.status==='new'?'selected':''}>New</option>
+        <option value="contacted" ${enq.status==='contacted'?'selected':''}>Contacted</option>
+        <option value="converted" ${enq.status==='converted'?'selected':''}>Converted</option>
+        <option value="closed" ${enq.status==='closed'?'selected':''}>Closed</option>
+      </select>
+    </div>
+    <div class="enquiry-field-label">Email</div>
+    <div class="enquiry-field-value"><a href="mailto:${escHtml(enq.email)}" style="color:var(--brass)">${escHtml(enq.email)}</a></div>
+
+    <div class="enquiry-field-label">What they build</div>
+    <div class="enquiry-field-value">${escHtml(enq.company_builds)}</div>
+
+    <div class="enquiry-field-label">Prompted by</div>
+    <div class="enquiry-field-value">${escHtml(enq.enquiry_prompt)}</div>
+
+    <div class="enquiry-field-label">Team size</div>
+    <div class="enquiry-field-value">${escHtml(enq.team_size)}</div>
+
+    <div class="enquiry-field-label">Interested in</div>
+    <div class="enquiry-field-value" style="display:flex;flex-wrap:wrap;gap:6px">
+      ${(enq.interested_in || []).map(i => `<span class="status-badge status-new">${interestLabels[i]||i}</span>`).join('')}
+    </div>
+
+    ${enq.existing_governance ? `<div class="enquiry-field-label">Existing governance</div><div class="enquiry-field-value">${escHtml(enq.existing_governance)}</div>` : ''}
+    ${enq.additional_notes ? `<div class="enquiry-field-label">Additional notes</div><div class="enquiry-field-value">${escHtml(enq.additional_notes)}</div>` : ''}
+
+    <div class="enquiry-field-label">Received</div>
+    <div class="enquiry-field-value" style="color:var(--muted)">${formatDate(enq.created_at)}</div>
+  `;
+}
+
+async function handleEnquiryStatusChange(enquiryId, status) {
+  const ok = await updateEnquiryStatus(enquiryId, status);
+  if (ok) {
+    showToast('Status updated.', 'success');
+    await loadEnquiries();
+  }
+}
+
+function escHtml(str) {
+  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
