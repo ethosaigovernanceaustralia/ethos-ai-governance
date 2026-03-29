@@ -102,7 +102,44 @@ img { display: block; max-width: 100%; }
   gap: 2rem;
 }
 
-.nav-logo { flex-shrink: 0; }
+.nav-logo {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  height: 38px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.nav-logo-wordmark {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  line-height: 1;
+}
+
+.nav-logo-brand {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.12em;
+}
+
+.nav-logo-tagline {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-top: 2px;
+}
 
 .nav-links {
   display: flex;
@@ -588,22 +625,30 @@ img { display: block; max-width: 100%; }
 .hero-underline {
   position: relative;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .hero-underline::after {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: -3px;
-  height: 4px;
-  background: var(--brass);
-  border-radius: 2px;
-  transform: scaleX(0);
-  transform-origin: left;
-  animation: drawUnderline 0.9s ease forwards 1.1s;
+  left: -2px;
+  right: -2px;
+  bottom: 8px;
+  height: 7px;
+  background: linear-gradient(90deg, rgba(168,131,58,0.45), rgba(201,176,128,0.25));
+  border-radius: 3px;
+  z-index: -1;
 }
 
-@keyframes drawUnderline {
-  to { transform: scaleX(1); }
+.hero-underline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 6px;
+  height: 3px;
+  background: var(--brass);
+  border-radius: 2px;
 }
 
 .hero-cta-btn {
@@ -1102,8 +1147,6 @@ img { display: block; max-width: 100%; }
 }
 
 /* ===== PROBLEM SECTION ===== */
-.section-problem { background: var(--paper); }
-
 .problem-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1112,35 +1155,36 @@ img { display: block; max-width: 100%; }
 }
 
 .problem-card {
-  background: var(--white);
-  border: 1px solid rgba(13,37,69,0.08);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: var(--radius-lg);
-  padding: 1.75rem 1.5rem;
+  padding: 1.875rem 1.5rem;
   text-align: center;
   transition: background var(--transition), border-color var(--transition), transform var(--transition), box-shadow var(--transition);
 }
 
 .problem-card:hover {
-  background: var(--navy);
-  border-color: var(--navy);
+  background: rgba(168,131,58,0.14);
+  border-color: rgba(168,131,58,0.4);
   transform: translateY(-4px);
-  box-shadow: var(--shadow-elevated);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
 }
 
-.problem-card:hover p,
-.problem-card:hover .problem-icon { color: rgba(255,255,255,0.85); }
+.problem-card:hover .problem-icon { color: var(--brass-light); }
+.problem-card:hover p { color: rgba(255,255,255,0.9); }
 
 .problem-icon {
   font-size: 2rem;
-  color: var(--brass);
+  color: var(--brass-light);
   margin-bottom: 0.875rem;
   display: block;
+  opacity: 0.9;
 }
 
 .problem-card p {
   font-size: 0.875rem;
-  line-height: 1.6;
-  color: var(--muted);
+  line-height: 1.65;
+  color: rgba(255,255,255,0.62);
 }
 
 /* ===== PRODUCT LADDER ===== */
