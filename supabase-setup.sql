@@ -72,6 +72,23 @@ ALTER TABLE documents   ENABLE ROW LEVEL SECURITY;
 ALTER TABLE enquiries   ENABLE ROW LEVEL SECURITY;
 
 
+-- ─── ADMIN HELPER (avoids infinite recursion in RLS policies) ──
+-- This function runs with elevated privileges (SECURITY DEFINER) so it can
+-- query profiles without triggering the profiles RLS policies recursively.
+
+CREATE OR REPLACE FUNCTION is_admin()
+RETURNS boolean
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'
+  );
+$$;
+
+
 -- ─── RLS: PROFILES ────────────────────────────────────────────
 
 -- Users can read their own profile
@@ -80,9 +97,7 @@ CREATE POLICY "profiles_self_read" ON profiles
 
 -- Admins can read all profiles
 CREATE POLICY "profiles_admin_read" ON profiles
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR SELECT USING (is_admin());
 
 -- Users can update their own profile
 CREATE POLICY "profiles_self_update" ON profiles
@@ -90,15 +105,11 @@ CREATE POLICY "profiles_self_update" ON profiles
 
 -- Admins can update any profile
 CREATE POLICY "profiles_admin_update" ON profiles
-  FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR UPDATE USING (is_admin());
 
 -- Admins can insert profiles (for client creation via API)
 CREATE POLICY "profiles_admin_insert" ON profiles
-  FOR INSERT WITH CHECK (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR INSERT WITH CHECK (is_admin());
 
 -- Service role can insert profiles (used by invite-client API function)
 CREATE POLICY "profiles_service_insert" ON profiles
@@ -113,15 +124,11 @@ CREATE POLICY "engagements_client_read" ON engagements
 
 -- Admins can read all engagements
 CREATE POLICY "engagements_admin_read" ON engagements
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR SELECT USING (is_admin());
 
 -- Admins can insert/update/delete engagements
 CREATE POLICY "engagements_admin_write" ON engagements
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (is_admin());
 
 -- Service role full access (for invite-client function)
 CREATE POLICY "engagements_service_write" ON engagements
@@ -159,9 +166,7 @@ CREATE POLICY "documents_client_delete" ON documents
 
 -- Admins can do everything with documents
 CREATE POLICY "documents_admin_all" ON documents
-  FOR ALL USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR ALL USING (is_admin());
 
 
 -- ─── RLS: ENQUIRIES ───────────────────────────────────────────
@@ -172,15 +177,11 @@ CREATE POLICY "enquiries_anon_insert" ON enquiries
 
 -- Admins can read all enquiries
 CREATE POLICY "enquiries_admin_read" ON enquiries
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR SELECT USING (is_admin());
 
 -- Admins can update enquiry status
 CREATE POLICY "enquiries_admin_update" ON enquiries
-  FOR UPDATE USING (
-    EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin')
-  );
+  FOR UPDATE USING (is_admin());
 
 
 -- ─── STORAGE BUCKET ───────────────────────────────────────────
