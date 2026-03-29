@@ -623,32 +623,7 @@ img { display: block; max-width: 100%; }
 }
 
 .hero-underline {
-  position: relative;
-  display: inline-block;
-  white-space: nowrap;
-}
-
-.hero-underline::after {
-  content: '';
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  bottom: 8px;
-  height: 7px;
-  background: linear-gradient(90deg, rgba(168,131,58,0.45), rgba(201,176,128,0.25));
-  border-radius: 3px;
-  z-index: -1;
-}
-
-.hero-underline::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 6px;
-  height: 3px;
-  background: var(--brass);
-  border-radius: 2px;
+  display: inline;
 }
 
 .hero-cta-btn {
