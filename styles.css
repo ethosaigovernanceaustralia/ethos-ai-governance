@@ -1513,6 +1513,44 @@ img { display: block; max-width: 100%; }
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+/* Footer logo */
+.footer-logo-wrap {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 0.25rem;
+}
+
+.footer-logo-icon {
+  height: 36px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.footer-logo-wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.footer-logo-brand {
+  font-family: var(--font-headline);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.12em;
+}
+
+.footer-logo-tagline {
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(201,168,76,0.8);
+  margin-top: 3px;
+}
+
 .footer-disclaimer {
   font-size: 0.8rem;
   color: rgba(255,255,255,0.45);
