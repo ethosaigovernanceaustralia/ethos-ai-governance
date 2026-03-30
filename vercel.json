@@ -2,6 +2,7 @@
   "rewrites": [
     { "source": "/portal/login",     "destination": "/portal/login.html" },
     { "source": "/portal/dashboard", "destination": "/portal/dashboard.html" },
-    { "source": "/portal/admin",     "destination": "/portal/admin.html" }
+    { "source": "/portal/admin",          "destination": "/portal/admin.html" },
+    { "source": "/portal/reset-password", "destination": "/portal/reset-password.html" }
   ]
 }

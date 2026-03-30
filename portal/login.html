@@ -133,7 +133,7 @@
     if (!sb) return;
 
     await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/portal/login'
+      redirectTo: window.location.origin + '/portal/reset-password'
     });
 
     document.getElementById('authError').style.display = 'none';
