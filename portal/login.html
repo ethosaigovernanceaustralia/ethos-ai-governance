@@ -71,8 +71,14 @@
   const session = await getSession();
   if (session) {
     const profile = await getProfile(session.user.id);
-    window.location.href = profile?.role === 'admin' ? '/portal/admin' : '/portal/dashboard';
-    return;
+    if (!profile) {
+      // Profile not set up yet — sign out to avoid redirect loop
+      const sb = getSupabase();
+      if (sb) await sb.auth.signOut();
+    } else {
+      window.location.href = profile.role === 'admin' ? '/portal/admin' : '/portal/dashboard';
+      return;
+    }
   }
 
   // ─── Sign In ───────────────────────────────────────────────
