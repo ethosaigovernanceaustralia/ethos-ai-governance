@@ -283,12 +283,13 @@ async function getAllClients() {
 
 // Admin: invite new client via Vercel API function
 async function inviteClient(fullName, email, companyName, engagementType) {
-  const secret = window.SUPABASE_CONFIG?._adminSecret || '';
+  const session = await getSession();
+  if (!session) throw new Error('Not authenticated');
   const res = await fetch('/api/invite-client', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-ethos-admin-key': secret
+      'Authorization': `Bearer ${session.access_token}`
     },
     body: JSON.stringify({ fullName, email, companyName, engagementType })
   });

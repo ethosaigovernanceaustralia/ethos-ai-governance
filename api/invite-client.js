@@ -12,12 +12,6 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Verify a simple shared secret so only the admin dashboard can call this
-  const authHeader = req.headers['x-ethos-admin-key'];
-  if (!authHeader || authHeader !== process.env.ETHOS_ADMIN_SECRET) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
   const { fullName, email, companyName, engagementType } = req.body;
 
   if (!fullName || !email || !companyName) {
@@ -30,6 +24,20 @@ module.exports = async function handler(req, res) {
     process.env.SUPABASE_SECRET_KEY,
     { auth: { autoRefreshToken: false, persistSession: false } }
   );
+
+  // Verify the caller is a logged-in admin by checking their session token
+  const bearerToken = (req.headers['authorization'] || '').replace('Bearer ', '');
+  if (!bearerToken) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  const { data: { user: callerUser }, error: tokenError } = await supabase.auth.getUser(bearerToken);
+  if (tokenError || !callerUser) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  const { data: callerProfile } = await supabase.from('profiles').select('role').eq('id', callerUser.id).single();
+  if (!callerProfile || callerProfile.role !== 'admin') {
+    return res.status(403).json({ error: 'Admin access required' });
+  }
 
   // Invite user — Supabase sends the invitation email automatically
   const { data: userData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
