@@ -187,6 +187,13 @@ async function handleFormSubmit(e) {
     // Still show success to the user — don't penalise them for backend issues
   }
 
+  // Fire-and-forget notification email (non-blocking)
+  fetch('/api/notify-enquiry', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  }).catch(() => {}); // silently ignore failures
+
   btn.innerHTML = originalBtnHTML;
   btn.disabled = false;
   if (successEl) successEl.style.display = 'flex';

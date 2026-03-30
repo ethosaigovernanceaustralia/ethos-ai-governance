@@ -3039,24 +3039,23 @@ img { display: block; max-width: 100%; }
 }
 
 /* Who This Is Not For */
-.section-not-for { padding: 0; }
+.section-not-for { padding: 0 0 4rem; }
 .not-for-callout {
-  max-width: 760px;
+  max-width: 720px;
   margin: 0 auto;
-  border: 1px solid rgba(201,168,76,0.3);
-  border-radius: 12px;
-  padding: 2rem 2.5rem;
-  background: rgba(201,168,76,0.04);
+  border-left: 3px solid var(--brass);
+  padding: 0.25rem 0 0.25rem 2rem;
+  background: none;
 }
 .not-for-heading {
-  font-size: 1.15rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--navy);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .not-for-callout p {
-  font-size: 0.97rem;
-  color: #4a5568;
+  font-size: 0.92rem;
+  color: #6b7280;
   line-height: 1.7;
   margin: 0;
 }
