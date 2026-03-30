@@ -19,15 +19,11 @@ DROP POLICY IF EXISTS "enquiries_admin_update" ON enquiries;
 
 CREATE OR REPLACE FUNCTION is_admin()
 RETURNS boolean
-LANGUAGE sql
-SECURITY DEFINER
-SET search_path = public
-STABLE
 AS $$
   SELECT EXISTS (
     SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'
   );
-$$;
+$$ LANGUAGE sql SECURITY DEFINER STABLE SET search_path = public;
 
 
 -- ─── 3. Recreate all admin policies using is_admin() ──────────

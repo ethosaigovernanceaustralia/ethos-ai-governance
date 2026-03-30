@@ -3023,3 +3023,172 @@ img { display: block; max-width: 100%; }
   .hero-ctas { flex-direction: column; align-items: flex-start; }
   .svc-cta-row { flex-direction: column; }
 }
+
+/* ── V6 + Hormozi additions ───────────────────────────── */
+
+/* Problem section bridge line */
+.problem-bridge {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.75);
+  font-style: italic;
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Who This Is Not For */
+.section-not-for { padding: 0; }
+.not-for-callout {
+  max-width: 760px;
+  margin: 0 auto;
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 12px;
+  padding: 2rem 2.5rem;
+  background: rgba(201,168,76,0.04);
+}
+.not-for-heading {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+.not-for-callout p {
+  font-size: 0.97rem;
+  color: #4a5568;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* Bonus cards */
+.bonus-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1rem;
+}
+.bonus-card {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid #e8ecf0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s;
+}
+.bonus-card:hover { box-shadow: 0 4px 16px rgba(13,31,60,0.08); }
+.bonus-card-icon {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--navy);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bonus-card-icon .material-symbols-outlined {
+  color: var(--brass);
+  font-size: 1.2rem;
+}
+.bonus-card-body h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 0.5rem;
+}
+.bonus-problem, .bonus-what {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #374151;
+  margin: 0 0 0.4rem;
+}
+.bonus-effort {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-style: italic;
+  margin: 0.25rem 0 0;
+}
+
+/* Time-to-value line */
+.svc-ttv {
+  font-size: 0.9rem;
+  color: var(--brass);
+  font-weight: 600;
+  margin: 0.5rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.svc-ttv::before {
+  content: "⏱";
+  font-style: normal;
+}
+
+/* Audit slot availability */
+.audit-slots {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-top: 0.6rem;
+  font-weight: 500;
+}
+
+/* Contact option note */
+.contact-option-note {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.6);
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+/* Free resource card */
+.free-resource-card {
+  position: relative;
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 12px;
+  padding: 1.75rem;
+  background: #fff;
+  max-width: 680px;
+}
+.free-resource-badge {
+  display: inline-block;
+  background: var(--brass);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+.free-resource-inner {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+.free-resource-icon {
+  font-size: 2rem;
+  color: var(--brass);
+  flex-shrink: 0;
+}
+.free-resource-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0 0 0.5rem;
+}
+.free-resource-body p {
+  font-size: 0.92rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+@media (max-width: 640px) {
+  .not-for-callout { padding: 1.5rem; }
+  .bonus-card { flex-direction: column; }
+  .free-resource-inner { flex-direction: column; }
+}
