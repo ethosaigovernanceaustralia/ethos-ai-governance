@@ -41,7 +41,8 @@ module.exports = async function handler(req, res) {
 
   // Invite user — Supabase sends the invitation email automatically
   const { data: userData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName, company_name: companyName }
+    data: { full_name: fullName, company_name: companyName },
+    redirectTo: 'https://ethosaigovernance.com.au/portal/reset-password',
   });
 
   if (inviteError) {
