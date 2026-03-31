@@ -48,6 +48,9 @@
         <button class="admin-nav-item" id="navArchive" onclick="showView('archive')">
           <span class="material-symbols-outlined">inventory_2</span> Archive
         </button>
+        <button class="admin-nav-item" id="navBin" onclick="showView('bin')">
+          <span class="material-symbols-outlined">delete</span> Bin
+        </button>
       </div>
     </div>
 
@@ -209,6 +212,42 @@
             <thead><tr><th>Name</th><th>Company</th><th>Date</th><th></th></tr></thead>
             <tbody id="archivedEnquiriesBody">
               <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Bin View ─── -->
+    <div id="viewBin" style="display:none">
+      <div class="portal-section-title">
+        <span>Bin</span>
+        <span style="font-size:0.8rem;color:var(--muted);font-weight:400">Items are permanently deleted after 90 days</span>
+      </div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem">
+        <button class="btn-navy" id="binTabClientsBtn" onclick="showBinTab('clients')" style="font-size:0.8125rem">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">group</span> Clients
+        </button>
+        <button class="btn-outline" id="binTabEnquiriesBtn" onclick="showBinTab('enquiries')" style="font-size:0.8125rem">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">mail</span> Enquiries
+        </button>
+      </div>
+      <div id="binClientsPane">
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead><tr><th>Client</th><th>Company</th><th>Deleted</th><th>Deletes in</th><th></th></tr></thead>
+            <tbody id="binClientsBody">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="binEnquiriesPane" style="display:none">
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead><tr><th>Name</th><th>Company</th><th>Deleted</th><th>Deletes in</th><th></th></tr></thead>
+            <tbody id="binEnquiriesBody">
+              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -413,10 +452,13 @@ function showView(view) {
   document.getElementById('viewClients').style.display   = view === 'clients'   ? 'block' : 'none';
   document.getElementById('viewEnquiries').style.display = view === 'enquiries' ? 'block' : 'none';
   document.getElementById('viewArchive').style.display   = view === 'archive'   ? 'block' : 'none';
+  document.getElementById('viewBin').style.display       = view === 'bin'       ? 'block' : 'none';
   document.getElementById('navClients').className   = 'admin-nav-item' + (view === 'clients'   ? ' active' : '');
   document.getElementById('navEnquiries').className = 'admin-nav-item' + (view === 'enquiries' ? ' active' : '');
   document.getElementById('navArchive').className   = 'admin-nav-item' + (view === 'archive'   ? ' active' : '');
+  document.getElementById('navBin').className       = 'admin-nav-item' + (view === 'bin'       ? ' active' : '');
   if (view === 'archive') loadArchive();
+  if (view === 'bin') loadBin();
 }
 
 function showArchiveTab(tab) {
@@ -449,9 +491,12 @@ async function loadArchivedClients() {
       </td>
       <td style="color:var(--muted)">${escHtml(c.company_name || '–')}</td>
       <td style="color:var(--muted)">${formatDate(c.archived_at)}</td>
-      <td>
+      <td style="display:flex;gap:0.4rem">
         <button class="btn-ghost" onclick="handleUnarchiveClient('${c.id}')">
           <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">unarchive</span> Restore
+        </button>
+        <button class="btn-ghost" onclick="handleSoftDeleteClient('${c.id}')" title="Move to Bin" style="color:var(--muted)">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">delete</span>
         </button>
       </td>
     </tr>
@@ -470,9 +515,12 @@ async function loadArchivedEnquiries() {
       <td style="font-weight:500">${escHtml(e.name)}</td>
       <td style="color:var(--muted)">${escHtml(e.company)}</td>
       <td style="color:var(--muted)">${formatDate(e.created_at)}</td>
-      <td>
+      <td style="display:flex;gap:0.4rem">
         <button class="btn-ghost" onclick="handleUnarchiveEnquiry('${e.id}')">
           <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">unarchive</span> Restore
+        </button>
+        <button class="btn-ghost" onclick="handleSoftDeleteEnquiry('${e.id}')" title="Move to Bin" style="color:var(--muted)">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">delete</span>
         </button>
       </td>
     </tr>
@@ -558,6 +606,9 @@ async function loadClients() {
           <button class="btn-ghost" onclick="event.stopPropagation();selectClient('${c.id}')">View</button>
           <button class="btn-ghost" onclick="event.stopPropagation();handleArchiveClient('${c.id}')" title="Archive" style="color:var(--muted)">
             <span class="material-symbols-outlined" style="font-size:0.9rem">archive</span>
+          </button>
+          <button class="btn-ghost" onclick="event.stopPropagation();handleSoftDeleteClient('${c.id}')" title="Move to Bin" style="color:var(--muted)">
+            <span class="material-symbols-outlined" style="font-size:0.9rem">delete</span>
           </button>
         </td>
       </tr>
@@ -909,9 +960,12 @@ async function loadEnquiries() {
       <td style="color:var(--muted)">${promptLabels[enq.enquiry_prompt] || enq.enquiry_prompt}</td>
       <td><span class="status-badge status-${enq.status}">${enq.status.charAt(0).toUpperCase()+enq.status.slice(1)}</span></td>
       <td style="color:var(--muted)">${formatDate(enq.created_at)}</td>
-      <td onclick="event.stopPropagation()">
+      <td onclick="event.stopPropagation()" style="display:flex;gap:0.4rem">
         <button class="btn-ghost" onclick="handleArchiveEnquiry('${enq.id}')" title="Archive" style="color:var(--muted)">
           <span class="material-symbols-outlined" style="font-size:0.9rem">archive</span>
+        </button>
+        <button class="btn-ghost" onclick="handleSoftDeleteEnquiry('${enq.id}')" title="Move to Bin" style="color:var(--muted)">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">delete</span>
         </button>
       </td>
     </tr>
@@ -975,6 +1029,137 @@ async function handleEnquiryStatusChange(enquiryId, status) {
     showToast('Status updated.', 'success');
     await loadEnquiries();
   }
+}
+
+// ─── Bin ───────────────────────────────────────────────────────
+
+function daysRemaining(deletedAt) {
+  const purgeDate = new Date(new Date(deletedAt).getTime() + 90 * 24 * 60 * 60 * 1000);
+  return Math.max(0, Math.ceil((purgeDate - Date.now()) / (24 * 60 * 60 * 1000)));
+}
+
+function showBinTab(tab) {
+  document.getElementById('binClientsPane').style.display   = tab === 'clients'   ? 'block' : 'none';
+  document.getElementById('binEnquiriesPane').style.display = tab === 'enquiries' ? 'block' : 'none';
+  document.getElementById('binTabClientsBtn').className   = tab === 'clients'   ? 'btn-navy'   : 'btn-outline';
+  document.getElementById('binTabEnquiriesBtn').className = tab === 'enquiries' ? 'btn-navy'   : 'btn-outline';
+  document.getElementById('binTabClientsBtn').style.fontSize   = '0.8125rem';
+  document.getElementById('binTabEnquiriesBtn').style.fontSize = '0.8125rem';
+}
+
+async function loadBin() {
+  await Promise.all([loadBinClients(), loadBinEnquiries()]);
+}
+
+async function loadBinClients() {
+  const clients = await getDeletedClients();
+  const tbody = document.getElementById('binClientsBody');
+
+  // Auto-purge anything older than 90 days
+  const expired = clients.filter(c => daysRemaining(c.deleted_at) === 0);
+  await Promise.all(expired.map(c => permanentlyDeleteClient(c.id)));
+
+  const active = clients.filter(c => daysRemaining(c.deleted_at) > 0);
+  if (!active.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Bin is empty.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = active.map(c => {
+    const days = daysRemaining(c.deleted_at);
+    return `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:10px">
+            <div class="client-avatar" style="width:28px;height:28px;font-size:0.65rem">${getInitials(c.full_name)}</div>
+            <span style="font-weight:500">${escHtml(c.full_name)}</span>
+          </div>
+        </td>
+        <td style="color:var(--muted)">${escHtml(c.company_name || '–')}</td>
+        <td style="color:var(--muted)">${formatDate(c.deleted_at)}</td>
+        <td><span class="status-badge ${days <= 7 ? 'scan-flagged' : 'status-paused'}">${days} day${days !== 1 ? 's' : ''}</span></td>
+        <td style="display:flex;gap:0.4rem">
+          <button class="btn-ghost" onclick="handleRestoreDeletedClient('${c.id}')">
+            <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">restore</span> Restore
+          </button>
+          <button class="btn-ghost" onclick="handlePermanentDeleteClient('${c.id}','${escHtml(c.full_name)}')" style="color:#dc2626" title="Delete forever">
+            <span class="material-symbols-outlined" style="font-size:0.9rem">delete_forever</span>
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+async function loadBinEnquiries() {
+  const enqs = await getDeletedEnquiries();
+  const tbody = document.getElementById('binEnquiriesBody');
+
+  const expired = enqs.filter(e => daysRemaining(e.deleted_at) === 0);
+  await Promise.all(expired.map(e => permanentlyDeleteEnquiry(e.id)));
+
+  const active = enqs.filter(e => daysRemaining(e.deleted_at) > 0);
+  if (!active.length) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Bin is empty.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = active.map(e => {
+    const days = daysRemaining(e.deleted_at);
+    return `
+      <tr>
+        <td style="font-weight:500">${escHtml(e.name)}</td>
+        <td style="color:var(--muted)">${escHtml(e.company)}</td>
+        <td style="color:var(--muted)">${formatDate(e.deleted_at)}</td>
+        <td><span class="status-badge ${days <= 7 ? 'scan-flagged' : 'status-paused'}">${days} day${days !== 1 ? 's' : ''}</span></td>
+        <td style="display:flex;gap:0.4rem">
+          <button class="btn-ghost" onclick="handleRestoreDeletedEnquiry('${e.id}')">
+            <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">restore</span> Restore
+          </button>
+          <button class="btn-ghost" onclick="handlePermanentDeleteEnquiry('${e.id}','${escHtml(e.name)}')" style="color:#dc2626" title="Delete forever">
+            <span class="material-symbols-outlined" style="font-size:0.9rem">delete_forever</span>
+          </button>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+async function handleSoftDeleteClient(clientId) {
+  if (!confirm('Move this client to the Bin? They will be permanently deleted after 90 days unless restored.')) return;
+  const ok = await softDeleteClient(clientId);
+  if (ok) {
+    showToast('Client moved to Bin.', 'success');
+    if (_selectedClientId === clientId) closeClientWorkspace();
+    await Promise.all([loadClients(), loadArchivedClients()]);
+  }
+}
+
+async function handleSoftDeleteEnquiry(enquiryId) {
+  if (!confirm('Move this enquiry to the Bin? It will be permanently deleted after 90 days unless restored.')) return;
+  const ok = await softDeleteEnquiry(enquiryId);
+  if (ok) {
+    showToast('Enquiry moved to Bin.', 'success');
+    await Promise.all([loadEnquiries(), loadArchivedEnquiries()]);
+  }
+}
+
+async function handleRestoreDeletedClient(clientId) {
+  const ok = await restoreDeletedClient(clientId);
+  if (ok) { showToast('Client restored.', 'success'); await Promise.all([loadClients(), loadBinClients()]); }
+}
+
+async function handleRestoreDeletedEnquiry(enquiryId) {
+  const ok = await restoreDeletedEnquiry(enquiryId);
+  if (ok) { showToast('Enquiry restored.', 'success'); await Promise.all([loadEnquiries(), loadBinEnquiries()]); }
+}
+
+async function handlePermanentDeleteClient(clientId, name) {
+  if (!confirm(`Permanently delete "${name}"? This cannot be undone.`)) return;
+  const ok = await permanentlyDeleteClient(clientId);
+  if (ok) { showToast('Client permanently deleted.', 'success'); await loadBinClients(); }
+}
+
+async function handlePermanentDeleteEnquiry(enquiryId, name) {
+  if (!confirm(`Permanently delete enquiry from "${name}"? This cannot be undone.`)) return;
+  const ok = await permanentlyDeleteEnquiry(enquiryId);
+  if (ok) { showToast('Enquiry permanently deleted.', 'success'); await loadBinEnquiries(); }
 }
 
 function escHtml(str) {

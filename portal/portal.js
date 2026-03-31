@@ -266,6 +266,7 @@ async function getEnquiries() {
     .from('enquiries')
     .select('*')
     .is('archived_at', null)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
   if (error) { console.error('Enquiries error:', error); return []; }
   return data || [];
@@ -289,6 +290,7 @@ async function getAllClients() {
     .select('*, engagements(id, engagement_type, status)')
     .eq('role', 'client')
     .is('archived_at', null)
+    .is('deleted_at', null)
     .order('created_at', { ascending: false });
   if (error) { console.error('Clients error:', error); return []; }
   return data || [];
@@ -320,6 +322,7 @@ async function getArchivedClients() {
     .select('*, engagements(id, engagement_type, status)')
     .eq('role', 'client')
     .not('archived_at', 'is', null)
+    .is('deleted_at', null)
     .order('archived_at', { ascending: false });
   if (error) { console.error('Archived clients error:', error); return []; }
   return data || [];
@@ -348,6 +351,7 @@ async function getArchivedEnquiries() {
     .from('enquiries')
     .select('*')
     .not('archived_at', 'is', null)
+    .is('deleted_at', null)
     .order('archived_at', { ascending: false });
   if (error) { console.error('Archived enquiries error:', error); return []; }
   return data || [];
@@ -442,6 +446,81 @@ function engagementLabel(type) {
     iso_pathway:         'ISO 42001 Readiness Pathway'
   };
   return labels[type] || type;
+}
+
+// ─── Bin (Soft-delete / 90-day permanent delete) ──────────────
+
+async function softDeleteClient(clientId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('profiles').update({ deleted_at: new Date().toISOString() }).eq('id', clientId);
+  if (error) { console.error('Soft-delete client error:', error); return false; }
+  return true;
+}
+
+async function softDeleteEnquiry(enquiryId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('enquiries').update({ deleted_at: new Date().toISOString() }).eq('id', enquiryId);
+  if (error) { console.error('Soft-delete enquiry error:', error); return false; }
+  return true;
+}
+
+async function restoreDeletedClient(clientId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('profiles').update({ deleted_at: null, archived_at: null }).eq('id', clientId);
+  if (error) { console.error('Restore deleted client error:', error); return false; }
+  return true;
+}
+
+async function restoreDeletedEnquiry(enquiryId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('enquiries').update({ deleted_at: null, archived_at: null }).eq('id', enquiryId);
+  if (error) { console.error('Restore deleted enquiry error:', error); return false; }
+  return true;
+}
+
+async function getDeletedClients() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('profiles')
+    .select('*')
+    .eq('role', 'client')
+    .not('deleted_at', 'is', null)
+    .order('deleted_at', { ascending: false });
+  if (error) { console.error('Deleted clients error:', error); return []; }
+  return data || [];
+}
+
+async function getDeletedEnquiries() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('enquiries')
+    .select('*')
+    .not('deleted_at', 'is', null)
+    .order('deleted_at', { ascending: false });
+  if (error) { console.error('Deleted enquiries error:', error); return []; }
+  return data || [];
+}
+
+async function permanentlyDeleteClient(clientId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('profiles').delete().eq('id', clientId);
+  if (error) { console.error('Permanent delete client error:', error); return false; }
+  return true;
+}
+
+async function permanentlyDeleteEnquiry(enquiryId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('enquiries').delete().eq('id', enquiryId);
+  if (error) { console.error('Permanent delete enquiry error:', error); return false; }
+  return true;
 }
 
 function hideLoader() {

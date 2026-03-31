@@ -3039,10 +3039,10 @@ img { display: block; max-width: 100%; }
 }
 
 /* Who This Is Not For */
-.section-not-for { padding: 0 0 4rem; }
+.section-not-for { padding: 8rem 0; }
 .not-for-callout {
   max-width: 720px;
-  margin: 0 auto;
+  margin: 4rem auto 0;
   border-left: 3px solid var(--brass);
   padding: 0.25rem 0 0.25rem 2rem;
   background: none;
