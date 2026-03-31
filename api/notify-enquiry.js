@@ -61,7 +61,7 @@ module.exports = async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Ethos Website <onboarding@resend.dev>',
+        from: 'Ethos Website <hello@ethosaigovernance.com.au>',
         to:   [NOTIFY_EMAIL],
         subject: `New enquiry from ${name} — ${company}`,
         html,
