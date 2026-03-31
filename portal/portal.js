@@ -113,31 +113,42 @@ async function updateEngagementStatus(engagementId, status) {
 
 // ─── Documents ────────────────────────────────────────────────
 
-async function getDocuments(engagementId) {
+async function getDocuments(engagementIds) {
   const sb = getSupabase();
   if (!sb) return [];
+  const ids = Array.isArray(engagementIds) ? engagementIds : [engagementIds];
   const { data, error } = await sb
     .from('documents')
     .select('*, profiles(full_name)')
-    .eq('engagement_id', engagementId)
+    .in('engagement_id', ids)
     .order('created_at', { ascending: false });
   if (error) { console.error('Documents error:', error); return []; }
   return data || [];
 }
 
-async function uploadDocument(file, engagementId, clientUserId, description, documentType, onProgress) {
+async function uploadDocument(file, engagementId, clientUserId, description, documentType, onProgress, adminMode = false) {
   const sb = getSupabase();
   if (!sb) return null;
 
   // Validate file type
-  if (file.type !== 'application/pdf') {
-    throw new Error('Only PDF files are accepted. Please convert your document to PDF and try again.');
+  const ADMIN_TYPES = [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  ];
+  const CLIENT_TYPES = ['application/pdf'];
+  const allowedTypes = adminMode ? ADMIN_TYPES : CLIENT_TYPES;
+  if (!allowedTypes.includes(file.type)) {
+    throw new Error(adminMode
+      ? 'Only PDF and Word documents (.doc, .docx) are accepted.'
+      : 'Only PDF files are accepted. Please convert your document to PDF and try again.'
+    );
   }
 
-  // Validate file size (25MB max)
-  const maxSize = 25 * 1024 * 1024;
+  // Validate file size
+  const maxSize = (adminMode ? 50 : 25) * 1024 * 1024;
   if (file.size > maxSize) {
-    throw new Error('File exceeds the 25MB limit. Please reduce the file size and try again.');
+    throw new Error(`File exceeds the ${adminMode ? 50 : 25}MB limit. Please reduce the file size and try again.`);
   }
 
   // Build storage path: {client_id}/{uuid}_{sanitized_name}
@@ -151,7 +162,7 @@ async function uploadDocument(file, engagementId, clientUserId, description, doc
     .upload(storagePath, file, {
       cacheControl: '3600',
       upsert: false,
-      contentType: 'application/pdf',
+      contentType: file.type,
       onUploadProgress: (progress) => {
         if (onProgress) onProgress(Math.round((progress.loaded / progress.total) * 100));
       }
@@ -254,6 +265,7 @@ async function getEnquiries() {
   const { data, error } = await sb
     .from('enquiries')
     .select('*')
+    .is('archived_at', null)
     .order('created_at', { ascending: false });
   if (error) { console.error('Enquiries error:', error); return []; }
   return data || [];
@@ -276,9 +288,77 @@ async function getAllClients() {
     .from('profiles')
     .select('*, engagements(id, engagement_type, status)')
     .eq('role', 'client')
+    .is('archived_at', null)
     .order('created_at', { ascending: false });
   if (error) { console.error('Clients error:', error); return []; }
   return data || [];
+}
+
+// ─── Archive ──────────────────────────────────────────────────
+
+async function archiveClient(clientId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('profiles').update({ archived_at: new Date().toISOString() }).eq('id', clientId);
+  if (error) { console.error('Archive client error:', error); return false; }
+  return true;
+}
+
+async function unarchiveClient(clientId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('profiles').update({ archived_at: null }).eq('id', clientId);
+  if (error) { console.error('Unarchive client error:', error); return false; }
+  return true;
+}
+
+async function getArchivedClients() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('profiles')
+    .select('*, engagements(id, engagement_type, status)')
+    .eq('role', 'client')
+    .not('archived_at', 'is', null)
+    .order('archived_at', { ascending: false });
+  if (error) { console.error('Archived clients error:', error); return []; }
+  return data || [];
+}
+
+async function archiveEnquiry(enquiryId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('enquiries').update({ archived_at: new Date().toISOString() }).eq('id', enquiryId);
+  if (error) { console.error('Archive enquiry error:', error); return false; }
+  return true;
+}
+
+async function unarchiveEnquiry(enquiryId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('enquiries').update({ archived_at: null }).eq('id', enquiryId);
+  if (error) { console.error('Unarchive enquiry error:', error); return false; }
+  return true;
+}
+
+async function getArchivedEnquiries() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('enquiries')
+    .select('*')
+    .not('archived_at', 'is', null)
+    .order('archived_at', { ascending: false });
+  if (error) { console.error('Archived enquiries error:', error); return []; }
+  return data || [];
+}
+
+async function deleteEngagement(engagementId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('engagements').delete().eq('id', engagementId);
+  if (error) { console.error('Delete engagement error:', error); return false; }
+  return true;
 }
 
 // Admin: invite new client via Vercel API function
@@ -345,6 +425,12 @@ function formatDate(dateStr) {
 function getInitials(name) {
   if (!name) return '?';
   return name.split(' ').slice(0, 2).map(n => n[0]).join('').toUpperCase();
+}
+
+function getFileTypeLabel(fileName) {
+  const ext = (fileName || '').split('.').pop().toLowerCase();
+  if (ext === 'doc' || ext === 'docx') return 'DOC';
+  return 'PDF';
 }
 
 function engagementLabel(type) {

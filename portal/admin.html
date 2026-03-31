@@ -45,6 +45,9 @@
           <span class="material-symbols-outlined">mail</span> Enquiries
           <span class="status-badge status-new" id="newEnquiriesBadge" style="margin-left:auto;display:none"></span>
         </button>
+        <button class="admin-nav-item" id="navArchive" onclick="showView('archive')">
+          <span class="material-symbols-outlined">inventory_2</span> Archive
+        </button>
       </div>
     </div>
 
@@ -115,23 +118,13 @@
             </div>
           </div>
           <div class="portal-card-body">
-            <div class="engagement-card" style="margin-bottom:0">
-              <div class="engagement-icon">
-                <span class="material-symbols-outlined">verified_user</span>
-              </div>
-              <div class="engagement-info">
-                <div class="engagement-type">Engagement</div>
-                <div class="engagement-name" id="wsEngagementName">No engagement yet</div>
-                <div class="engagement-notes" id="wsEngagementNotes"></div>
-              </div>
-              <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-end">
-                <select class="p-select" id="wsEngagementStatus" onchange="handleUpdateEngagementStatus()" style="width:140px;font-size:0.8125rem;padding:0.4rem 0.75rem">
-                  <option value="active">Active</option>
-                  <option value="paused">Paused</option>
-                  <option value="completed">Completed</option>
-                </select>
-              </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem">
+              <div style="font-weight:600;font-size:0.875rem;color:var(--navy)">Engagements</div>
+              <button class="btn-outline" onclick="openAddEngagementModal()" style="font-size:0.8rem;padding:0.3rem 0.7rem;display:flex;align-items:center;gap:4px">
+                <span class="material-symbols-outlined" style="font-size:0.9rem">add</span> Add
+              </button>
             </div>
+            <div id="wsEngagementsList"></div>
           </div>
         </div>
 
@@ -189,6 +182,39 @@
       </div>
     </div>
 
+    <!-- ─── Archive View ─── -->
+    <div id="viewArchive" style="display:none">
+      <div class="portal-section-title">Archive</div>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.5rem">
+        <button class="btn-navy" id="archiveTabClientsBtn" onclick="showArchiveTab('clients')" style="font-size:0.8125rem">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">group</span> Clients
+        </button>
+        <button class="btn-outline" id="archiveTabEnquiriesBtn" onclick="showArchiveTab('enquiries')" style="font-size:0.8125rem">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">mail</span> Enquiries
+        </button>
+      </div>
+      <div id="archiveClientsPane">
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead><tr><th>Client</th><th>Company</th><th>Archived</th><th></th></tr></thead>
+            <tbody id="archivedClientsBody">
+              <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="archiveEnquiriesPane" style="display:none">
+        <div class="p-table-wrap">
+          <table class="p-table">
+            <thead><tr><th>Name</th><th>Company</th><th>Date</th><th></th></tr></thead>
+            <tbody id="archivedEnquiriesBody">
+              <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <!-- ─── Enquiries View ─── -->
     <div id="viewEnquiries" style="display:none">
       <div class="portal-section-title">Enquiries</div>
@@ -205,10 +231,11 @@
                 <th>Prompted by</th>
                 <th>Status</th>
                 <th>Date</th>
+                <th></th>
               </tr>
             </thead>
             <tbody id="enquiriesTableBody">
-              <tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
+              <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">Loading...</td></tr>
             </tbody>
           </table>
         </div>
@@ -291,13 +318,13 @@
 
     <div class="drop-zone" id="adminDropZone" onclick="document.getElementById('adminFileInput').click()">
       <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
-      <div class="drop-zone-text">Drop the PDF here, or click to browse</div>
-      <div class="drop-zone-sub">PDF files only. Maximum 25MB.</div>
-      <input type="file" id="adminFileInput" accept=".pdf,application/pdf"/>
+      <div class="drop-zone-text">Drop the file here, or click to browse</div>
+      <div class="drop-zone-sub">PDF or Word documents (.doc, .docx). Maximum 50MB.</div>
+      <input type="file" id="adminFileInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
     </div>
 
     <div class="selected-file" id="adminSelectedFile">
-      <span class="material-symbols-outlined" style="color:#dc2626;font-size:1.25rem">picture_as_pdf</span>
+      <span class="material-symbols-outlined" id="adminFileTypeIcon" style="color:#1d4ed8;font-size:1.25rem">description</span>
       <span class="selected-file-name" id="adminSelectedFileName"></span>
       <span class="selected-file-size" id="adminSelectedFileSize"></span>
       <button class="btn-danger-ghost" onclick="clearAdminFile()">
@@ -327,6 +354,35 @@
   </div>
 </div>
 
+<!-- Add Engagement Modal -->
+<div class="modal-overlay" id="addEngagementOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Add Engagement</h2>
+      <button class="modal-close" onclick="closeAddEngagementModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="addEngagementType">Engagement Type</label>
+      <select class="p-select" id="addEngagementType">
+        <option value="free_audit">Free Governance Audit</option>
+        <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
+        <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
+        <option value="retainer">Governance Retainer</option>
+        <option value="iso_pathway">ISO 42001 Readiness Pathway</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
+      <button class="btn-outline" onclick="closeAddEngagementModal()" style="flex:1">Cancel</button>
+      <button class="btn-gold" onclick="handleAddEngagement()" style="flex:2">
+        <span class="material-symbols-outlined" style="font-size:1rem">add</span>
+        Add Engagement
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="portal.js"></script>
@@ -335,6 +391,7 @@ let _adminProfile = null;
 let _allClients = [];
 let _selectedClientId = null;
 let _selectedEngagementId = null;
+let _allEngagements = [];
 let _adminSelectedFile = null;
 let _allEnquiries = [];
 let _selectedEnquiry = null;
@@ -353,10 +410,99 @@ let _selectedEnquiry = null;
 
 // ─── View switcher ─────────────────────────────────────────────
 function showView(view) {
-  document.getElementById('viewClients').style.display = view === 'clients' ? 'block' : 'none';
+  document.getElementById('viewClients').style.display   = view === 'clients'   ? 'block' : 'none';
   document.getElementById('viewEnquiries').style.display = view === 'enquiries' ? 'block' : 'none';
-  document.getElementById('navClients').className = 'admin-nav-item' + (view === 'clients' ? ' active' : '');
+  document.getElementById('viewArchive').style.display   = view === 'archive'   ? 'block' : 'none';
+  document.getElementById('navClients').className   = 'admin-nav-item' + (view === 'clients'   ? ' active' : '');
   document.getElementById('navEnquiries').className = 'admin-nav-item' + (view === 'enquiries' ? ' active' : '');
+  document.getElementById('navArchive').className   = 'admin-nav-item' + (view === 'archive'   ? ' active' : '');
+  if (view === 'archive') loadArchive();
+}
+
+function showArchiveTab(tab) {
+  document.getElementById('archiveClientsPane').style.display   = tab === 'clients'   ? 'block' : 'none';
+  document.getElementById('archiveEnquiriesPane').style.display = tab === 'enquiries' ? 'block' : 'none';
+  document.getElementById('archiveTabClientsBtn').className   = tab === 'clients'   ? 'btn-navy'    : 'btn-outline';
+  document.getElementById('archiveTabEnquiriesBtn').className = tab === 'enquiries' ? 'btn-navy'    : 'btn-outline';
+  document.getElementById('archiveTabClientsBtn').style.fontSize   = '0.8125rem';
+  document.getElementById('archiveTabEnquiriesBtn').style.fontSize = '0.8125rem';
+}
+
+async function loadArchive() {
+  await Promise.all([loadArchivedClients(), loadArchivedEnquiries()]);
+}
+
+async function loadArchivedClients() {
+  const clients = await getArchivedClients();
+  const tbody = document.getElementById('archivedClientsBody');
+  if (!clients.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">No archived clients.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = clients.map(c => `
+    <tr>
+      <td>
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="client-avatar" style="width:28px;height:28px;font-size:0.65rem">${getInitials(c.full_name)}</div>
+          <span style="font-weight:500">${escHtml(c.full_name)}</span>
+        </div>
+      </td>
+      <td style="color:var(--muted)">${escHtml(c.company_name || '–')}</td>
+      <td style="color:var(--muted)">${formatDate(c.archived_at)}</td>
+      <td>
+        <button class="btn-ghost" onclick="handleUnarchiveClient('${c.id}')">
+          <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">unarchive</span> Restore
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function loadArchivedEnquiries() {
+  const enqs = await getArchivedEnquiries();
+  const tbody = document.getElementById('archivedEnquiriesBody');
+  if (!enqs.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:2rem">No archived enquiries.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = enqs.map(e => `
+    <tr>
+      <td style="font-weight:500">${escHtml(e.name)}</td>
+      <td style="color:var(--muted)">${escHtml(e.company)}</td>
+      <td style="color:var(--muted)">${formatDate(e.created_at)}</td>
+      <td>
+        <button class="btn-ghost" onclick="handleUnarchiveEnquiry('${e.id}')">
+          <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">unarchive</span> Restore
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function handleArchiveClient(clientId) {
+  if (!confirm('Archive this client? They will be moved to the Archive bin and can be restored at any time.')) return;
+  const ok = await archiveClient(clientId);
+  if (ok) {
+    showToast('Client archived.', 'success');
+    if (_selectedClientId === clientId) closeClientWorkspace();
+    await loadClients();
+  }
+}
+
+async function handleUnarchiveClient(clientId) {
+  const ok = await unarchiveClient(clientId);
+  if (ok) { showToast('Client restored.', 'success'); await Promise.all([loadClients(), loadArchivedClients()]); }
+}
+
+async function handleArchiveEnquiry(enquiryId) {
+  if (!confirm('Archive this enquiry? It will be moved to the Archive bin and can be restored at any time.')) return;
+  const ok = await archiveEnquiry(enquiryId);
+  if (ok) { showToast('Enquiry archived.', 'success'); await loadEnquiries(); }
+}
+
+async function handleUnarchiveEnquiry(enquiryId) {
+  const ok = await unarchiveEnquiry(enquiryId);
+  if (ok) { showToast('Enquiry restored.', 'success'); await Promise.all([loadEnquiries(), loadArchivedEnquiries()]); }
 }
 
 // ─── Clients ───────────────────────────────────────────────────
@@ -408,7 +554,12 @@ async function loadClients() {
         <td>${eng ? escHtml(engagementLabel(eng.engagement_type)) : '<span style="color:var(--muted)">None</span>'}</td>
         <td>${eng ? `<span class="status-badge status-${eng.status}">${eng.status.charAt(0).toUpperCase()+eng.status.slice(1)}</span>` : '–'}</td>
         <td style="color:var(--muted)">${formatDate(c.created_at)}</td>
-        <td><button class="btn-ghost" onclick="event.stopPropagation();selectClient('${c.id}')">View</button></td>
+        <td style="display:flex;gap:0.4rem">
+          <button class="btn-ghost" onclick="event.stopPropagation();selectClient('${c.id}')">View</button>
+          <button class="btn-ghost" onclick="event.stopPropagation();handleArchiveClient('${c.id}')" title="Archive" style="color:var(--muted)">
+            <span class="material-symbols-outlined" style="font-size:0.9rem">archive</span>
+          </button>
+        </td>
       </tr>
     `;
   }).join('');
@@ -432,22 +583,21 @@ async function selectClient(clientId) {
   document.getElementById('wsClientName').textContent = client.full_name + (client.company_name ? ` — ${client.company_name}` : '');
   document.getElementById('wsClientEmail').textContent = client.email;
 
-  // Load engagement
+  // Load engagements
   const engagements = await getEngagements(clientId);
+  _allEngagements = engagements;
+  _selectedEngagementId = engagements.find(e => e.status === 'active')?.id || engagements[0]?.id || null;
+
+  const badge = document.getElementById('wsEngagementBadge');
   if (engagements.length) {
-    const eng = engagements[0];
-    _selectedEngagementId = eng.id;
-    document.getElementById('wsEngagementName').textContent = engagementLabel(eng.engagement_type);
-    document.getElementById('wsEngagementNotes').textContent = eng.notes || '';
-    const badge = document.getElementById('wsEngagementBadge');
-    badge.textContent = eng.status.charAt(0).toUpperCase() + eng.status.slice(1);
-    badge.className = `status-badge status-${eng.status}`;
-    document.getElementById('wsEngagementStatus').value = eng.status;
+    const active = engagements.filter(e => e.status === 'active').length;
+    badge.textContent = `${engagements.length} engagement${engagements.length > 1 ? 's' : ''}`;
+    badge.className = `status-badge status-${active ? 'active' : 'paused'}`;
   } else {
-    _selectedEngagementId = null;
-    document.getElementById('wsEngagementName').textContent = 'No engagement set';
-    document.getElementById('wsEngagementBadge').textContent = '';
+    badge.textContent = 'No engagements';
+    badge.className = 'status-badge';
   }
+  renderEngagements(engagements);
 
   // Load documents
   await refreshWorkspaceDocs();
@@ -459,18 +609,20 @@ async function selectClient(clientId) {
 function closeClientWorkspace() {
   _selectedClientId = null;
   _selectedEngagementId = null;
+  _allEngagements = [];
   document.getElementById('clientWorkspace').style.display = 'none';
   document.getElementById('clientsTable').style.display = 'block';
   document.querySelectorAll('.client-list-item').forEach(el => el.classList.remove('active'));
 }
 
 async function refreshWorkspaceDocs() {
-  if (!_selectedEngagementId) {
+  if (!_allEngagements.length) {
     document.getElementById('wsClientDocList').innerHTML = `<div class="empty-state"><p class="empty-state-text">No engagement set for this client yet.</p></div>`;
-    document.getElementById('wsEthosDocList').innerHTML = '';
+    document.getElementById('wsEthosDocList').innerHTML = `<div class="empty-state"><p class="empty-state-text">No engagement set for this client yet.</p></div>`;
     return;
   }
-  const docs = await getDocuments(_selectedEngagementId);
+  const allIds = _allEngagements.map(e => e.id);
+  const docs = await getDocuments(allIds);
   renderAdminDocList('wsClientDocList', docs.filter(d => d.document_type === 'client_upload'), false);
   renderAdminDocList('wsEthosDocList', docs.filter(d => d.document_type !== 'client_upload'), true);
 }
@@ -483,7 +635,7 @@ function renderAdminDocList(containerId, docs, showDelete) {
   }
   el.innerHTML = docs.map(doc => `
     <div class="file-item">
-      <div class="file-icon">PDF</div>
+      <div class="file-icon">${getFileTypeLabel(doc.file_name)}</div>
       <div class="file-info">
         <div class="file-name" title="${escHtml(doc.file_name)}">${escHtml(doc.file_name)}</div>
         <div class="file-meta">
@@ -528,11 +680,76 @@ async function handleAdminDeleteDoc(docId, filePath) {
   if (ok) { showToast('Document deleted.', 'success'); await refreshWorkspaceDocs(); }
 }
 
-async function handleUpdateEngagementStatus() {
-  if (!_selectedEngagementId) return;
-  const status = document.getElementById('wsEngagementStatus').value;
-  const ok = await updateEngagementStatus(_selectedEngagementId, status);
-  if (ok) showToast('Engagement status updated.', 'success');
+async function handleUpdateEngagementStatus(engId, status) {
+  const ok = await updateEngagementStatus(engId, status);
+  if (ok) {
+    const eng = _allEngagements.find(e => e.id === engId);
+    if (eng) eng.status = status;
+    _selectedEngagementId = _allEngagements.find(e => e.status === 'active')?.id || _allEngagements[0]?.id || null;
+    showToast('Status updated.', 'success');
+  }
+}
+
+function renderEngagements(engagements) {
+  const el = document.getElementById('wsEngagementsList');
+  if (!engagements.length) {
+    el.innerHTML = `<div style="font-size:0.8125rem;color:var(--muted);padding:0.25rem 0">No engagements yet. Use Add to create one.</div>`;
+    return;
+  }
+  el.innerHTML = engagements.map(eng => `
+    <div class="engagement-card" style="margin-bottom:0.75rem">
+      <div class="engagement-icon">
+        <span class="material-symbols-outlined">verified_user</span>
+      </div>
+      <div class="engagement-info" style="flex:1">
+        <div class="engagement-name">${escHtml(engagementLabel(eng.engagement_type))}</div>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <select class="p-select" onchange="handleUpdateEngagementStatus('${eng.id}', this.value)" style="width:120px;font-size:0.8125rem;padding:0.35rem 0.625rem">
+          <option value="active" ${eng.status==='active'?'selected':''}>Active</option>
+          <option value="paused" ${eng.status==='paused'?'selected':''}>Paused</option>
+          <option value="completed" ${eng.status==='completed'?'selected':''}>Completed</option>
+        </select>
+        <button class="file-action-btn delete" onclick="handleRemoveEngagement('${eng.id}')" title="Remove engagement">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function handleRemoveEngagement(engId) {
+  if (!confirm('Remove this engagement? This cannot be undone.')) return;
+  const ok = await deleteEngagement(engId);
+  if (ok) {
+    _allEngagements = _allEngagements.filter(e => e.id !== engId);
+    _selectedEngagementId = _allEngagements.find(e => e.status === 'active')?.id || _allEngagements[0]?.id || null;
+    renderEngagements(_allEngagements);
+    await refreshWorkspaceDocs();
+    showToast('Engagement removed.', 'success');
+  }
+}
+
+function openAddEngagementModal() {
+  document.getElementById('addEngagementOverlay').classList.add('open');
+}
+
+function closeAddEngagementModal() {
+  document.getElementById('addEngagementOverlay').classList.remove('open');
+}
+
+async function handleAddEngagement() {
+  if (!_selectedClientId) return;
+  const type = document.getElementById('addEngagementType').value;
+  const eng = await createEngagement(_selectedClientId, type, '');
+  if (eng) {
+    _allEngagements.unshift(eng);
+    _selectedEngagementId = eng.id;
+    renderEngagements(_allEngagements);
+    closeAddEngagementModal();
+    await refreshWorkspaceDocs();
+    showToast('Engagement added.', 'success');
+  }
 }
 
 // ─── Admin Upload Modal ────────────────────────────────────────
@@ -568,6 +785,10 @@ function setAdminFile(file) {
   document.getElementById('adminSelectedFileSize').textContent = formatFileSize(file.size);
   document.getElementById('adminSelectedFile').classList.add('visible');
   document.getElementById('adminUploadBtn').disabled = false;
+  const isWord = file.name.match(/\.(doc|docx)$/i);
+  const icon = document.getElementById('adminFileTypeIcon');
+  icon.textContent = isWord ? 'description' : 'picture_as_pdf';
+  icon.style.color = isWord ? '#1d4ed8' : '#dc2626';
 }
 
 function clearAdminFile() {
@@ -595,7 +816,8 @@ async function handleAdminUpload() {
       (pct) => {
         document.getElementById('adminUploadFill').style.width = `${pct}%`;
         document.getElementById('adminUploadText').textContent = `Uploading... ${pct}%`;
-      }
+      },
+      true  // adminMode: allow Word docs, 50MB
     );
     showToast('Deliverable uploaded to client workspace.', 'success');
     closeAdminUploadModal();
@@ -667,7 +889,7 @@ async function loadEnquiries() {
 
   const tbody = document.getElementById('enquiriesTableBody');
   if (!_allEnquiries.length) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:2rem">No enquiries yet.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:2rem">No enquiries yet.</td></tr>`;
     return;
   }
 
@@ -687,6 +909,11 @@ async function loadEnquiries() {
       <td style="color:var(--muted)">${promptLabels[enq.enquiry_prompt] || enq.enquiry_prompt}</td>
       <td><span class="status-badge status-${enq.status}">${enq.status.charAt(0).toUpperCase()+enq.status.slice(1)}</span></td>
       <td style="color:var(--muted)">${formatDate(enq.created_at)}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn-ghost" onclick="handleArchiveEnquiry('${enq.id}')" title="Archive" style="color:var(--muted)">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">archive</span>
+        </button>
+      </td>
     </tr>
   `).join('');
 }
