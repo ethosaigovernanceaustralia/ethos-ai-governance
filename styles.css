@@ -1196,7 +1196,7 @@ img { display: block; max-width: 100%; }
 }
 
 .ladder-card-featured::before {
-  content: 'Most Popular';
+  content: '★ Recommended';
   position: absolute;
   top: -12px;
   left: 50%;
@@ -2138,6 +2138,169 @@ img { display: block; max-width: 100%; }
   font-size: 0.8125rem;
   color: var(--muted);
   font-style: italic;
+}
+
+/* Tier 3 featured section */
+.services-section-featured {
+  background: linear-gradient(180deg, rgba(168,131,58,0.04) 0%, var(--white) 100%);
+  border-top: 3px solid var(--brass);
+}
+
+/* Recommended badge variant */
+.svc-badge-recommended {
+  background: var(--brass);
+  color: var(--white);
+}
+
+/* Tier 2 — exclusions list */
+.tier2-exclusions {
+  background: var(--surface);
+  border: 1.5px solid rgba(13,37,69,0.1);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 2rem;
+}
+
+.exclusions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0;
+  margin: 0;
+}
+
+.exclusions-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.exclusion-icon {
+  font-size: 1.1rem !important;
+  color: #dc2626;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Inline disclaimer (below CTAs in Tier 2 & 3) */
+.svc-disclaimer-inline {
+  background: rgba(13,37,69,0.04);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+}
+
+.svc-disclaimer-inline p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* Upgrade nudge (below Tier 2 CTA) */
+.upgrade-nudge {
+  background: rgba(168,131,58,0.06);
+  border: 1.5px solid rgba(168,131,58,0.2);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+}
+
+.upgrade-nudge p {
+  font-size: 0.9rem;
+  color: var(--navy);
+  line-height: 1.6;
+}
+
+.upgrade-nudge a {
+  color: var(--brass-dark);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Value context callout (Tier 3 & 4) */
+.value-context-callout {
+  background: rgba(13,37,69,0.04);
+  border-left: 4px solid var(--brass);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.value-context-callout h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.value-context-callout ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.value-context-callout li {
+  font-size: 0.9rem;
+  color: var(--muted);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.value-context-callout li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--brass);
+  font-weight: 700;
+}
+
+.value-context-callout p {
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.value-context-punchline {
+  font-size: 1rem !important;
+  font-weight: 600;
+  color: var(--navy) !important;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(13,37,69,0.1);
+}
+
+/* Retainer sub-block inside Tier 3 */
+.retainer-sub-block {
+  background: var(--surface);
+  border: 1.5px solid rgba(168,131,58,0.15);
+  border-radius: var(--radius-xl);
+  padding: 2rem 2.25rem;
+}
+
+.retainer-sub-note {
+  font-size: 0.8rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 1.25rem;
+  line-height: 1.6;
+}
+
+/* Bonus disclaimer lines */
+.bonus-disclaimer {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+  line-height: 1.55;
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(13,37,69,0.08);
 }
 
 /* ===== ABOUT PAGE ===== */
