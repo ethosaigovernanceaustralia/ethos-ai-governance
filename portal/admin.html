@@ -631,7 +631,7 @@ async function selectClient(clientId) {
   document.getElementById('clientWorkspace').style.display = 'block';
 
   // Populate header
-  document.getElementById('wsClientName').textContent = client.full_name + (client.company_name ? ` — ${client.company_name}` : '');
+  document.getElementById('wsClientName').textContent = client.full_name + (client.company_name ? ` - ${client.company_name}` : '');
   document.getElementById('wsClientEmail').textContent = client.email;
 
   // Load engagements
