@@ -1209,6 +1209,7 @@ img { display: block; max-width: 100%; }
   text-transform: uppercase;
   padding: 4px 12px;
   border-radius: 100px;
+  white-space: nowrap;
 }
 
 .ladder-num {
