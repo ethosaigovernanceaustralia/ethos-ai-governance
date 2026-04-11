@@ -86,7 +86,7 @@ function scrollToSection(sectionId) {
 // ─── Sub-nav active highlight on scroll ──────────
 function initSubnavHighlight() {
   if (currentPage !== 'services') return;
-  const sections = ['audit', 'toolkit', 'retainer', 'iso42001'];
+  const sections = ['audit', 'pricing-comparison', 'iso42001'];
   const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 80;
 
   const observer = new IntersectionObserver((entries) => {
@@ -583,6 +583,61 @@ function initPage() {
     obs.observe(panoEl);
   }
 })();
+
+// ─── Path-specific Form Submission ───────────────
+async function handlePathFormSubmit(e, pathType) {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('[type="submit"]');
+  const successEl = form.querySelector('.form-success-inline');
+  if (!submitBtn) return;
+
+  // Basic validation
+  const requiredFields = form.querySelectorAll('[required]');
+  let valid = true;
+  requiredFields.forEach(f => {
+    if (!f.value.trim()) {
+      f.style.borderColor = 'rgba(168,131,58,0.6)';
+      setTimeout(() => { f.style.borderColor = ''; }, 2500);
+      valid = false;
+    }
+  });
+  if (!valid) return;
+
+  const originalHTML = submitBtn.innerHTML;
+  submitBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem;animation:spin 0.8s linear infinite;vertical-align:middle">refresh</span> Sending...';
+  submitBtn.disabled = true;
+
+  // Collect form data
+  const fd = new FormData(form);
+  const data = {};
+  fd.forEach((val, key) => { data[key] = val; });
+  data.enquiry_type = pathType;
+
+  try {
+    await submitEnquiryToSupabase(data);
+  } catch (err) {
+    console.error('Form submission error:', err);
+  }
+
+  fetch('/api/notify-enquiry', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  }).catch(() => {});
+
+  submitBtn.innerHTML = originalHTML;
+  submitBtn.disabled = false;
+  form.reset();
+  if (successEl) successEl.style.display = 'flex';
+}
+
+// ─── Bonus Secondary Card Toggle ─────────────────
+function toggleBonusSecondary(summaryEl) {
+  const card = summaryEl.closest('.bonus-secondary-card');
+  if (!card) return;
+  card.classList.toggle('open');
+}
 
 // ─── Boot ────────────────────────────────────────
 if (document.readyState === 'loading') {

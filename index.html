@@ -38,8 +38,7 @@
         <a href="#services" data-page="services" onclick="navigate('services'); return false;">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
         <div class="nav-dropdown">
           <a href="#services" onclick="navigate('services'); setTimeout(()=>scrollToSection('audit'),300); return false;">Free Audit</a>
-          <a href="#services" onclick="navigate('services'); setTimeout(()=>scrollToSection('toolkit'),300); return false;">AU Compliance Core</a>
-          <a href="#services" onclick="navigate('services'); setTimeout(()=>scrollToSection('fullkit'),300); return false;">Responsible AI Toolkit</a>
+          <a href="#services" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300); return false;">Compare Tiers</a>
           <a href="#services" onclick="navigate('services'); setTimeout(()=>scrollToSection('iso42001'),300); return false;">ISO 42001</a>
         </div>
       </li>
@@ -226,29 +225,21 @@
     <div class="container">
       <div class="section-label" data-aos="fade-up">Common Scenarios</div>
       <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Does This Sound Familiar?</h2>
-      <div class="problem-grid">
-        <div class="problem-card" data-aos="fade-up" data-aos-delay="80">
-          <span class="material-symbols-outlined problem-icon">work</span>
-          <p>A prospect just sent you a 40-question AI governance assessment. You have zero answers.</p>
+      <div class="vignette-stack">
+        <div class="vignette-block" data-aos="fade-up" data-aos-delay="80">
+          <div class="vignette-label">The Procurement Ambush</div>
+          <blockquote class="vignette-text">"You're three weeks into your biggest enterprise sales cycle. The champion is excited, the technical evaluation went well, and then procurement sends a 40-question AI governance assessment. Your CTO looks at you. Your head of product looks at you. Nobody has answers. The deal stalls — not because your product isn't good enough, but because you can't demonstrate governance."</blockquote>
         </div>
-        <div class="problem-card" data-aos="fade-up" data-aos-delay="120">
-          <span class="material-symbols-outlined problem-icon">search</span>
-          <p>Procurement flagged your AI governance gaps. The deal's dying. You don't even know what to fix.</p>
+        <div class="vignette-block" data-aos="fade-up" data-aos-delay="140">
+          <div class="vignette-label">The Compliance Handoff</div>
+          <blockquote class="vignette-text">"Your CEO just forwarded you an email from your largest prospect's legal team: 'Please provide your AI governance framework, risk register, and automated decision-making transparency documentation before we can proceed to contract.' He's added a note: 'Can you handle this by Friday?' You don't have any of these documents. You're not even sure what half of them should contain."</blockquote>
         </div>
-        <div class="problem-card" data-aos="fade-up" data-aos-delay="160">
-          <span class="material-symbols-outlined problem-icon">groups</span>
-          <p>The board wants to see your responsible AI framework. You don't have one.</p>
-        </div>
-        <div class="problem-card" data-aos="fade-up" data-aos-delay="200">
-          <span class="material-symbols-outlined problem-icon">public</span>
-          <p>A partner won't integrate until you show documented AI governance. Clock's ticking.</p>
-        </div>
-        <div class="problem-card" data-aos="fade-up" data-aos-delay="240">
-          <span class="material-symbols-outlined problem-icon">verified</span>
-          <p>ISO 42001 is becoming a procurement requirement. Your competitors already know this.</p>
+        <div class="vignette-block" data-aos="fade-up" data-aos-delay="200">
+          <div class="vignette-label">The Investor Question</div>
+          <blockquote class="vignette-text">"Your Series A lead asks a straightforward question in the partner meeting: 'Walk us through your responsible AI framework.' You talk about your engineering practices, your testing pipeline, your data handling. They nod politely and then ask: 'But where's the documented governance framework? The risk register? The incident response plan?' You don't have one. The conversation moves on, but the question lingers in every subsequent email."</blockquote>
         </div>
       </div>
-      <p class="problem-bridge" data-aos="fade-up" data-aos-delay="280">You're not behind yet. But the window is closing.</p>
+      <p class="problem-bridge" data-aos="fade-up" data-aos-delay="260">These aren't hypothetical scenarios. They're happening to Australian AI vendors right now. The ones who have governance documentation ready close the deal. The ones who don't, lose it to a competitor who does.</p>
     </div>
   </section>
 
@@ -276,19 +267,20 @@
           <p>A structured health check that surfaces your governance gaps before your prospects do. No cost, no obligation.</p>
           <button class="btn-outline btn-sm" onclick="navigate('contact')">Request Free Audit</button>
         </div>
-        <div class="ladder-card" data-aos="fade-up" data-aos-delay="140">
+        <div class="ladder-card ladder-card-muted" data-aos="fade-up" data-aos-delay="140">
           <div class="ladder-num">02</div>
           <div class="ladder-badge">$999 AUD</div>
           <h3>AU Compliance Core</h3>
           <p>The legislative minimum, documented and delivered. Every current Australian regulatory obligation covered in professionally documented governance templates, ready for your team to review, adapt, and implement.</p>
-          <button class="btn-outline btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('toolkit'),300)">Get AU Compliance Core</button>
+          <button class="btn-outline btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get AU Compliance Core</button>
         </div>
         <div class="ladder-card ladder-card-featured" data-aos="fade-up" data-aos-delay="200">
+          <div class="ladder-recommended-badge">★ Recommended</div>
           <div class="ladder-num">03</div>
           <div class="ladder-badge">$1,699 AUD</div>
           <h3>Full Responsible AI Toolkit</h3>
           <p>The complete governance framework, client-branded, done-for-you delivery, with 6 months of governance retainer included. This is the product most Ethos clients choose.</p>
-          <button class="btn-primary btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('fullkit'),300)">Get the Toolkit</button>
+          <button class="btn-primary btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get the Toolkit</button>
         </div>
         <div class="ladder-card" data-aos="fade-up" data-aos-delay="260">
           <div class="ladder-num">04</div>
@@ -318,14 +310,14 @@
           <p>Governance frameworks built from Australian law outward. Not US or EU models adapted for Australia. The Privacy Act, ACL, and OAIC guidance are our foundation.</p>
         </div>
         <div class="bento-card" data-aos="fade-up" data-aos-delay="180">
-          <span class="material-symbols-outlined bento-icon">balance</span>
-          <h3>Legal + Technical Expertise</h3>
-          <p>The Ethos team holds qualifications in law, engineering and finance - the combination that AI governance demands.</p>
+          <span class="material-symbols-outlined bento-icon">my_location</span>
+          <h3>Deep Regulatory Precision</h3>
+          <p>Every template references specific Australian obligations — the Privacy Act, APPs, OAIC guidance, GfAA, and the December 2026 automated decision-making requirements. No generic 'best practices.' No US or EU frameworks repackaged.</p>
         </div>
         <div class="bento-card" data-aos="fade-up" data-aos-delay="230">
           <span class="material-symbols-outlined bento-icon">shield_with_heart</span>
-          <h3>Risk-Free Entry</h3>
-          <p>30-day relevance guarantee on the Baseline Toolkit. If it is not relevant to your AI product, you receive a full refund. No questions, no conditions.</p>
+          <h3>30-Day Money-Back Guarantee</h3>
+          <p>If the toolkit isn't relevant to your AI product, you receive a full refund within 30 days. No questions, no conditions.</p>
         </div>
       </div>
     </div>
@@ -365,38 +357,14 @@
     </div>
   </section>
 
-  <!-- FOUNDER CREDIBILITY -->
-  <section class="section section-founder">
+  <!-- AUDIT COUNTER -->
+  <section class="section section-audit-counter">
     <div class="container">
-      <div class="founder-two-col">
-        <div class="founder-text" data-aos="fade-right">
-          <div class="section-label">Our Foundation</div>
-          <h2 class="section-heading" style="text-align:left;max-width:none">Founded by a Rare Combination</h2>
-          <p>The Ethos team holds qualifications in law, engineering and finance.</p>
-          <button class="btn-outline" style="margin-top:1.75rem" onclick="navigate('about')">About Ethos <span class="material-symbols-outlined" style="font-size:0.95rem;vertical-align:middle;margin-left:4px">arrow_forward</span></button>
-        </div>
-        <div class="founder-credentials" data-aos="fade-left" data-aos-delay="100">
-          <div class="credential-card">
-            <span class="material-symbols-outlined credential-icon">gavel</span>
-            <div>
-              <div class="credential-title">Law</div>
-              <div class="credential-sub">Australian law and regulatory frameworks</div>
-            </div>
-          </div>
-          <div class="credential-card">
-            <span class="material-symbols-outlined credential-icon">engineering</span>
-            <div>
-              <div class="credential-title">Engineering</div>
-              <div class="credential-sub">Technical depth in AI systems</div>
-            </div>
-          </div>
-          <div class="credential-card">
-            <span class="material-symbols-outlined credential-icon">trending_up</span>
-            <div>
-              <div class="credential-title">Finance</div>
-              <div class="credential-sub">Commercial and financial acumen</div>
-            </div>
-          </div>
+      <div class="audit-counter-block" data-aos="fade-up">
+        <span class="material-symbols-outlined audit-counter-icon">task_alt</span>
+        <div class="audit-counter-text">
+          <span class="audit-counter-label">Governance Audits Completed</span>
+          <span class="audit-counter-num" id="auditCounterNum">3</span>
         </div>
       </div>
     </div>
@@ -445,8 +413,7 @@
     <div class="container">
       <div class="subnav-links">
         <a href="#audit" onclick="scrollToSection('audit'); return false;" class="subnav-link active-sub" data-section="audit">Free Audit</a>
-        <a href="#toolkit" onclick="scrollToSection('toolkit'); return false;" class="subnav-link" data-section="toolkit">AU Compliance Core</a>
-        <a href="#fullkit" onclick="scrollToSection('fullkit'); return false;" class="subnav-link" data-section="fullkit">Responsible AI Toolkit</a>
+        <a href="#pricing-comparison" onclick="scrollToSection('pricing-comparison'); return false;" class="subnav-link" data-section="pricing-comparison">Compare Tiers</a>
         <a href="#iso42001" onclick="scrollToSection('iso42001'); return false;" class="subnav-link" data-section="iso42001">ISO 42001 Pathway</a>
       </div>
     </div>
@@ -457,27 +424,22 @@
     <div class="container">
       <div class="svc-badge free-badge-lg" data-aos="fade-up">No Cost · No Obligation</div>
       <h2 class="svc-heading" data-aos="fade-up" data-aos-delay="60">Know Where You Stand Before Your Prospects Find Out</h2>
-      <p class="svc-body" data-aos="fade-up" data-aos-delay="100">A structured governance health check that maps your current AI posture against Australian obligations and surfaces the gaps that matter, before a client due diligence process, investor review, or regulatory enquiry does. Most founders discover 3–5 gaps they didn't know they had.</p>
 
-      <div class="audit-two-col">
-        <div data-aos="fade-right" data-aos-delay="80">
-          <h3 class="svc-subheading">What You Receive</h3>
+      <div class="audit-compact-two-col" data-aos="fade-up" data-aos-delay="80">
+        <div class="audit-compact-text">
+          <p class="svc-body" style="margin-bottom:1.5rem">A structured governance health check that surfaces the gaps that matter — before a prospect due diligence process, investor review, or regulatory enquiry does.</p>
           <ul class="svc-list">
-            <li><span class="material-symbols-outlined svc-check">check_circle</span>Traffic-light risk report (red / amber / green) across core governance domains</li>
-            <li><span class="material-symbols-outlined svc-check">check_circle</span>Compliance posture mapped to specific Australian regulatory requirements</li>
-            <li><span class="material-symbols-outlined svc-check">check_circle</span>Key governance gaps with associated risk ratings</li>
-            <li><span class="material-symbols-outlined svc-check">check_circle</span>Benchmarking against similar-stage Australian AI vendors (anonymised, aggregated)</li>
+            <li><span class="material-symbols-outlined svc-check">check_circle</span>Traffic-light report (red / amber / green) across core governance domains</li>
+            <li><span class="material-symbols-outlined svc-check">check_circle</span>Gap analysis against current Australian obligations</li>
             <li><span class="material-symbols-outlined svc-check">check_circle</span>Clear recommended next steps</li>
           </ul>
-          <div class="constraint-callout" data-aos="fade-up" data-aos-delay="120">
-            <span class="material-symbols-outlined" style="color:var(--brass)">info</span>
-            <p>Limited to 3 engagements per month. Report delivered within 5 business days of submission.</p>
+          <p class="audit-slots" style="margin-top:1.25rem">3 of 3 audit slots remaining for April 2026</p>
+          <div style="margin-top:1.5rem">
+            <button class="btn-primary" onclick="navigate('contact')">Request Your Free Audit</button>
+            <p style="font-size:0.8rem;color:var(--muted);margin-top:0.6rem">No pitch. No obligation. Report delivered within 5 business days.</p>
           </div>
-          <button class="btn-primary" style="margin-top:2rem" onclick="navigate('contact')">Request Your Free Audit</button>
-          <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem">No pitch. No obligation. You receive a report. What you do with it is your decision.</p>
-          <p class="audit-slots">3 of 3 audit slots remaining for April 2026</p>
         </div>
-        <div data-aos="fade-left" data-aos-delay="100">
+        <div class="audit-compact-visual">
           <div class="tl-report-card">
             <div class="tl-report-header">
               <span class="tl-report-title">Governance Audit Report</span>
@@ -498,11 +460,6 @@
                 <span class="tl-domain">Transparency</span>
                 <div class="tl-bar-wrap"><div class="tl-bar tl-red" style="width:23%"></div></div>
                 <span class="tl-status red-pill">Red</span>
-              </div>
-              <div class="tl-report-row">
-                <span class="tl-domain">Third-Party AI</span>
-                <div class="tl-bar-wrap"><div class="tl-bar tl-amber" style="width:48%"></div></div>
-                <span class="tl-status amber-pill">Amber</span>
               </div>
               <div class="tl-report-row">
                 <span class="tl-domain">Incident Response</span>
@@ -526,222 +483,251 @@
 
   <div class="section-divider"></div>
 
-  <!-- ── SECTION 2: AU COMPLIANCE CORE ── -->
-  <section class="services-section" id="toolkit">
+  <!-- ── PRICING COMPARISON: $999 vs $1,699 ── -->
+  <section class="services-section" id="pricing-comparison">
     <div class="container">
-      <div class="svc-badge" data-aos="fade-up">$999 AUD · One-Time</div>
-      <h2 class="svc-heading" data-aos="fade-up" data-aos-delay="60">The Legislative Minimum: Documented, Delivered, Done.</h2>
-      <p class="svc-body" data-aos="fade-up" data-aos-delay="100">Every current Australian regulatory obligation relevant to AI vendors, professionally documented in governance templates, ready for your team to review, adapt, and implement. This covers the compliance floor: the obligations that exist in Australian law right now. If your immediate need is documented governance foundations, this is your starting point.</p>
+      <div class="section-label" style="text-align:center;margin-bottom:0.5rem" data-aos="fade-up">Choose Your Tier</div>
+      <h2 class="svc-heading" data-aos="fade-up" data-aos-delay="60">Two Tiers. One Framework.</h2>
 
-      <h3 class="svc-subheading" data-aos="fade-up">What's Included</h3>
-      <div class="toolkit-grid" data-aos="fade-up" data-aos-delay="80">
-        <div class="toolkit-item"><span class="material-symbols-outlined">description</span>AI governance policy document (addressing Privacy Act, Australian Consumer Law, OAIC guidance, and GfAA alignment)</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">checklist</span>AI risk register template with guidance notes</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">inventory_2</span>AI system inventory / register template</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">visibility</span>Automated decision-making transparency documentation (supporting Privacy Act December 2026 readiness)</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">checklist</span>Third-party / vendor AI assessment checklist</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">policy</span>Responsible AI usage standards document</div>
-        <div class="toolkit-item toolkit-item-full"><span class="material-symbols-outlined">account_tree</span>Roles and responsibilities matrix for AI governance</div>
-      </div>
+      <div class="pricing-comparison-grid" data-aos="fade-up" data-aos-delay="80">
 
-      <!-- WHAT'S NOT INCLUDED -->
-      <div class="tier2-exclusions" data-aos="fade-up" style="margin-top:2.5rem">
-        <h3 class="svc-subheading" style="margin-bottom:1rem">What AU Compliance Core Does Not Include</h3>
-        <ul class="exclusions-list">
-          <li><span class="material-symbols-outlined exclusion-icon">remove_circle</span>Templates are delivered in standard format, not branded to your company</li>
-          <li><span class="material-symbols-outlined exclusion-icon">remove_circle</span>No implementation support: your team reviews, adapts, and implements independently</li>
-          <li><span class="material-symbols-outlined exclusion-icon">remove_circle</span>No ongoing regulatory updates: reflects obligations as at the date of purchase</li>
-          <li><span class="material-symbols-outlined exclusion-icon">remove_circle</span>Incident response plan, data governance mapping, and human oversight procedures (included in the Full Responsible AI Toolkit)</li>
-          <li><span class="material-symbols-outlined exclusion-icon">remove_circle</span>Bonuses (implementation sequence, procurement readiness guide, clause guide, board summary, tabletop exercise, benchmarking, governance badge) are included in the Full Responsible AI Toolkit only</li>
-        </ul>
-      </div>
-
-      <!-- GUARANTEE -->
-      <div class="readiness-guarantee" style="margin-top:2.5rem" data-aos="fade-up">
-        <div class="rg-icon"><span class="material-symbols-outlined">verified</span></div>
-        <div>
-          <h4>30-Day Relevance Guarantee</h4>
-          <p>If the templates are not relevant to your AI product or business model, you receive a full refund within 30 days. No questions, no conditions.</p>
-        </div>
-      </div>
-
-      <div class="svc-disclaimer-inline" data-aos="fade-up" style="margin-top:1.5rem">
-        <p>All templates are provided as professional governance resources and starting points. They require review, adaptation, and customisation to your specific circumstances, systems, and obligations. Ethos recommends that recipients seek independent legal counsel before finalising and implementing any governance documentation. Use of these templates does not guarantee compliance with any law or standard.</p>
-      </div>
-
-      <div class="svc-cta-row" data-aos="fade-up" data-aos-delay="80">
-        <button class="btn-primary btn-lg" onclick="navigate('contact')">Get AU Compliance Core ($999)</button>
-      </div>
-
-      <div class="upgrade-nudge" data-aos="fade-up" style="margin-top:1.5rem">
-        <p>Need it branded, implemented for you, and kept current as regulations change? <a href="#fullkit" onclick="scrollToSection('fullkit'); return false;">The Full Responsible AI Toolkit</a> includes everything above plus the complete framework, your company branding throughout, done-for-you delivery, and 6 months of governance retainer. $1,699.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="section-divider"></div>
-
-  <!-- ── SECTION 3: FULL RESPONSIBLE AI TOOLKIT ── -->
-  <section class="services-section services-section-featured" id="fullkit">
-    <div class="container">
-      <div class="svc-badge svc-badge-recommended" data-aos="fade-up">$1,699 AUD · ★ Recommended</div>
-      <h2 class="svc-heading" data-aos="fade-up" data-aos-delay="60">The Complete Governance Framework: Branded, Delivered, and Backed for 6 Months</h2>
-      <p class="svc-body" data-aos="fade-up" data-aos-delay="100">Everything in AU Compliance Core, plus the full responsible AI framework, branded to your company, delivered done-for-you, with 6 months of governance retainer included. The next time someone asks about your AI governance, your team has a professionally documented framework ready, with your logo on it.</p>
-
-      <!-- VALUE CONTEXT CALLOUT -->
-      <div class="value-context-callout" data-aos="fade-up" data-aos-delay="80">
-        <h4>What building this yourself typically involves</h4>
-        <ul>
-          <li>Engaging a governance consultant to develop these documents: $8,000–$15,000</li>
-          <li>Legal review of AI governance clauses and positions: $3,000–$5,000</li>
-          <li>Ongoing regulatory monitoring and template maintenance: $500/month</li>
-          <li>Typical first-year investment: $14,000–$26,000+</li>
-        </ul>
-        <p class="value-context-punchline">The Full Responsible AI Toolkit: $1,699, including 6 months of retainer.</p>
-      </div>
-
-      <h3 class="svc-subheading" data-aos="fade-up">Full Toolkit Contents</h3>
-      <p style="color:var(--muted);font-size:0.9rem;margin-bottom:1rem" data-aos="fade-up">Everything in AU Compliance Core, plus:</p>
-      <div class="toolkit-grid" data-aos="fade-up" data-aos-delay="80">
-        <div class="toolkit-item"><span class="material-symbols-outlined">description</span>AI governance policy document (addressing Privacy Act, ACL, OAIC guidance, and GfAA alignment)</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">checklist</span>AI risk register template with guidance notes</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">inventory_2</span>AI system inventory / register template</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">visibility</span>Automated decision-making transparency documentation</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">checklist</span>Third-party / vendor AI assessment checklist</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">policy</span>Responsible AI usage standards document</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">account_tree</span>Roles and responsibilities matrix for AI governance</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">hub</span>Data governance and data flow mapping templates</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">crisis_alert</span>Incident response plan for AI-related incidents</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">supervised_user_circle</span>Human oversight and review procedures</div>
-        <div class="toolkit-item"><span class="material-symbols-outlined">support_agent</span>Done-for-you delivery: documents configured for your business context, ready for your team's review and implementation</div>
-        <div class="toolkit-item toolkit-item-full"><span class="material-symbols-outlined">palette</span>All templates delivered branded with your company's logo and colours</div>
-      </div>
-
-      <!-- 6-MONTH RETAINER SUB-SECTION -->
-      <div class="retainer-sub-block" data-aos="fade-up" style="margin-top:3rem">
-        <h3 class="svc-subheading">6-Month Governance Retainer: Included</h3>
-        <div class="retainer-grid">
-          <div class="retainer-card">
-            <span class="material-symbols-outlined retainer-icon">notifications_active</span>
-            <h4>Regulatory Update Feed</h4>
-            <p>Curated alerts on enforcement actions, new guidance, and legislative changes. Delivered within 48 hours of a material development.</p>
-          </div>
-          <div class="retainer-card">
-            <span class="material-symbols-outlined retainer-icon">update</span>
-            <h4>Template Updates</h4>
-            <p>Automatic template updates as Australian AI regulations evolve, for the full 6-month retainer period.</p>
-          </div>
-          <div class="retainer-card">
-            <span class="material-symbols-outlined retainer-icon">health_and_safety</span>
-            <h4>Governance Health Check</h4>
-            <p>One re-run of the Ethos governance audit within the retainer period to track your progress.</p>
-          </div>
-          <div class="retainer-card">
-            <span class="material-symbols-outlined retainer-icon">star</span>
-            <h4>Priority Consulting Access</h4>
-            <p>Retainer clients are prioritised for all Ethos consulting slots.</p>
-          </div>
-        </div>
-        <p class="retainer-sub-note">Retainer updates reflect Ethos's professional interpretation of regulatory developments. They do not constitute legal advice. Clients should seek independent legal counsel where required.</p>
-      </div>
-
-      <!-- BONUSES -->
-      <h3 class="svc-subheading" style="margin-top:3rem" data-aos="fade-up">Included Bonuses</h3>
-      <div class="bonus-cards" data-aos="fade-up" data-aos-delay="80">
-
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">schedule_send</span></div>
-          <div class="bonus-card-body">
-            <h4>90-Day Guided Implementation Sequence</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> You receive governance documentation and it sits in a folder untouched because you do not know where to start or what order to work through it.</p>
-            <p class="bonus-what"><strong>What you get:</strong> A structured email sequence that walks your team through implementation step by step: governance policy first, then AI system inventory, then risk register, building systematically over 90 days. Every email tells you exactly what to focus on next.</p>
-            <p class="bonus-effort">Without it: Most governance frameworks are purchased and never fully implemented. This sequence is designed so yours is not one of them.</p>
+        <!-- LEFT: AU COMPLIANCE CORE ($999) -->
+        <div class="pricing-col pricing-col-narrow" id="toolkit">
+          <div class="pricing-col-inner">
+            <div class="svc-badge" style="margin-bottom:1rem">$999 AUD · One-Time</div>
+            <h3 class="pricing-col-title">AU Compliance Core</h3>
+            <p class="pricing-col-desc">Every current Australian regulatory obligation relevant to AI vendors, professionally documented in governance templates. Your team reviews, adapts, and implements independently.</p>
+            <ul class="pricing-checklist">
+              <li><span class="material-symbols-outlined">check</span>AI governance policy document</li>
+              <li><span class="material-symbols-outlined">check</span>AI risk register template</li>
+              <li><span class="material-symbols-outlined">check</span>AI system inventory template</li>
+              <li><span class="material-symbols-outlined">check</span>Automated decision-making transparency documentation</li>
+              <li><span class="material-symbols-outlined">check</span>Third-party / vendor AI assessment checklist</li>
+              <li><span class="material-symbols-outlined">check</span>Responsible AI usage standards document</li>
+              <li><span class="material-symbols-outlined">check</span>Roles and responsibilities matrix</li>
+            </ul>
+            <div class="pricing-guarantee-line">
+              <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">verified</span>
+              30-Day Relevance Guarantee
+            </div>
+            <button class="btn-outline" style="width:100%;margin-top:1.5rem" onclick="navigate('contact')">Get AU Compliance Core</button>
+            <p class="pricing-upgrade-nudge">Need it branded, delivered, and kept current? <a href="#" onclick="document.getElementById('fullkit').scrollIntoView({behavior:'smooth'}); return false;">See Full Toolkit →</a></p>
           </div>
         </div>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">quick_reference_all</span></div>
-          <div class="bonus-card-body">
-            <h4>Procurement Readiness Guide</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> A governance assessment lands in your inbox mid-sales cycle. You have no idea where to start and the deadline is next week.</p>
-            <p class="bonus-what"><strong>What you get:</strong> An educational guide covering the types of AI governance questions that commonly appear in enterprise procurement assessments. Each section provides context, discussion points, and suggested approaches your team can use as a starting position when preparing your own responses.</p>
-            <p class="bonus-effort">Without it: Most founders spend 15–20 hours researching from scratch every time a governance questionnaire arrives.</p>
-            <p class="bonus-disclaimer">This guide is educational only. It does not provide pre-written answers for submission. Your team is solely responsible for the accuracy and completeness of any procurement responses you submit.</p>
-          </div>
-        </div>
+        <!-- RIGHT: FULL RESPONSIBLE AI TOOLKIT ($1,699) -->
+        <div class="pricing-col pricing-col-wide pricing-col-featured" id="fullkit">
+          <div class="pricing-recommended-badge">★ Recommended</div>
+          <div class="pricing-col-inner">
+            <div class="svc-badge svc-badge-recommended" style="margin-bottom:1rem">$1,699 AUD · ★ Recommended</div>
+            <h3 class="pricing-col-title">Full Responsible AI Toolkit</h3>
+            <p class="pricing-col-desc">Everything in AU Compliance Core, plus the complete framework — branded, delivered, and backed for 6 months.</p>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">contract</span></div>
-          <div class="bonus-card-body">
-            <h4>AI Governance Clause Guide: Starting Positions</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> Your contracts and terms of service do not address AI governance and you do not know what types of clauses are common in the market.</p>
-            <p class="bonus-what"><strong>What you get:</strong> An illustrative guide to common clause positions observed in AI vendor agreements, DPAs, and terms of service. Each section explains the intent behind the clause type and why it matters, so you know what to raise with your legal counsel.</p>
-            <p class="bonus-effort">Without it: You either engage a lawyer to research market-standard AI governance clauses from scratch, or you leave gaps that a sophisticated buyer may identify in due diligence.</p>
-            <p class="bonus-disclaimer">This guide is illustrative only. It is not drafted for any specific transaction and does not constitute legal advice. All clauses must be reviewed and adapted by your legal counsel before use in any agreement.</p>
-          </div>
-        </div>
+            <!-- Cost anchor -->
+            <div class="cost-anchor-box">
+              <div class="cost-anchor-label">What building this yourself typically involves</div>
+              <div class="cost-anchor-items">
+                <span>Governance consultant: $8,000–$15,000</span>
+                <span>Legal review: $3,000–$5,000</span>
+                <span>Ongoing monitoring: $500/month</span>
+                <span class="cost-anchor-total">Typical first-year investment: $14,000–$26,000+</span>
+              </div>
+            </div>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">summarize</span></div>
-          <div class="bonus-card-body">
-            <h4>Board &amp; Investor Governance Summary</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> Your board or investors have asked about responsible AI practices and you have nothing polished to present.</p>
-            <p class="bonus-what"><strong>What you get:</strong> A professional one-page governance summary designed for investors, board members, and partner due diligence teams, covering your governance posture, key controls, and risk management approach in plain language.</p>
-            <p class="bonus-effort">Without it: You spend hours reformatting technical documentation into something a non-technical stakeholder can actually read.</p>
-            <p class="bonus-disclaimer">This summary is a professional governance resource. It is not a certification, audit opinion, or compliance guarantee.</p>
-          </div>
-        </div>
+            <!-- Core deliverables -->
+            <h4 class="pricing-sub-heading">Core Deliverables</h4>
+            <ul class="pricing-checklist">
+              <li><span class="material-symbols-outlined">check</span>AI governance policy document</li>
+              <li><span class="material-symbols-outlined">check</span>AI risk register template</li>
+              <li><span class="material-symbols-outlined">check</span>AI system inventory template</li>
+              <li><span class="material-symbols-outlined">check</span>Automated decision-making transparency documentation</li>
+              <li><span class="material-symbols-outlined">check</span>Third-party / vendor AI assessment checklist</li>
+              <li><span class="material-symbols-outlined">check</span>Responsible AI usage standards document</li>
+              <li><span class="material-symbols-outlined">check</span>Roles and responsibilities matrix</li>
+              <li><span class="material-symbols-outlined">check</span>Data governance and data flow mapping templates</li>
+              <li><span class="material-symbols-outlined">check</span>Incident response plan for AI-related incidents</li>
+              <li><span class="material-symbols-outlined">check</span>Human oversight and review procedures</li>
+              <li><span class="material-symbols-outlined">check</span>Done-for-you delivery</li>
+              <li><span class="material-symbols-outlined">check</span>All templates branded with your company's logo and colours</li>
+            </ul>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">emergency_home</span></div>
-          <div class="bonus-card-body">
-            <h4>AI Incident Response Tabletop Exercise</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> You have an incident response plan but you have never stress-tested it, and you do not want to find out it does not work during an actual incident.</p>
-            <p class="bonus-what"><strong>What you get:</strong> A structured walkthrough scenario that guides your team through a simulated AI governance incident, testing your plan, surfacing gaps, and building preparedness before you need it.</p>
-            <p class="bonus-effort">Without it: Most teams discover their incident response gaps during the incident itself.</p>
-          </div>
-        </div>
+            <!-- 6-Month Retainer -->
+            <h4 class="pricing-sub-heading">6-Month Governance Retainer: Included</h4>
+            <div class="retainer-mini-grid">
+              <div class="retainer-mini-card">
+                <span class="material-symbols-outlined">notifications_active</span>
+                <div><strong>Regulatory Update Feed</strong><br>Curated alerts within 48 hours of a material development.</div>
+              </div>
+              <div class="retainer-mini-card">
+                <span class="material-symbols-outlined">update</span>
+                <div><strong>Template Updates</strong><br>Automatic updates as regulations evolve.</div>
+              </div>
+              <div class="retainer-mini-card">
+                <span class="material-symbols-outlined">health_and_safety</span>
+                <div><strong>Governance Health Check</strong><br>One re-run of the audit within the retainer period.</div>
+              </div>
+              <div class="retainer-mini-card">
+                <span class="material-symbols-outlined">star</span>
+                <div><strong>Priority Consulting Access</strong><br>Retainer clients are prioritised for all consulting slots.</div>
+              </div>
+            </div>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">leaderboard</span></div>
-          <div class="bonus-card-body">
-            <h4>Peer Benchmarking Snapshot</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> You do not know how your governance posture compares to similar Australian AI vendors, making it hard to prioritise what matters most.</p>
-            <p class="bonus-what"><strong>What you get:</strong> An anonymised benchmarking snapshot showing how your governance posture compares to other Australian AI vendors at a similar stage, based on Ethos audit data.</p>
-            <p class="bonus-effort">Without it: You are optimising without context. This gives you a reference point.</p>
-            <p class="bonus-disclaimer">Based on a limited and non-representative sample of Ethos audit data. Indicative only, not statistically rigorous.</p>
-          </div>
-        </div>
+            <!-- Bonuses -->
+            <h4 class="pricing-sub-heading">Included Bonuses</h4>
+            <p class="pricing-bonus-intro">Every bonus exists to remove a specific obstacle between you and a working governance framework.</p>
 
-        <div class="bonus-card">
-          <div class="bonus-card-icon"><span class="material-symbols-outlined">verified_user</span></div>
-          <div class="bonus-card-body">
-            <h4>Governance-Verified Digital Badge</h4>
-            <p class="bonus-problem"><strong>The problem:</strong> Prospects and partners cannot easily see that you take AI governance seriously before they reach the due diligence stage.</p>
-            <p class="bonus-what"><strong>What you get:</strong> An Ethos-branded trust mark for your website and marketing materials, a visible signal to prospects and partners that your organisation has engaged in a professional AI governance process.</p>
-            <p class="bonus-effort">Without it: Your governance work is invisible until someone asks, by which point the conversation is already reactive.</p>
-            <p class="bonus-disclaimer">The badge indicates that the holder has completed an Ethos governance engagement. It does not certify compliance with any law or standard, product quality, or any particular business outcome. Ethos may revoke the badge at any time at its discretion.</p>
-          </div>
-        </div>
+            <!-- Top 3 bonuses — fully expanded -->
+            <div class="bonus-expanded-stack">
 
+              <div class="bonus-expanded-card">
+                <div class="bonus-expanded-header">
+                  <span class="material-symbols-outlined bonus-exp-icon">schedule_send</span>
+                  <h5>90-Day Guided Implementation Sequence</h5>
+                </div>
+                <p class="bonus-exp-problem">The problem: You receive governance documentation and it sits in a folder untouched because you do not know where to start.</p>
+                <p class="bonus-exp-what">What you get: A structured email sequence that walks your team through implementation step by step — governance policy first, then AI system inventory, then risk register, building systematically over 90 days. Every email tells you exactly what to focus on next.</p>
+                <p class="bonus-exp-without">Without it: Most governance frameworks are purchased and never fully implemented.</p>
+              </div>
+
+              <div class="bonus-expanded-card">
+                <div class="bonus-expanded-header">
+                  <span class="material-symbols-outlined bonus-exp-icon">quick_reference_all</span>
+                  <h5>Procurement Readiness Guide</h5>
+                </div>
+                <p class="bonus-exp-problem">The problem: A governance assessment lands in your inbox mid-sales cycle. You have no idea where to start and the deadline is next week.</p>
+                <p class="bonus-exp-what">What you get: An educational guide covering the types of AI governance questions that commonly appear in enterprise procurement assessments, with context, discussion points, and suggested approaches.</p>
+                <p class="bonus-exp-without">Without it: Most founders spend 15–20 hours researching from scratch every time a governance questionnaire arrives.</p>
+                <p class="bonus-exp-disclaimer">This guide is educational only. It does not provide pre-written answers for submission. Your team is solely responsible for the accuracy and completeness of any procurement responses you submit.</p>
+              </div>
+
+              <div class="bonus-expanded-card">
+                <div class="bonus-expanded-header">
+                  <span class="material-symbols-outlined bonus-exp-icon">contract</span>
+                  <h5>AI Governance Clause Guide: Starting Positions</h5>
+                </div>
+                <p class="bonus-exp-problem">The problem: Your contracts and terms of service do not address AI governance and you do not know what types of clauses are common in the market.</p>
+                <p class="bonus-exp-what">What you get: An illustrative guide to common clause positions observed in AI vendor agreements, DPAs, and terms of service — so you know what to raise with your legal counsel.</p>
+                <p class="bonus-exp-without">Without it: You either engage a lawyer to research from scratch, or leave gaps that a sophisticated buyer may identify in due diligence.</p>
+                <p class="bonus-exp-disclaimer">Illustrative only. Not legal advice. All clauses must be reviewed and adapted by your legal counsel before use in any agreement.</p>
+              </div>
+
+            </div><!-- /bonus-expanded-stack -->
+
+            <!-- Secondary 4 bonuses — compact 2x2 grid with accordion -->
+            <div class="bonus-secondary-grid">
+              <div class="bonus-secondary-card">
+                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                  <span class="material-symbols-outlined bonus-sec-icon">summarize</span>
+                  <div>
+                    <strong>Board &amp; Investor Governance Summary</strong>
+                    <p>A professional one-page governance summary for investors, board members, and due diligence teams.</p>
+                  </div>
+                  <span class="material-symbols-outlined bonus-sec-toggle">expand_more</span>
+                </div>
+                <div class="bonus-secondary-detail">
+                  <p class="bonus-exp-problem">The problem: Your board or investors have asked about responsible AI practices and you have nothing polished to present.</p>
+                  <p class="bonus-exp-without">Without it: You spend hours reformatting technical documentation into something a non-technical stakeholder can actually read.</p>
+                  <p class="bonus-exp-disclaimer">Not a certification, audit opinion, or compliance guarantee.</p>
+                </div>
+              </div>
+
+              <div class="bonus-secondary-card">
+                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                  <span class="material-symbols-outlined bonus-sec-icon">emergency_home</span>
+                  <div>
+                    <strong>AI Incident Response Tabletop Exercise</strong>
+                    <p>A structured walkthrough that stress-tests your incident response plan before you need it.</p>
+                  </div>
+                  <span class="material-symbols-outlined bonus-sec-toggle">expand_more</span>
+                </div>
+                <div class="bonus-secondary-detail">
+                  <p class="bonus-exp-problem">The problem: You have an incident response plan but have never stress-tested it.</p>
+                  <p class="bonus-exp-without">Without it: Most teams discover their incident response gaps during the incident itself.</p>
+                </div>
+              </div>
+
+              <div class="bonus-secondary-card">
+                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                  <span class="material-symbols-outlined bonus-sec-icon">leaderboard</span>
+                  <div>
+                    <strong>Peer Benchmarking Snapshot</strong>
+                    <p>See how your governance posture compares to similar Australian AI vendors.</p>
+                  </div>
+                  <span class="material-symbols-outlined bonus-sec-toggle">expand_more</span>
+                </div>
+                <div class="bonus-secondary-detail">
+                  <p class="bonus-exp-problem">The problem: You do not know how your governance posture compares to similar vendors, making it hard to prioritise.</p>
+                  <p class="bonus-exp-without">Without it: You are optimising without context.</p>
+                  <p class="bonus-exp-disclaimer">Based on a limited and non-representative sample of Ethos audit data. Indicative only.</p>
+                </div>
+              </div>
+
+              <div class="bonus-secondary-card">
+                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                  <span class="material-symbols-outlined bonus-sec-icon">verified_user</span>
+                  <div>
+                    <strong>Governance-Verified Digital Badge</strong>
+                    <p>An Ethos-branded trust mark for your website and marketing materials.</p>
+                  </div>
+                  <span class="material-symbols-outlined bonus-sec-toggle">expand_more</span>
+                </div>
+                <div class="bonus-secondary-detail">
+                  <p class="bonus-exp-problem">The problem: Prospects and partners cannot easily see that you take AI governance seriously before they reach the due diligence stage.</p>
+                  <p class="bonus-exp-without">Without it: Your governance work is invisible until someone asks.</p>
+                  <p class="bonus-exp-disclaimer">The badge indicates completion of an Ethos governance engagement. It does not certify compliance with any law or standard. Ethos may revoke the badge at any time at its discretion.</p>
+                </div>
+              </div>
+            </div><!-- /bonus-secondary-grid -->
+
+            <!-- 30-Day Guarantee -->
+            <div class="readiness-guarantee" style="margin-top:2rem">
+              <div class="rg-icon"><span class="material-symbols-outlined">verified</span></div>
+              <div>
+                <h4>30-Day Relevance Guarantee</h4>
+                <p>If the toolkit is not relevant to your AI product or business model, you receive a full refund within 30 days. No questions, no conditions.</p>
+              </div>
+            </div>
+
+            <!-- Value summary -->
+            <p class="pricing-value-summary">Core framework · done-for-you delivery · 6-month retainer · 7 included bonuses. $1,699.</p>
+
+            <div class="svc-disclaimer-inline" style="margin-top:1rem">
+              <p>All deliverables are provided as professional governance resources and starting points. They require review, adaptation, and customisation by the recipient to their specific circumstances, systems, and obligations. Ethos recommends that recipients seek independent legal counsel before finalising and implementing any governance documentation. Use of these deliverables does not guarantee compliance with any law, standard, or regulation, and does not guarantee any particular business outcome.</p>
+            </div>
+
+            <div class="svc-cta-row" style="margin-top:1.5rem">
+              <button class="btn-primary btn-lg" style="width:100%" onclick="navigate('contact')">Get the Full Toolkit ($1,699)</button>
+            </div>
+
+          </div>
+        </div><!-- /pricing-col-wide -->
+
+      </div><!-- /pricing-comparison-grid -->
+
+      <!-- Mobile note for AU Compliance Core (shown below on mobile) -->
+      <div class="pricing-mobile-note">
+        <details class="pricing-mobile-accordion">
+          <summary>Looking for just the templates? AU Compliance Core — $999</summary>
+          <div class="pricing-mobile-accordion-body">
+            <p>Every current Australian regulatory obligation relevant to AI vendors, professionally documented in governance templates. Your team reviews, adapts, and implements independently.</p>
+            <ul class="pricing-checklist" style="margin-top:1rem">
+              <li><span class="material-symbols-outlined">check</span>AI governance policy document</li>
+              <li><span class="material-symbols-outlined">check</span>AI risk register template</li>
+              <li><span class="material-symbols-outlined">check</span>AI system inventory template</li>
+              <li><span class="material-symbols-outlined">check</span>Automated decision-making transparency documentation</li>
+              <li><span class="material-symbols-outlined">check</span>Third-party / vendor AI assessment checklist</li>
+              <li><span class="material-symbols-outlined">check</span>Responsible AI usage standards document</li>
+              <li><span class="material-symbols-outlined">check</span>Roles and responsibilities matrix</li>
+            </ul>
+            <div class="pricing-guarantee-line" style="margin-top:1rem">
+              <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">verified</span>
+              30-Day Relevance Guarantee
+            </div>
+            <button class="btn-outline" style="width:100%;margin-top:1rem" onclick="navigate('contact')">Get AU Compliance Core</button>
+          </div>
+        </details>
       </div>
 
-      <!-- GUARANTEE -->
-      <div class="readiness-guarantee" style="margin-top:3rem" data-aos="fade-up">
-        <div class="rg-icon"><span class="material-symbols-outlined">verified</span></div>
-        <div>
-          <h4>30-Day Relevance Guarantee</h4>
-          <p>If the toolkit is not relevant to your AI product or business model, you receive a full refund within 30 days. No questions, no conditions.</p>
-        </div>
-      </div>
-
-      <div class="svc-disclaimer-inline" data-aos="fade-up" style="margin-top:1.5rem">
-        <p>All deliverables are provided as professional governance resources and starting points. They require review, adaptation, and customisation by the recipient to their specific circumstances, systems, and obligations. Ethos recommends that recipients seek independent legal counsel before finalising and implementing any governance documentation. Use of these deliverables does not guarantee compliance with any law, standard, or regulation, and does not guarantee any particular business outcome.</p>
-      </div>
-
-      <div class="svc-cta-row" data-aos="fade-up" data-aos-delay="80">
-        <button class="btn-primary btn-lg" onclick="navigate('contact')">Get the Full Toolkit ($1,699)</button>
-      </div>
     </div>
   </section>
 
@@ -792,8 +778,9 @@
   <div class="section-divider"></div>
 
   <!-- ── SECTION 4: ISO 42001 ── -->
-  <section class="services-section" id="iso42001">
+  <section class="services-section services-section-iso" id="iso42001">
     <div class="container">
+      <div class="iso-qualifier" data-aos="fade-up">For AI vendors ready to pursue the certification that fewer than 30 companies worldwide hold. If you're not sure whether ISO 42001 is right for your stage, <a href="#audit" onclick="scrollToSection('audit'); return false;">start with the Free Audit</a>.</div>
       <div class="svc-badge iso-badge-lg" data-aos="fade-up">$13,990 AUD · 9-Month Pathway</div>
       <h2 class="svc-heading" data-aos="fade-up" data-aos-delay="60">Prepare for the World's First International AI Management System Certification</h2>
       <p class="svc-body" data-aos="fade-up" data-aos-delay="100">ISO/IEC 42001 is held by fewer than approximately 30 companies worldwide. Ethos prepares your organisation, from wherever you are now, to certification-ready in approximately 9 months. No prior Ethos tiers required. This is a standalone engagement for organisations ready to pursue the certification that sets them apart.</p>
@@ -910,8 +897,8 @@
   <section class="page-hero">
     <div class="container">
       <div class="section-label" data-aos="fade-up">Our Story</div>
-      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">Built at the Intersection of Law, Technology, and AI Risk</h1>
-      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">Ethos was founded with a specific mandate: serve Australian companies that build and sell AI products - with the legal rigour, technical depth, and regulatory precision that generic governance frameworks cannot provide.</p>
+      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">AI Governance Built Exclusively for AI Vendors</h1>
+      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">Most governance frameworks are designed for companies that use AI tools. Ethos exists for companies that build and sell them. The compliance obligations, the risk surface, the procurement questions, and the governance documentation requirements are fundamentally different when AI is your product. We built Ethos around that difference.</p>
     </div>
   </section>
 
@@ -973,8 +960,8 @@
   <!-- TEAM -->
   <section class="section">
     <div class="container">
-      <div class="section-label" data-aos="fade-up">Our Team</div>
-      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">A Rare Combination</h2>
+      <div class="section-label" data-aos="fade-up">About the Founder</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">The Team</h2>
       <p class="section-sub" data-aos="fade-up" data-aos-delay="100">The Ethos team holds qualifications in law, engineering and finance.</p>
       <div class="credential-row" data-aos="fade-up" data-aos-delay="120">
         <div class="credential-card-large">
@@ -1590,122 +1577,126 @@
 
   <section class="section">
     <div class="container">
-      <!-- Three Contact Options -->
-      <div class="contact-options">
-        <div class="contact-option-card" data-aos="fade-up" data-aos-delay="60">
-          <span class="material-symbols-outlined contact-option-icon">search</span>
-          <h3>Request a Free Governance Audit</h3>
-          <p>Understand your current AI governance posture at no cost. Structured assessment, traffic-light report, clear next steps.</p>
-          <button class="btn-primary" onclick="showContactForm('audit')">Request Free Audit</button>
-        </div>
-        <div class="contact-option-card contact-option-featured" data-aos="fade-up" data-aos-delay="100">
-          <span class="material-symbols-outlined contact-option-icon">calendar_month</span>
-          <h3>Book a Discovery Call</h3>
-          <p>For AU Compliance Core, Full Responsible AI Toolkit, or ISO 42001 Pathway enquiries. Scoping conversation to understand your situation before recommending an approach.</p>
-          <button class="btn-primary" onclick="showContactForm('call')">Book a Call</button>
-          <p class="contact-option-note">Submit the form and we'll confirm a time within one business day. A direct booking link is coming soon.</p>
-        </div>
-        <div class="contact-option-card" data-aos="fade-up" data-aos-delay="140">
-          <span class="material-symbols-outlined contact-option-icon">mail</span>
-          <h3>General Enquiry</h3>
-          <p>Questions, media enquiries, or any other matters. We respond to all enquiries within one business day.</p>
-          <button class="btn-outline" onclick="showContactForm('general')">Send Enquiry</button>
-        </div>
-      </div>
 
-      <!-- Contact Form -->
-      <div class="contact-form-wrap" id="contactFormWrap" data-aos="fade-up">
-        <div class="contact-form-header">
-          <h3 class="contact-form-title">Get in Touch</h3>
-          <p class="contact-form-sub">Tell us about your company and what you're looking for. We'll get back to you within one business day.</p>
-        </div>
-        <form id="contactForm" onsubmit="handleFormSubmit(event)" novalidate>
-          <input type="hidden" id="enquiryType" name="enquiry_type" value="general"/>
+      <!-- Three Contact Path Cards -->
+      <div class="contact-paths" data-aos="fade-up">
 
-          <div class="form-row">
-            <div class="form-group">
-              <label for="contactName">Name <span class="required">*</span></label>
-              <input type="text" id="contactName" name="name" required placeholder="Your name"/>
+        <!-- Path 1: Free Audit -->
+        <div class="contact-path-card">
+          <div class="contact-path-header">
+            <span class="material-symbols-outlined contact-option-icon">search</span>
+            <h3>Request a Free Governance Audit</h3>
+            <p>Understand your current AI governance posture at no cost. Structured assessment, traffic-light report, clear next steps.</p>
+          </div>
+          <form class="contact-path-form" id="auditForm" onsubmit="handlePathFormSubmit(event, 'audit')" novalidate>
+            <input type="hidden" name="enquiry_type" value="audit"/>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Name <span class="required">*</span></label>
+                <input type="text" name="name" required placeholder="Your name"/>
+              </div>
+              <div class="form-group">
+                <label>Company <span class="required">*</span></label>
+                <input type="text" name="company" required placeholder="Your company name"/>
+              </div>
             </div>
             <div class="form-group">
-              <label for="contactCompany">Company <span class="required">*</span></label>
-              <input type="text" id="contactCompany" name="company" required placeholder="Your company name"/>
+              <label>Work Email <span class="required">*</span></label>
+              <input type="email" name="email" required placeholder="you@company.com"/>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label for="contactEmail">Work Email <span class="required">*</span></label>
-            <input type="email" id="contactEmail" name="email" required placeholder="you@company.com"/>
-          </div>
-
-          <div class="form-group">
-            <label for="contactBuilds">What does your company build? <span class="required">*</span></label>
-            <input type="text" id="contactBuilds" name="company_builds" required placeholder="e.g. AI-powered fraud detection platform, NLP API for legal documents"/>
-            <span class="form-helper">Ethos works exclusively with companies that build and sell AI products or services.</span>
-          </div>
-
-          <div class="form-row">
             <div class="form-group">
-              <label for="contactPrompt">What prompted your enquiry? <span class="required">*</span></label>
-              <select id="contactPrompt" name="enquiry_prompt" required>
+              <label>What does your company build? <span class="required">*</span></label>
+              <input type="text" name="company_builds" required placeholder="e.g. AI-powered fraud detection platform"/>
+            </div>
+            <div class="form-group">
+              <label>Do you have existing governance documentation?</label>
+              <select name="existing_governance">
                 <option value="">Select one...</option>
-                <option value="enterprise_governance">Enterprise client requiring governance documentation</option>
-                <option value="investor_board">Investor or board governance question</option>
-                <option value="iso42001">Preparing for ISO 42001 certification</option>
-                <option value="procurement">Upcoming procurement or tender</option>
-                <option value="proactive">Proactive - want to get ahead of regulation</option>
-                <option value="other">Other</option>
+                <option value="comprehensive">Yes, comprehensive documentation in place</option>
+                <option value="some_gaps">Some policies but gaps exist</option>
+                <option value="nothing_formal">Nothing formal yet</option>
+                <option value="not_sure">Not sure</option>
               </select>
             </div>
+            <button type="submit" class="btn-primary" style="width:100%">Request Free Audit <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
+            <div class="form-success-inline" style="display:none">
+              <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
+              Request received. We'll be in touch within one business day.
+            </div>
+          </form>
+        </div>
+
+        <!-- Path 2: Discovery Call -->
+        <div class="contact-path-card contact-path-featured">
+          <div class="contact-path-header">
+            <span class="material-symbols-outlined contact-option-icon">calendar_month</span>
+            <h3>Book a Discovery Call</h3>
+            <p>For AU Compliance Core, Full Responsible AI Toolkit, or ISO 42001 Pathway enquiries. A scoping conversation to understand your situation before recommending an approach.</p>
+          </div>
+          <form class="contact-path-form" id="callForm" onsubmit="handlePathFormSubmit(event, 'call')" novalidate>
+            <input type="hidden" name="enquiry_type" value="call"/>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Name <span class="required">*</span></label>
+                <input type="text" name="name" required placeholder="Your name"/>
+              </div>
+              <div class="form-group">
+                <label>Company <span class="required">*</span></label>
+                <input type="text" name="company" required placeholder="Your company name"/>
+              </div>
+            </div>
             <div class="form-group">
-              <label for="contactTeamSize">Team size <span class="required">*</span></label>
-              <select id="contactTeamSize" name="team_size" required>
+              <label>Work Email <span class="required">*</span></label>
+              <input type="email" name="email" required placeholder="you@company.com"/>
+            </div>
+            <div class="form-group">
+              <label>What are you interested in? <span class="required">*</span></label>
+              <select name="interested_in" required>
                 <option value="">Select one...</option>
-                <option value="1-10">1-10</option>
-                <option value="11-50">11-50</option>
-                <option value="51-200">51-200</option>
-                <option value="200+">200+</option>
+                <option value="au_compliance_core">AU Compliance Core ($999)</option>
+                <option value="full_toolkit">Full Responsible AI Toolkit ($1,699)</option>
+                <option value="iso_pathway">ISO 42001 Certification Pathway ($13,990)</option>
               </select>
             </div>
-          </div>
-
-          <div class="form-group">
-            <label>What are you interested in? <span class="required">*</span></label>
-            <div class="pill-group" id="interestPills">
-              <label class="pill-option"><input type="checkbox" name="interested_in" value="free_audit"/><span>Free AI Governance Audit</span></label>
-              <label class="pill-option"><input type="checkbox" name="interested_in" value="au_compliance_core"/><span>AU Compliance Core ($999)</span></label>
-              <label class="pill-option"><input type="checkbox" name="interested_in" value="full_toolkit"/><span>Full Responsible AI Toolkit ($1,699)</span></label>
-              <label class="pill-option"><input type="checkbox" name="interested_in" value="iso_pathway"/><span>ISO 42001 Certification Pathway ($13,990)</span></label>
-              <label class="pill-option"><input type="checkbox" name="interested_in" value="general"/><span>General enquiry</span></label>
+            <button type="submit" class="btn-primary" style="width:100%">Request a Call <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
+            <p style="font-size:0.8rem;color:var(--muted);margin-top:0.75rem;text-align:center">We'll confirm a time within one business day.</p>
+            <div class="form-success-inline" style="display:none">
+              <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
+              Request received. We'll confirm a time within one business day.
             </div>
-          </div>
+          </form>
+        </div>
 
-          <div class="form-group">
-            <label for="contactGovDocs">Do you have existing governance documentation?</label>
-            <select id="contactGovDocs" name="existing_governance">
-              <option value="">Select one...</option>
-              <option value="comprehensive">Yes, comprehensive documentation in place</option>
-              <option value="some_gaps">Some policies but gaps exist</option>
-              <option value="nothing_formal">Nothing formal yet</option>
-              <option value="not_sure">Not sure</option>
-            </select>
+        <!-- Path 3: General Enquiry -->
+        <div class="contact-path-card">
+          <div class="contact-path-header">
+            <span class="material-symbols-outlined contact-option-icon">mail</span>
+            <h3>General Enquiry</h3>
+            <p>Questions, media enquiries, or any other matters. We respond to all enquiries within one business day.</p>
           </div>
+          <form class="contact-path-form" id="generalForm" onsubmit="handlePathFormSubmit(event, 'general')" novalidate>
+            <input type="hidden" name="enquiry_type" value="general"/>
+            <div class="form-group">
+              <label>Name <span class="required">*</span></label>
+              <input type="text" name="name" required placeholder="Your name"/>
+            </div>
+            <div class="form-group">
+              <label>Email <span class="required">*</span></label>
+              <input type="email" name="email" required placeholder="you@company.com"/>
+            </div>
+            <div class="form-group">
+              <label>Message <span class="required">*</span></label>
+              <textarea name="additional_notes" rows="5" required placeholder="Your message" maxlength="500"></textarea>
+            </div>
+            <button type="submit" class="btn-outline" style="width:100%">Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
+            <div class="form-success-inline" style="display:none">
+              <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
+              Message sent. We'll be in touch within one business day.
+            </div>
+          </form>
+        </div>
 
-          <div class="form-group">
-            <label for="contactMessage">Anything else we should know?</label>
-            <textarea id="contactMessage" name="additional_notes" rows="4" maxlength="500" placeholder="Optional - any additional context about your situation" oninput="updateCharCount(this)"></textarea>
-            <span class="char-count"><span id="charCountNum">0</span>/500</span>
-          </div>
-
-          <button type="submit" class="btn-submit-full" id="formSubmitBtn">
-            Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span>
-          </button>
-          <div id="formSuccess" style="display:none" class="form-success">
-            <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
-            Thanks for your enquiry. We'll be in touch within one business day.
-          </div>
-        </form>
-      </div>
+      </div><!-- /contact-paths -->
 
       <div class="contact-disclaimer" data-aos="fade-up">
         <p>Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
