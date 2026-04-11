@@ -115,9 +115,7 @@ img { display: block; max-width: 100%; }
   width: auto;
   flex-shrink: 0;
   display: block;
-  overflow: visible;
-  will-change: transform;
-  transform: translateZ(0);
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .nav-logo-wordmark {
@@ -1552,9 +1550,7 @@ img { display: block; max-width: 100%; }
   width: auto;
   flex-shrink: 0;
   display: block;
-  overflow: visible;
-  will-change: transform;
-  transform: translateZ(0);
+  filter: brightness(0) invert(1);
 }
 
 .footer-logo-wordmark {
@@ -5166,7 +5162,331 @@ img { display: block; max-width: 100%; }
   .iso-bonus-card { flex-direction: column; }
 }
 
-/* ===== END ISO 42001 PREMIUM REDESIGN ===== */
+/* ===== END ISO 42001 PREMIUM REDESIGN (OLD) ===== */
+
+/* ===== ISO 42001 — VERTICAL-FLOW REDESIGN ===== */
+
+.iso-new-section {
+  background: #0d1024;
+  background-image: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(211,167,74,0.055) 0%, transparent 70%);
+  padding: 5rem 0 4rem;
+}
+
+/* Row 1 — Header */
+.iso-new-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 2.75rem;
+}
+.iso-new-header .section-label { margin-bottom: 1.25rem; }
+.iso-new-heading {
+  font-family: var(--font-headline);
+  font-size: clamp(1.8rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+.iso-new-sub {
+  font-size: 1.05rem;
+  color: rgba(253,252,252,0.65);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Row 2 — Price row */
+.iso-new-price-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 3.5rem;
+}
+.iso-new-price-row .iso-badge-lg {
+  background: rgba(211,167,74,0.15);
+  color: var(--brass);
+  border: 1px solid rgba(211,167,74,0.35);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+}
+.iso-new-market-compare {
+  font-size: 0.9rem;
+  color: rgba(253,252,252,0.5);
+  font-style: italic;
+}
+.iso-new-27001-tag {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background: rgba(211,167,74,0.08);
+  border: 1px solid rgba(211,167,74,0.2);
+  border-radius: var(--radius);
+  padding: 0.6rem 1rem;
+  max-width: 560px;
+  font-size: 0.825rem;
+  color: rgba(253,252,252,0.6);
+  line-height: 1.5;
+  margin-top: 0.25rem;
+}
+.iso-new-27001-tag .material-symbols-outlined {
+  font-size: 1rem;
+  color: var(--brass);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.iso-new-27001-tag strong { color: rgba(253,252,252,0.85); }
+
+/* Row 3 — Horizontal timeline */
+.iso-ht-wrap {
+  margin-bottom: 4rem;
+}
+.iso-ht-label {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 2rem;
+}
+.iso-ht-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+.iso-ht-node {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.25rem;
+}
+.iso-ht-dot {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(211,167,74,0.12);
+  border: 2px solid rgba(211,167,74,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  cursor: default;
+}
+.iso-ht-dot:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 24px rgba(211,167,74,0.3);
+  border-color: var(--brass);
+}
+.iso-ht-dot-final {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+.iso-ht-dot-final:hover {
+  box-shadow: 0 0 28px rgba(211,167,74,0.5);
+}
+.iso-ht-month {
+  font-family: var(--font-headline);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--brass);
+  letter-spacing: 0.02em;
+}
+.iso-ht-dot-final .iso-ht-month {
+  color: #0d1024;
+}
+.iso-ht-connector {
+  flex: 0 0 60px;
+  height: 2px;
+  background: linear-gradient(to right, rgba(211,167,74,0.45), rgba(211,167,74,0.2));
+  align-self: flex-start;
+  margin-top: 35px;
+}
+.iso-ht-content {
+  padding: 0 0.5rem;
+}
+.iso-ht-title {
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.4rem;
+}
+.iso-ht-desc {
+  font-size: 0.825rem;
+  color: rgba(253,252,252,0.55);
+  line-height: 1.5;
+}
+
+/* Row 4 — Phase cards */
+.iso-new-phases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+.iso-new-phase-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-top: 2px solid rgba(211,167,74,0.4);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem 1.5rem;
+  transition: transform 0.25s ease, border-top-color 0.25s ease, box-shadow 0.25s ease;
+}
+.iso-new-phase-card:hover {
+  transform: translateY(-4px);
+  border-top-color: var(--brass);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+}
+.iso-new-phase-hdr {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+.iso-new-phase-icon {
+  font-size: 1.4rem;
+  color: var(--brass);
+  opacity: 0.8;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.iso-new-phase-num {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 0.2rem;
+}
+.iso-new-phase-name {
+  font-family: var(--font-headline);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.2;
+}
+.iso-new-phase-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.iso-new-phase-list li {
+  font-size: 0.825rem;
+  color: rgba(253,252,252,0.6);
+  line-height: 1.45;
+  padding-left: 1.1rem;
+  position: relative;
+}
+.iso-new-phase-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--brass);
+  opacity: 0.6;
+  font-size: 0.75rem;
+}
+
+/* Row 6 — CTA */
+.iso-new-cta {
+  text-align: center;
+  padding: 3rem 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+.btn-iso-cta-xl {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--brass);
+  color: #0d1024;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1.1rem 2.5rem;
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(211,167,74,0.3);
+}
+.btn-iso-cta-xl:hover {
+  background: #c49a3a;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(211,167,74,0.45);
+}
+.iso-new-cta-note {
+  font-size: 0.8rem;
+  color: rgba(253,252,252,0.4);
+  margin: 0;
+}
+
+/* Row 7 — Fine print */
+.iso-new-fine-block {
+  border-top: 1px solid rgba(255,255,255,0.07);
+  padding-top: 2rem;
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.iso-new-cert-bodies {
+  font-size: 0.8rem;
+  color: rgba(253,252,252,0.4);
+  margin-bottom: 0.75rem;
+  line-height: 1.55;
+}
+.iso-new-fine-block .iso-fine-print {
+  font-size: 0.75rem;
+  color: rgba(253,252,252,0.3);
+  line-height: 1.6;
+  max-width: none;
+  text-align: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .iso-new-phases { grid-template-columns: 1fr; }
+  .iso-ht-track {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .iso-ht-node {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    flex: none;
+    width: 100%;
+    gap: 1rem;
+  }
+  .iso-ht-connector {
+    width: 2px;
+    height: 32px;
+    flex: none;
+    margin: 0 0 0 35px;
+    background: linear-gradient(to bottom, rgba(211,167,74,0.45), rgba(211,167,74,0.2));
+  }
+}
+
+@media (max-width: 640px) {
+  .iso-new-section { padding: 3.5rem 0 3rem; }
+  .iso-new-27001-tag { text-align: left; }
+}
+
+/* ===== END ISO 42001 VERTICAL-FLOW REDESIGN ===== */
 
 @media (max-width: 640px) {
   .vignette-text { font-size: 0.9375rem; }
