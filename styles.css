@@ -111,9 +111,11 @@ img { display: block; max-width: 100%; }
 }
 
 .nav-logo-icon {
-  height: 38px;
+  height: 40px;
   width: auto;
   flex-shrink: 0;
+  display: block;
+  overflow: visible;
 }
 
 .nav-logo-wordmark {
@@ -1544,9 +1546,11 @@ img { display: block; max-width: 100%; }
 }
 
 .footer-logo-icon {
-  height: 36px;
+  height: 38px;
   width: auto;
   flex-shrink: 0;
+  display: block;
+  overflow: visible;
 }
 
 .footer-logo-wordmark {
