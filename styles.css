@@ -115,7 +115,6 @@ img { display: block; max-width: 100%; }
   width: auto;
   flex-shrink: 0;
   display: block;
-  image-rendering: -webkit-optimize-contrast;
 }
 
 .nav-logo-wordmark {
