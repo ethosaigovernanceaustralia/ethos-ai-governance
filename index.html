@@ -261,41 +261,85 @@
     </div>
   </section>
 
-  <!-- PRODUCT LADDER -->
+  <!-- PRODUCT OFFERING -->
   <section class="section section-ladder" id="product-ladder">
     <div class="container">
       <div class="section-label" data-aos="fade-up">The Pathway</div>
-      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Four Tiers. One Pathway.</h2>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Two Tiers. One Framework.</h2>
       <p class="section-sub" data-aos="fade-up" data-aos-delay="100">Start where it makes sense. Progress as your governance needs grow.</p>
-      <div class="ladder-grid" id="ladder-grid">
-        <div class="ladder-card" data-aos="fade-up" data-aos-delay="80">
-          <div class="ladder-num">01</div>
-          <div class="ladder-badge free-badge">No Cost</div>
-          <h3>Free AI Governance Audit</h3>
-          <p>A structured health check that surfaces your governance gaps before your prospects do. No cost, no obligation.</p>
-          <button class="btn-outline btn-sm" onclick="navigate('contact')">Request Free Audit</button>
+
+      <div class="offering-grid" data-aos="fade-up" data-aos-delay="120">
+
+        <!-- Free Audit Bar — top, full width, thin -->
+        <div class="offering-audit-bar">
+          <div class="offering-audit-left">
+            <span class="material-symbols-outlined offering-audit-icon">task_alt</span>
+            <div>
+              <div class="offering-audit-title">Free AI Governance Audit</div>
+              <div class="offering-audit-sub">A structured health check that surfaces your governance gaps — no cost, no obligation.</div>
+            </div>
+          </div>
+          <div class="offering-audit-right">
+            <span class="offering-free-badge">No Cost</span>
+            <button class="btn-outline btn-sm" onclick="navigate('contact')">Request Free Audit</button>
+          </div>
         </div>
-        <div class="ladder-card ladder-card-muted" data-aos="fade-up" data-aos-delay="140">
-          <div class="ladder-num">02</div>
-          <div class="ladder-badge">$999 AUD</div>
-          <h3>AU Compliance Core</h3>
-          <p>The legislative minimum, documented and delivered. Every current Australian regulatory obligation covered in professionally documented governance templates, ready for your team to review, adapt, and implement.</p>
-          <button class="btn-outline btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get AU Compliance Core</button>
+
+        <!-- AU Compliance Core — narrow left (35%) -->
+        <div class="offering-tier-card offering-tier-muted">
+          <div class="offering-price-badge">$999 AUD · One-Time</div>
+          <h3 class="offering-card-heading">AU Compliance Core</h3>
+          <p class="offering-card-desc">Every current Australian regulatory obligation relevant to AI vendors, professionally documented in governance templates. Your team reviews, adapts, and implements independently.</p>
+          <ul class="offering-checklist">
+            <li>AI governance policy document</li>
+            <li>AI risk register template</li>
+            <li>AI system inventory template</li>
+            <li>Automated decision-making transparency documentation</li>
+            <li>Third-party / vendor AI assessment checklist</li>
+            <li>Responsible AI usage standards document</li>
+          </ul>
+          <button class="btn-outline btn-sm" style="margin-top:auto" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get AU Compliance Core</button>
         </div>
-        <div class="ladder-card ladder-card-featured" data-aos="fade-up" data-aos-delay="200">
-          <div class="ladder-num">03</div>
-          <div class="ladder-badge">$1,699 AUD</div>
-          <h3>Full Responsible AI Toolkit</h3>
-          <p>The complete governance framework, client-branded, done-for-you delivery, with 6 months of governance retainer included. This is the product most Ethos clients choose.</p>
-          <button class="btn-primary btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get the Toolkit</button>
+
+        <!-- Full Responsible AI Toolkit — wide right (65%), featured -->
+        <div class="offering-tier-card offering-tier-featured">
+          <div class="offering-recommended-pill">★ Recommended</div>
+          <div class="offering-price-badge offering-price-featured">$1,699 AUD · ★ Recommended</div>
+          <h3 class="offering-card-heading">Full Responsible AI Toolkit</h3>
+          <p class="offering-card-desc">Everything in AU Compliance Core, plus the complete framework — branded, delivered, and backed for 6 months.</p>
+          <div class="offering-value-box">
+            <div class="offering-value-label">What building this yourself typically involves</div>
+            <div class="offering-value-items">
+              <span>Governance consultant: $8,000–$15,000</span>
+              <span>Legal review: $3,000–$5,000</span>
+              <span>Ongoing monitoring: $500/month</span>
+            </div>
+            <div class="offering-value-total">Typical first-year investment: $14,000–$26,000+</div>
+          </div>
+          <ul class="offering-checklist">
+            <li>Everything in AU Compliance Core</li>
+            <li>Client-branded, done-for-you delivery</li>
+            <li>6-month governance retainer included</li>
+            <li>Regulatory monitoring &amp; update alerts</li>
+            <li>Procurement questionnaire response pack</li>
+            <li>Board-ready governance reporting template</li>
+          </ul>
+          <button class="btn-primary btn-sm" style="margin-top:auto" onclick="navigate('services'); setTimeout(()=>scrollToSection('pricing-comparison'),300)">Get the Full Toolkit →</button>
         </div>
-        <div class="ladder-card" data-aos="fade-up" data-aos-delay="260">
-          <div class="ladder-num">04</div>
-          <div class="ladder-badge iso-badge">9-Month Pathway</div>
-          <h3>ISO 42001 Certification Pathway</h3>
-          <p>From current state to certification-ready in approximately 9 months. Fewer than 30 companies worldwide hold ISO 42001. Early movers build a defensible competitive position.</p>
-          <button class="btn-outline btn-sm" onclick="navigate('contact')">Book Discovery Call</button>
+
+        <!-- ISO 42001 Bar — bottom, full width, dark navy -->
+        <div class="offering-iso-bar">
+          <div class="offering-iso-left">
+            <span class="offering-iso-eyebrow">$13,990 AUD · 9-Month Pathway</span>
+            <h3 class="offering-iso-heading">ISO 42001 Certification Pathway</h3>
+            <p class="offering-iso-desc">Fewer than 30 companies worldwide hold ISO/IEC 42001. From wherever you are now to certification-ready in approximately 9 months. No prior Ethos tiers required.</p>
+          </div>
+          <div class="offering-iso-right">
+            <button class="btn-primary btn-sm" onclick="navigate('services'); setTimeout(()=>scrollToSection('iso42001'),300)">Explore ISO 42001 →</button>
+            <button class="btn-ghost-light btn-sm" onclick="navigate('contact')">Book Discovery Call</button>
+          </div>
         </div>
+
       </div>
     </div>
   </section>
