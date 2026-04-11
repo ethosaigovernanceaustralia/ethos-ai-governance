@@ -3927,86 +3927,77 @@ img { display: block; max-width: 100%; }
   background: var(--white);
 }
 
-/* ===== ISO 42001 SECTION — DARK TREATMENT ===== */
-.services-section-iso {
+/* ===== ISO 42001 SECTION — BANDED TREATMENT ===== */
+.iso-section-wrapper {
+  /* wrapper — bands handle their own spacing */
+}
+
+.iso-band {
+  padding: 88px 0;
+}
+
+/* Dark bands */
+.iso-band-dark {
   background: linear-gradient(180deg, #0a1e38 0%, var(--navy-deep) 100%);
   color: var(--white);
-  padding: 96px 0;
 }
 
-.services-section-iso .svc-heading {
+.iso-band-closing {
+  background: var(--navy-deep);
+}
+
+.iso-band-dark .svc-heading {
   color: var(--white);
 }
 
-.services-section-iso .svc-body {
+.iso-band-dark .svc-body {
   color: rgba(255,255,255,0.7);
 }
 
-.services-section-iso .svc-subheading {
-  color: var(--brass-light);
+.iso-band-dark .svc-ttv {
+  color: rgba(255,255,255,0.5);
+  border-color: rgba(168,131,58,0.3);
 }
 
-.services-section-iso .svc-badge {
+.iso-band-dark .svc-badge {
   background: rgba(168,131,58,0.25);
   color: var(--brass-light);
 }
 
-.services-section-iso .iso-badge-lg {
+.iso-band-dark .iso-badge-lg {
   background: rgba(255,255,255,0.1);
   color: rgba(255,255,255,0.85);
 }
 
-.services-section-iso .svc-list li {
-  color: rgba(255,255,255,0.7);
-}
-
-.services-section-iso .svc-check {
-  color: var(--brass-light);
-}
-
-.services-section-iso .iso-note-callout {
+.iso-band-dark .iso-note-callout {
   background: rgba(255,255,255,0.06);
   border-color: rgba(168,131,58,0.3);
 }
 
-.services-section-iso .iso-note-callout p,
-.services-section-iso .iso-note-callout strong {
+.iso-band-dark .iso-note-callout p,
+.iso-band-dark .iso-note-callout strong {
   color: rgba(255,255,255,0.75);
 }
 
-.services-section-iso .iso27001-callout {
-  background: rgba(255,255,255,0.06);
-  border-color: rgba(168,131,58,0.3);
-}
-
-.services-section-iso .iso27001-callout strong,
-.services-section-iso .iso27001-callout p {
-  color: rgba(255,255,255,0.75);
-}
-
-.services-section-iso .value-context-callout {
-  background: rgba(255,255,255,0.05);
-  border-left-color: var(--brass);
-}
-
-.services-section-iso .value-context-callout h4 {
-  color: var(--brass-light);
-}
-
-.services-section-iso .value-context-callout p {
-  color: rgba(255,255,255,0.65);
-}
-
-.services-section-iso .btn-primary {
+.iso-band-dark .btn-primary {
   background: var(--brass);
   color: var(--white);
 }
 
-.services-section-iso .section-divider-inner {
-  border-color: rgba(255,255,255,0.1);
+/* Light band */
+.iso-band-light {
+  background: var(--paper);
 }
 
-/* ISO qualifier (intro line before heading) */
+.iso-band-light .svc-subheading {
+  color: var(--navy);
+}
+
+.iso-band-light .svc-check {
+  color: var(--brass);
+}
+
+/* ISO qualifier (always in dark band) */
 .iso-qualifier {
   font-size: 0.9rem;
   color: rgba(255,255,255,0.55);
