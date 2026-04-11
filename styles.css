@@ -2351,6 +2351,215 @@ img { display: block; max-width: 100%; }
 }
 
 /* ===== ABOUT PAGE ===== */
+
+/* ── Hero — light override ── */
+.about-hero-light {
+  background: var(--paper);
+  color: var(--navy);
+}
+
+.about-hero-light::before { display: none; }
+
+.about-hero-light .section-label {
+  color: var(--brass);
+}
+
+.about-hero-h1 {
+  color: var(--navy) !important;
+}
+
+.about-hero-sub {
+  color: var(--muted) !important;
+}
+
+.about-hero-rule {
+  width: 64px;
+  height: 2px;
+  background: var(--brass);
+  margin: 1.25rem 0 1.5rem;
+  border-radius: 2px;
+}
+
+/* ── Focus section (dark) — upgraded comparison ── */
+.about-focus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.about-focus-col {
+  border-radius: var(--radius-xl);
+  padding: 2rem 2.25rem;
+}
+
+.about-focus-serve {
+  background: rgba(168,131,58,0.08);
+  border: 1.5px solid rgba(168,131,58,0.22);
+}
+
+.about-focus-noserve {
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid rgba(255,255,255,0.08);
+}
+
+.about-focus-col-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brass-light);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.875rem;
+  border-bottom: 1px solid rgba(168,131,58,0.2);
+}
+
+.about-focus-col-label-no {
+  color: rgba(255,255,255,0.4);
+  border-bottom-color: rgba(255,255,255,0.08);
+}
+
+.about-focus-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.about-focus-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  padding: 0.5rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: background 0.2s ease;
+  cursor: default;
+}
+
+.about-focus-list-serve li {
+  color: rgba(255,255,255,0.88);
+  font-weight: 500;
+}
+
+.about-focus-list-serve li:hover {
+  background: rgba(168,131,58,0.1);
+}
+
+.about-focus-list-serve li::before {
+  content: '✓';
+  color: var(--brass-light);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.about-focus-list-noserve li {
+  color: rgba(255,255,255,0.45);
+  font-weight: 400;
+}
+
+.about-focus-list-noserve li:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.about-focus-list-noserve li::before {
+  content: '✕';
+  color: rgba(255,255,255,0.25);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+/* ── Philosophy — paper bg so white cards pop ── */
+.section-paper {
+  background: var(--paper);
+}
+
+/* ── Credential section (dark) — expanded items ── */
+.about-credential-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.about-credential-item {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-top: 2px solid rgba(168,131,58,0.4);
+  border-radius: var(--radius-lg);
+  padding: 2rem 1.75rem;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-top-color 0.25s ease, background 0.25s ease;
+}
+
+.about-credential-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  border-top-color: var(--brass);
+  background: rgba(168,131,58,0.08);
+}
+
+.about-credential-icon {
+  font-size: 2.25rem;
+  color: rgba(201,176,128,0.65);
+  margin-bottom: 1rem;
+  display: block;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.about-credential-item:hover .about-credential-icon {
+  color: var(--brass-light);
+  transform: scale(1.1);
+}
+
+.about-credential-title {
+  font-family: var(--font-headline);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+
+.about-credential-desc {
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  transition: color 0.25s ease;
+}
+
+.about-credential-item:hover .about-credential-desc {
+  color: rgba(255,255,255,0.75);
+}
+
+/* philosophy card upgrade — icon gold by default */
+.philosophy-icon {
+  font-size: 2rem;
+  color: var(--brass);
+  display: block;
+  margin-bottom: 1.25rem;
+  transition: transform 0.25s ease;
+}
+
+.philosophy-card:hover .philosophy-icon {
+  transform: scale(1.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .about-focus-grid { grid-template-columns: 1fr; }
+  .about-credential-grid { grid-template-columns: 1fr; }
+}
+
+/* ── OLD comparison grid (kept for backwards compat) ── */
 .comparison-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -3207,6 +3416,8 @@ img { display: block; max-width: 100%; }
   .comparison-grid { grid-template-columns: 1fr; }
   .philosophy-grid { grid-template-columns: 1fr; }
   .credential-row { flex-direction: column; }
+  .about-focus-grid { grid-template-columns: 1fr; }
+  .about-credential-grid { grid-template-columns: 1fr; }
 
   .reg-cards-grid { grid-template-columns: 1fr; }
   .horizon-grid { grid-template-columns: 1fr; }
