@@ -443,9 +443,80 @@ function engagementLabel(type) {
     toolkit_self_service:'Baseline Compliance Toolkit (Self-Service)',
     toolkit_consulting:  'Baseline Compliance Toolkit (Consulting)',
     retainer:            'Governance Retainer',
-    iso_pathway:         'ISO 42001 Readiness Pathway'
+    iso_pathway:         'ISO 42001 Readiness Pathway',
+    au_compliance_core:  'AU Compliance Core',
   };
   return labels[type] || type;
+}
+
+// ─── Product Templates ────────────────────────────────────────
+// Returns shared template files for all product tiers the current client
+// has active access to. RLS filters automatically based on auth.uid().
+
+async function getProductTemplates() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('product_templates')
+    .select('*')
+    .order('sort_order', { ascending: true });
+  if (error) { console.error('Product templates error:', error); return []; }
+  return data || [];
+}
+
+// Logs a template download and opens a 15-minute signed URL.
+async function downloadTemplate(templateId, filePath, fileName) {
+  const sb = getSupabase();
+  if (!sb) return;
+
+  // Log the download (non-blocking — don't wait for it)
+  getSession().then(session => {
+    if (session) {
+      sb.from('template_downloads').insert({
+        client_id:   session.user.id,
+        template_id: templateId,
+      }).then(({ error }) => {
+        if (error) console.error('Download log error:', error);
+      });
+    }
+  });
+
+  // Generate a 15-minute signed URL from the ethos-assets bucket
+  const { data, error } = await sb.storage
+    .from('ethos-assets')
+    .createSignedUrl(filePath, 900);
+
+  if (error) {
+    console.error('Template signed URL error:', error);
+    showToast('Could not generate download link. Please try again.', 'error');
+    return;
+  }
+
+  const a = document.createElement('a');
+  a.href = data.signedUrl;
+  a.download = fileName;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// ─── Resend Invite (admin only) ───────────────────────────────
+
+async function resendInvite(email) {
+  const session = await getSession();
+  if (!session) throw new Error('Not authenticated');
+  const res = await fetch('/api/resend-invite', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${session.access_token}`,
+    },
+    body: JSON.stringify({ email }),
+  });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || 'Failed to resend invite');
+  return json;
 }
 
 // ─── Bin (Soft-delete / 90-day permanent delete) ──────────────

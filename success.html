@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase Successful — Ethos AI Governance</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <style>
+    .success-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f8f7f4;
+    }
+
+    .success-nav {
+      background: #0D1F3C;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .success-nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .success-nav-logo img {
+      width: 32px;
+      height: 32px;
+    }
+
+    .success-nav-wordmark {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .success-nav-brand {
+      font-size: 0.875rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #ffffff;
+    }
+
+    .success-nav-tagline {
+      font-size: 0.6rem;
+      color: #C9A84C;
+      letter-spacing: 0.04em;
+    }
+
+    .success-nav-back {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+
+    .success-nav-back:hover { color: #ffffff; }
+
+    .success-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4rem 1.5rem;
+    }
+
+    .success-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 3rem 3.5rem;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 24px rgba(13,31,60,0.07);
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background: #ecfdf5;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .success-icon .material-symbols-outlined {
+      font-size: 2rem;
+      color: #059669;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .success-heading {
+      font-size: 1.625rem;
+      font-weight: 700;
+      color: #0D1F3C;
+      margin: 0 0 0.5rem;
+      font-family: 'Newsreader', Georgia, serif;
+    }
+
+    .success-product {
+      font-size: 0.9375rem;
+      color: #C9A84C;
+      font-weight: 600;
+      margin: 0 0 2rem;
+    }
+
+    .success-steps {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .success-step {
+      display: flex;
+      gap: 0.875rem;
+      align-items: flex-start;
+    }
+
+    .success-step-icon {
+      width: 32px;
+      height: 32px;
+      background: rgba(13,31,60,0.06);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .success-step-icon .material-symbols-outlined {
+      font-size: 1rem;
+      color: #0D1F3C;
+    }
+
+    .success-step-text {
+      font-size: 0.9375rem;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .success-step-text strong {
+      color: #111827;
+    }
+
+    .success-divider {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin: 1.75rem 0;
+    }
+
+    .success-guarantee {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      background: rgba(201,168,76,0.08);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .success-guarantee .material-symbols-outlined {
+      font-size: 1.25rem;
+      color: #C9A84C;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-variation-settings: 'FILL' 1;
+    }
+
+    .success-guarantee-text {
+      font-size: 0.875rem;
+      color: #374151;
+      line-height: 1.5;
+    }
+
+    .success-guarantee-text strong {
+      color: #111827;
+    }
+
+    .success-contact {
+      font-size: 0.875rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    .success-contact a {
+      color: #C9A84C;
+      text-decoration: none;
+    }
+
+    .success-contact a:hover {
+      text-decoration: underline;
+    }
+
+    .success-home-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 1.5rem;
+      padding: 0.625rem 1.25rem;
+      background: #0D1F3C;
+      color: #ffffff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    .success-home-btn:hover { background: #162d52; }
+
+    @media (max-width: 600px) {
+      .success-card {
+        padding: 2rem 1.5rem;
+        border-radius: 12px;
+      }
+      .success-heading { font-size: 1.375rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="success-page">
+
+  <!-- Nav -->
+  <nav class="success-nav">
+    <a href="/" class="success-nav-logo">
+      <img src="assets/logo-icon.png" alt="Ethos"/>
+      <span class="success-nav-wordmark">
+        <span class="success-nav-brand">ETHOS</span>
+        <span class="success-nav-tagline">AI Governance</span>
+      </span>
+    </a>
+    <a href="/" class="success-nav-back">
+      <span class="material-symbols-outlined" style="font-size:0.9rem">arrow_back</span>
+      Back to website
+    </a>
+  </nav>
+
+  <!-- Content -->
+  <div class="success-content">
+    <div class="success-card">
+
+      <div class="success-icon">
+        <span class="material-symbols-outlined">check_circle</span>
+      </div>
+
+      <h1 class="success-heading">Payment successful</h1>
+      <p class="success-product" id="productName">AU Compliance Core</p>
+
+      <ul class="success-steps">
+        <li class="success-step">
+          <div class="success-step-icon">
+            <span class="material-symbols-outlined">receipt_long</span>
+          </div>
+          <div class="success-step-text">
+            <strong>Invoice on its way.</strong> A tax invoice is being sent to your email now. Check your inbox (and spam folder, just in case).
+          </div>
+        </li>
+        <li class="success-step">
+          <div class="success-step-icon">
+            <span class="material-symbols-outlined">key</span>
+          </div>
+          <div class="success-step-text">
+            <strong>Portal invite coming shortly.</strong> You'll receive a second email with a link to set up your Ethos client portal account.
+          </div>
+        </li>
+        <li class="success-step">
+          <div class="success-step-icon">
+            <span class="material-symbols-outlined">folder_open</span>
+          </div>
+          <div class="success-step-text">
+            <strong>Documents ready to download.</strong> Once you log in, your <span id="productNameInline">AU Compliance Core</span> documents will be waiting in your workspace.
+          </div>
+        </li>
+      </ul>
+
+      <hr class="success-divider"/>
+
+      <div class="success-guarantee">
+        <span class="material-symbols-outlined">verified</span>
+        <div class="success-guarantee-text">
+          <strong>30-Day Relevance Guarantee.</strong> If the deliverables are not relevant to your AI product or business model, you receive a full refund within 30 days — no questions asked.
+        </div>
+      </div>
+
+      <p class="success-contact">
+        Questions? Email us at
+        <a href="mailto:Mike@ethosaigovernance.com.au">Mike@ethosaigovernance.com.au</a>
+      </p>
+
+      <div style="text-align:center">
+        <a href="/" class="success-home-btn">
+          <span class="material-symbols-outlined" style="font-size:1rem">home</span>
+          Back to website
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Read the product tier from the URL and show the correct product name
+  const PRODUCT_NAMES = {
+    au_compliance_core: 'AU Compliance Core',
+    full_toolkit:       'Full Responsible AI Toolkit',
+  };
+
+  const params      = new URLSearchParams(window.location.search);
+  const tier        = params.get('tier');
+  const productName = PRODUCT_NAMES[tier] || 'Your purchase';
+
+  document.getElementById('productName').textContent       = productName;
+  document.getElementById('productNameInline').textContent = productName;
+</script>
+
+</body>
+</html>

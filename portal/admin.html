@@ -114,6 +114,10 @@
             </div>
             <div style="display:flex;gap:0.75rem;align-items:center">
               <span class="status-badge" id="wsEngagementBadge"></span>
+              <button class="btn-outline" id="resendInviteBtn" onclick="handleResendInvite()" style="display:none;font-size:0.8rem;padding:0.4rem 0.875rem;align-items:center;gap:4px">
+                <span class="material-symbols-outlined" style="font-size:0.9rem">mark_email_unread</span>
+                Resend Invite
+              </button>
               <button class="btn-outline" onclick="closeClientWorkspace()" style="font-size:0.8rem;padding:0.4rem 0.875rem">
                 <span class="material-symbols-outlined" style="font-size:0.9rem">arrow_back</span>
                 All clients
@@ -328,6 +332,7 @@
       <label class="p-label" for="inviteEngagement">Engagement Type</label>
       <select class="p-select" id="inviteEngagement">
         <option value="">None yet</option>
+        <option value="au_compliance_core">AU Compliance Core</option>
         <option value="free_audit">Free Governance Audit</option>
         <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
         <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
@@ -405,6 +410,7 @@
     <div class="p-form-group">
       <label class="p-label" for="addEngagementType">Engagement Type</label>
       <select class="p-select" id="addEngagementType">
+        <option value="au_compliance_core">AU Compliance Core</option>
         <option value="free_audit">Free Governance Audit</option>
         <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
         <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
@@ -650,8 +656,15 @@ async function selectClient(clientId) {
   }
   renderEngagements(engagements);
 
-  // Load documents
-  await refreshWorkspaceDocs();
+  // Load documents and login status in parallel
+  const [, statusResult] = await Promise.all([
+    refreshWorkspaceDocs(),
+    fetchClientLoginStatus(clientId),
+  ]);
+
+  // Show Resend Invite button only if the client has never logged in
+  const resendBtn = document.getElementById('resendInviteBtn');
+  resendBtn.style.display = statusResult.hasLoggedIn ? 'none' : 'inline-flex';
 
   // Show client view
   showView('clients');
@@ -1160,6 +1173,46 @@ async function handlePermanentDeleteEnquiry(enquiryId, name) {
   if (!confirm(`Permanently delete enquiry from "${name}"? This cannot be undone.`)) return;
   const ok = await permanentlyDeleteEnquiry(enquiryId);
   if (ok) { showToast('Enquiry permanently deleted.', 'success'); await loadBinEnquiries(); }
+}
+
+// ─── Resend Invite ─────────────────────────────────────────────
+
+async function fetchClientLoginStatus(clientId) {
+  const session = await getSession();
+  if (!session) return { hasLoggedIn: true }; // Default: hide button on error
+  try {
+    const res = await fetch('/api/get-client-status', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ clientId }),
+    });
+    if (!res.ok) return { hasLoggedIn: true };
+    return await res.json();
+  } catch {
+    return { hasLoggedIn: true };
+  }
+}
+
+async function handleResendInvite() {
+  const client = _allClients.find(c => c.id === _selectedClientId);
+  if (!client) return;
+
+  const btn = document.getElementById('resendInviteBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+
+  try {
+    await resendInvite(client.email);
+    showToast(`Invite resent to ${client.email}`, 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:0.9rem">mark_email_unread</span> Resend Invite';
+  }
 }
 
 function escHtml(str) {

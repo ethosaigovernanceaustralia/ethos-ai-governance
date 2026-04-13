@@ -639,6 +639,44 @@ function toggleBonusSecondary(summaryEl) {
   card.classList.toggle('open');
 }
 
+// ─── Stripe Checkout ─────────────────────────────
+// Called by the "Get AU Compliance Core" buttons on the website.
+// Passes `this` so the button can show a loading state during the API call.
+
+async function startCheckout(productTier, btn) {
+  const originalHTML = btn.innerHTML;
+  btn.disabled = true;
+  btn.textContent = 'Loading...';
+
+  // Remove any previous error message near this button
+  const prev = btn.parentElement.querySelector('.checkout-error');
+  if (prev) prev.remove();
+
+  try {
+    const res  = await fetch('/api/create-checkout-session', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ productTier }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Could not start checkout');
+
+    // Redirect to Stripe-hosted checkout page
+    window.location.href = data.url;
+  } catch (err) {
+    console.error('[checkout]', err);
+    btn.disabled  = false;
+    btn.innerHTML = originalHTML;
+
+    const errEl = document.createElement('p');
+    errEl.className = 'checkout-error';
+    errEl.style.cssText = 'color:#dc2626;font-size:0.8125rem;margin-top:0.5rem;text-align:center';
+    errEl.textContent = 'Something went wrong. Please try again.';
+    btn.insertAdjacentElement('afterend', errEl);
+    setTimeout(() => errEl.remove(), 5000);
+  }
+}
+
 // ─── Boot ────────────────────────────────────────
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initPage);

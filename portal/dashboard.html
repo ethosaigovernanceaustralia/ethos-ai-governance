@@ -203,25 +203,33 @@ let _selectedFile = null;
   document.getElementById('dashWelcome').textContent = `Welcome, ${firstName}`;
   document.getElementById('dashCompany').textContent = _currentProfile.company_name || '';
 
-  // Load engagements
-  const engagements = await getEngagements(_currentProfile.id);
+  // Load engagements and templates in parallel
+  const [engagements, templates] = await Promise.all([
+    getEngagements(_currentProfile.id),
+    getProductTemplates(),
+  ]);
 
-  if (!engagements.length) {
+  // Show workspace if there is an engagement OR purchased templates
+  if (!engagements.length && !templates.length) {
     document.getElementById('noEngagementState').style.display = 'block';
     hideLoader();
     return;
   }
 
-  _currentEngagement = engagements[0];
+  _currentEngagement = engagements[0] || null;
   document.getElementById('workspaceContent').style.display = 'block';
 
-  // Populate engagement card
-  document.getElementById('engagementTypeLabel').textContent = 'Active Engagement';
-  document.getElementById('engagementName').textContent = engagementLabel(_currentEngagement.engagement_type);
-  document.getElementById('engagementNotes').textContent = _currentEngagement.notes || '';
-  const badge = document.getElementById('engagementStatusBadge');
-  badge.textContent = _currentEngagement.status.charAt(0).toUpperCase() + _currentEngagement.status.slice(1);
-  badge.className = `status-badge status-${_currentEngagement.status}`;
+  // Populate engagement card (hidden if no engagement)
+  if (_currentEngagement) {
+    document.getElementById('engagementTypeLabel').textContent = 'Active Engagement';
+    document.getElementById('engagementName').textContent = engagementLabel(_currentEngagement.engagement_type);
+    document.getElementById('engagementNotes').textContent = _currentEngagement.notes || '';
+    const badge = document.getElementById('engagementStatusBadge');
+    badge.textContent = _currentEngagement.status.charAt(0).toUpperCase() + _currentEngagement.status.slice(1);
+    badge.className = `status-badge status-${_currentEngagement.status}`;
+  } else {
+    document.getElementById('engagementCard').style.display = 'none';
+  }
 
   // Load documents
   await refreshDocuments();
@@ -232,11 +240,30 @@ let _selectedFile = null;
 // ─── Documents ─────────────────────────────────────────────────
 
 async function refreshDocuments() {
-  if (!_currentEngagement) return;
-  const docs = await getDocuments(_currentEngagement.id);
+  // Fetch per-engagement documents (if an engagement exists)
+  let clientDocs = [];
+  let manualEthosDocs = [];
+  if (_currentEngagement) {
+    const docs = await getDocuments(_currentEngagement.id);
+    clientDocs      = docs.filter(d => d.document_type === 'client_upload');
+    manualEthosDocs = docs.filter(d => d.document_type === 'ethos_deliverable' || d.document_type === 'shared_working');
+  }
 
-  const clientDocs = docs.filter(d => d.document_type === 'client_upload');
-  const ethosDocs = docs.filter(d => d.document_type === 'ethos_deliverable' || d.document_type === 'shared_working');
+  // Fetch shared product templates (RLS restricts to tiers the client has purchased)
+  const templates = await getProductTemplates();
+  const templateItems = templates.map(t => ({
+    _isTemplate:  true,
+    _templateId:  t.id,
+    file_name:    t.display_name,
+    file_path:    t.file_path,
+    file_size_bytes: null,
+    created_at:   t.created_at,
+    description:  null,
+    scan_status:  'reviewed',
+  }));
+
+  // Templates first, then any manually uploaded deliverables
+  const ethosDocs = [...templateItems, ...manualEthosDocs];
 
   renderDocList('clientDocList', clientDocs, true);
   renderDocList('ethosDocList', ethosDocs, false);
@@ -258,7 +285,12 @@ function renderDocList(containerId, docs, showDelete) {
     return;
   }
 
-  el.innerHTML = docs.map(doc => `
+  el.innerHTML = docs.map(doc => {
+    const downloadOnclick = doc._isTemplate
+      ? `downloadTemplate('${doc._templateId}','${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`
+      : `downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`;
+
+    return `
     <div class="file-item">
       <div class="file-icon">PDF</div>
       <div class="file-info">
@@ -273,7 +305,7 @@ function renderDocList(containerId, docs, showDelete) {
         ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
       </div>
       <div class="file-actions">
-        <button class="file-action-btn" onclick="downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')" title="Download">
+        <button class="file-action-btn" onclick="${downloadOnclick}" title="Download">
           <span class="material-symbols-outlined">download</span>
         </button>
         ${showDelete ? `<button class="file-action-btn delete" onclick="handleDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
@@ -281,7 +313,7 @@ function renderDocList(containerId, docs, showDelete) {
         </button>` : ''}
       </div>
     </div>
-  `).join('');
+  `}).join('');
 }
 
 async function handleDeleteDoc(docId, filePath) {
