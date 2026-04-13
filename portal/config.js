@@ -11,5 +11,5 @@
 
 window.SUPABASE_CONFIG = {
   url: 'https://jfnzaynugoerjvlxymez.supabase.co',
-  anonKey: 'sb_publishable_1-ancXXXLThUZLsh_oYSqw_uHPNDVBC'
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmbnpheW51Z29lcmp2bHh5bWV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3NzU2ODEsImV4cCI6MjA5MDM1MTY4MX0._lKqIE17ky3_oLTq872Tu_qNNCtTcsCq4NILJvL1oTI'
 };
