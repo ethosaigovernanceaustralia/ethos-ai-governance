@@ -5,5 +5,11 @@
     { "source": "/portal/admin",          "destination": "/portal/admin.html" },
     { "source": "/portal/reset-password", "destination": "/portal/reset-password.html" },
     { "source": "/success",               "destination": "/success.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/send-recovery-emails",
+      "schedule": "0 1 * * *"
+    }
   ]
 }

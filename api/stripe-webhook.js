@@ -94,11 +94,49 @@ async function handleCheckoutCompleted(session) {
   // 2. Find or create client
   const { clientId } = await findOrCreateClient(supabase, email, name);
 
-  // 3. Grant product access
+  // 3. Upgrade logic: if purchasing full_toolkit, revoke existing au_compliance_core access
+  if (productTier === 'full_toolkit') {
+    const { data: aucAccess } = await supabase
+      .from('product_access')
+      .select('id')
+      .eq('client_id', clientId)
+      .eq('product_tier', 'au_compliance_core')
+      .is('revoked_at', null)
+      .maybeSingle();
+
+    if (aucAccess) {
+      const { error: revokeError } = await supabase
+        .from('product_access')
+        .update({ revoked_at: new Date().toISOString() })
+        .eq('id', aucAccess.id);
+      if (revokeError) throw revokeError;
+
+      console.log(`[webhook] Revoked au_compliance_core access for ${email} (upgrade)`);
+
+      // Mark old engagement as upgraded (non-critical — cosmetic change)
+      await tryStep('upgrade-old-engagement', () =>
+        supabase.from('engagements')
+          .update({ status: 'upgraded' })
+          .eq('client_id', clientId)
+          .eq('engagement_type', 'au_compliance_core')
+          .eq('status', 'active')
+          .then(({ error }) => { if (error) throw error; })
+      );
+    }
+  }
+
+  // 4. Grant product access (with retainer dates for full_toolkit)
+  const retainerStart = productTier === 'full_toolkit' ? new Date().toISOString() : null;
+  const retainerEnd   = productTier === 'full_toolkit'
+    ? (() => { const d = new Date(); d.setMonth(d.getMonth() + 6); return d.toISOString(); })()
+    : null;
+
   const { error: accessError } = await supabase.from('product_access').insert({
-    client_id:         clientId,
-    product_tier:      productTier,
-    stripe_session_id: sessionId,
+    client_id:           clientId,
+    product_tier:        productTier,
+    stripe_session_id:   sessionId,
+    retainer_start_date: retainerStart,
+    retainer_end_date:   retainerEnd,
   });
   if (accessError) throw accessError;
 
@@ -239,6 +277,12 @@ async function generateAndSendInvoice(supabase, { clientId, email, name, product
 
   // Send email with PDF attached (Resend, matching notify-enquiry.js pattern)
   await sendInvoiceEmail({ email, name, invoiceNumber, productName, pdfBytes });
+
+  // Update email tracking
+  await supabase.from('invoices').update({
+    last_emailed_at: new Date().toISOString(),
+    email_count:     1,
+  }).eq('id', invoiceId);
 }
 
 

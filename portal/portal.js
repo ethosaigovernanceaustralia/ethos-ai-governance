@@ -601,3 +601,107 @@ function hideLoader() {
     setTimeout(() => loader.remove(), 500);
   }
 }
+
+// ─── Admin: Invoices ──────────────────────────────────────────
+
+async function getAdminInvoices() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('invoices')
+    .select('*, profiles(full_name, email)')
+    .order('created_at', { ascending: false });
+  if (error) { console.error('Admin invoices error:', error); return []; }
+  return data || [];
+}
+
+async function getClientInvoices(clientId) {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('invoices')
+    .select('*')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false });
+  if (error) { console.error('Client invoices error:', error); return []; }
+  return data || [];
+}
+
+// ─── Admin: Product Access ────────────────────────────────────
+
+async function getClientProductAccess(clientId) {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('product_access')
+    .select('*')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false });
+  if (error) { console.error('Product access error:', error); return []; }
+  return data || [];
+}
+
+// ─── Admin: Download from ethos-assets ───────────────────────
+
+async function adminDownloadInvoice(filePath, fileName) {
+  const sb = getSupabase();
+  if (!sb) return;
+
+  const { data, error } = await sb.storage
+    .from('ethos-assets')
+    .createSignedUrl(filePath, 900);
+
+  if (error) {
+    showToast('Could not generate download link. Please try again.', 'error');
+    return;
+  }
+
+  const a = document.createElement('a');
+  a.href = data.signedUrl;
+  a.download = fileName;
+  a.target = '_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// ─── Admin: Abandoned Checkouts ───────────────────────────────
+
+async function getAbandonedCheckouts() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('abandoned_checkouts')
+    .select('*')
+    .order('abandoned_at', { ascending: false });
+  if (error) { console.error('Abandoned checkouts error:', error); return []; }
+  return data || [];
+}
+
+// ─── Admin: Download Activity ─────────────────────────────────
+
+async function getClientDownloadActivity(clientId) {
+  const sb = getSupabase();
+  if (!sb) return { templates: [], downloads: [] };
+
+  // Get client's active product access tiers
+  const { data: access } = await sb
+    .from('product_access')
+    .select('product_tier')
+    .eq('client_id', clientId)
+    .is('revoked_at', null);
+
+  if (!access || !access.length) return { templates: [], downloads: [] };
+
+  const tiers = access.map(a => a.product_tier);
+
+  const [templatesRes, downloadsRes] = await Promise.all([
+    sb.from('product_templates').select('*').in('product_tier', tiers).order('sort_order'),
+    sb.from('template_downloads').select('*').eq('client_id', clientId).order('downloaded_at', { ascending: false }),
+  ]);
+
+  return {
+    templates: templatesRes.data || [],
+    downloads: downloadsRes.data || [],
+  };
+}
