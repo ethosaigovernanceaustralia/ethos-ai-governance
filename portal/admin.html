@@ -48,6 +48,10 @@
         <button class="admin-nav-item" id="navInvoices" onclick="showView('invoices')">
           <span class="material-symbols-outlined">receipt_long</span> Invoices
         </button>
+        <button class="admin-nav-item" id="navMessages" onclick="showView('messages')">
+          <span class="material-symbols-outlined">chat</span> Messages
+          <span class="status-badge status-new" id="adminMessagesBadge" style="margin-left:auto;display:none;font-size:0.625rem;padding:2px 7px"></span>
+        </button>
         <button class="admin-nav-item" id="navArchive" onclick="showView('archive')">
           <span class="material-symbols-outlined">inventory_2</span> Archive
         </button>
@@ -121,6 +125,10 @@
                 <span class="material-symbols-outlined" style="font-size:0.9rem">mark_email_unread</span>
                 Resend Invite
               </button>
+              <button class="btn-outline" id="sendPasswordResetBtn" onclick="handleSendPasswordReset()" style="font-size:0.8rem;padding:0.4rem 0.875rem;display:inline-flex;align-items:center;gap:4px">
+                <span class="material-symbols-outlined" style="font-size:0.9rem">lock_reset</span>
+                Reset Password
+              </button>
               <button class="btn-outline" onclick="closeClientWorkspace()" style="font-size:0.8rem;padding:0.4rem 0.875rem">
                 <span class="material-symbols-outlined" style="font-size:0.9rem">arrow_back</span>
                 All clients
@@ -135,6 +143,22 @@
               </button>
             </div>
             <div id="wsEngagementsList"></div>
+          </div>
+        </div>
+
+        <!-- Action Items -->
+        <div class="portal-card" style="margin-bottom:1.5rem">
+          <div class="portal-card-header">
+            <div class="portal-card-title" style="display:flex;align-items:center;gap:6px">
+              <span class="material-symbols-outlined" style="font-size:1rem">task_alt</span>
+              Action Items
+            </div>
+            <button class="btn-outline" onclick="openCreateActionItemModal()" style="font-size:0.8rem;padding:0.3rem 0.7rem;display:inline-flex;align-items:center;gap:4px">
+              <span class="material-symbols-outlined" style="font-size:0.9rem">add</span> Add
+            </button>
+          </div>
+          <div class="portal-card-body" style="padding:0.5rem">
+            <div id="wsActionItemsList"><div style="padding:0.75rem 1rem;font-size:0.8125rem;color:var(--muted)">No action items yet.</div></div>
           </div>
         </div>
 
@@ -311,6 +335,33 @@
       </div>
     </div>
 
+    <!-- ─── Messages View ─── -->
+    <div id="viewMessages" style="display:none">
+      <div class="portal-section-title">Messages</div>
+      <div class="messages-split">
+
+        <!-- Client list -->
+        <div class="messages-client-list">
+          <div class="messages-client-list-header">Conversations</div>
+          <div id="messagesClientList">
+            <div style="padding:1rem;font-size:0.8125rem;color:var(--muted)">Loading…</div>
+          </div>
+        </div>
+
+        <!-- Thread panel -->
+        <div class="messages-thread-panel" id="messagesThreadPanel">
+          <div style="display:flex;flex-direction:column;height:100%;align-items:center;justify-content:center">
+            <div class="empty-state" style="padding:2rem">
+              <span class="material-symbols-outlined empty-state-icon">chat</span>
+              <div class="empty-state-title">Select a conversation</div>
+              <p class="empty-state-text">Choose a client from the left to view their thread.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <!-- ─── Enquiries View ─── -->
     <div id="viewEnquiries" style="display:none">
       <div class="portal-section-title">Enquiries</div>
@@ -383,6 +434,54 @@
 </div>
 </div>
 
+<!-- Create / Edit Action Item Modal -->
+<div class="modal-overlay" id="createActionItemOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="actionItemModalTitle">Add Action Item</h2>
+      <button class="modal-close" onclick="closeCreateActionItemModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="actionItemTitle">Title *</label>
+      <input class="p-input" type="text" id="actionItemTitle" placeholder="e.g. Review and sign engagement terms"/>
+    </div>
+    <div class="p-form-row" style="margin-bottom:1.25rem">
+      <div class="p-form-group" style="margin-bottom:0">
+        <label class="p-label" for="actionItemStatus">Status</label>
+        <select class="p-select" id="actionItemStatus">
+          <option value="pending">Pending</option>
+          <option value="in_progress">In Progress</option>
+          <option value="complete">Complete</option>
+        </select>
+      </div>
+      <div class="p-form-group" style="margin-bottom:0">
+        <label class="p-label" for="actionItemAssignedTo">Assigned To</label>
+        <select class="p-select" id="actionItemAssignedTo">
+          <option value="client">Client</option>
+          <option value="ethos">Ethos</option>
+        </select>
+      </div>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="actionItemDueDate">Due Date <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <input class="p-input" type="date" id="actionItemDueDate"/>
+    </div>
+    <div class="p-form-group">
+      <label class="p-label" for="actionItemNotes">Notes <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+      <textarea class="p-textarea" id="actionItemNotes" placeholder="Additional context or instructions..." style="min-height:80px"></textarea>
+    </div>
+    <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
+      <button class="btn-outline" onclick="closeCreateActionItemModal()" style="flex:1">Cancel</button>
+      <button class="btn-gold" id="saveActionItemBtn" onclick="handleSaveActionItem()" style="flex:2">
+        <span class="material-symbols-outlined" style="font-size:1rem">add_task</span>
+        <span id="saveActionItemBtnLabel">Add Action Item</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Revoke Access Confirmation Modal -->
 <div class="modal-overlay" id="revokeModalOverlay">
   <div class="modal" style="max-width:440px">
@@ -438,12 +537,11 @@
       <label class="p-label" for="inviteEngagement">Engagement Type</label>
       <select class="p-select" id="inviteEngagement">
         <option value="">None yet</option>
+        <option value="free_audit">Free AI Governance Audit</option>
         <option value="au_compliance_core">AU Compliance Core</option>
-        <option value="free_audit">Free Governance Audit</option>
-        <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
-        <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
+        <option value="full_toolkit">Full Responsible AI Toolkit</option>
         <option value="retainer">Governance Retainer</option>
-        <option value="iso_pathway">ISO 42001 Readiness Pathway</option>
+        <option value="iso_pathway">ISO 42001 Certification Pathway</option>
       </select>
     </div>
     <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
@@ -516,12 +614,11 @@
     <div class="p-form-group">
       <label class="p-label" for="addEngagementType">Engagement Type</label>
       <select class="p-select" id="addEngagementType">
+        <option value="free_audit">Free AI Governance Audit</option>
         <option value="au_compliance_core">AU Compliance Core</option>
-        <option value="free_audit">Free Governance Audit</option>
-        <option value="toolkit_self_service">Baseline Compliance Toolkit (Self-Service)</option>
-        <option value="toolkit_consulting">Baseline Compliance Toolkit (Consulting)</option>
+        <option value="full_toolkit">Full Responsible AI Toolkit</option>
         <option value="retainer">Governance Retainer</option>
-        <option value="iso_pathway">ISO 42001 Readiness Pathway</option>
+        <option value="iso_pathway">ISO 42001 Certification Pathway</option>
       </select>
     </div>
     <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
@@ -548,6 +645,15 @@ let _adminSelectedFile = null;
 let _allEnquiries = [];
 let _selectedEnquiry = null;
 let _pendingRevokeData = null;
+let _adminActionItems = [];
+let _editingActionItemId = null;
+// Messaging state
+let _adminMessagesClientId  = null;
+let _adminThreadMessages    = [];
+let _adminMsgPollTimer      = null;
+let _adminMsgFile           = null;
+let _adminMsgSending        = false;
+let _adminUnreadCounts      = {};
 
 // ─── Init ──────────────────────────────────────────────────────
 (async () => {
@@ -558,24 +664,28 @@ let _pendingRevokeData = null;
   document.getElementById('navAdminName').textContent = _adminProfile.full_name;
 
   await Promise.all([loadClients(), loadEnquiries()]);
+
+  // Load unread message counts to show badge in nav
+  getAllThreadUnreadCounts().then(counts => {
+    _adminUnreadCounts = counts;
+    updateAdminMessagesBadge();
+  });
+
   hideLoader();
 })();
 
 // ─── View switcher ─────────────────────────────────────────────
 function showView(view) {
-  document.getElementById('viewClients').style.display   = view === 'clients'   ? 'block' : 'none';
-  document.getElementById('viewEnquiries').style.display = view === 'enquiries' ? 'block' : 'none';
-  document.getElementById('viewInvoices').style.display  = view === 'invoices'  ? 'block' : 'none';
-  document.getElementById('viewArchive').style.display   = view === 'archive'   ? 'block' : 'none';
-  document.getElementById('viewBin').style.display       = view === 'bin'       ? 'block' : 'none';
-  document.getElementById('navClients').className   = 'admin-nav-item' + (view === 'clients'   ? ' active' : '');
-  document.getElementById('navEnquiries').className = 'admin-nav-item' + (view === 'enquiries' ? ' active' : '');
-  document.getElementById('navInvoices').className  = 'admin-nav-item' + (view === 'invoices'  ? ' active' : '');
-  document.getElementById('navArchive').className   = 'admin-nav-item' + (view === 'archive'   ? ' active' : '');
-  document.getElementById('navBin').className       = 'admin-nav-item' + (view === 'bin'       ? ' active' : '');
+  const views = ['clients','enquiries','invoices','archive','bin','messages'];
+  views.forEach(v => {
+    document.getElementById(`view${v.charAt(0).toUpperCase()+v.slice(1)}`).style.display = v === view ? 'block' : 'none';
+    document.getElementById(`nav${v.charAt(0).toUpperCase()+v.slice(1)}`).className = 'admin-nav-item' + (v === view ? ' active' : '');
+  });
   if (view === 'archive')  loadArchive();
   if (view === 'bin')      loadBin();
   if (view === 'invoices') loadInvoices();
+  if (view === 'messages') loadAdminMessages();
+  if (view !== 'messages') stopAdminMessagePoll();
 }
 
 function showArchiveTab(tab) {
@@ -771,12 +881,13 @@ async function selectClient(clientId) {
   }
   renderEngagements(engagements);
 
-  // Load documents, login status, invoices, download activity in parallel
+  // Load documents, login status, invoices, download activity, action items in parallel
   const [, statusResult] = await Promise.all([
     refreshWorkspaceDocs(),
     fetchClientLoginStatus(clientId),
     refreshClientInvoices(),
     refreshDownloadActivity(),
+    refreshAdminActionItems(),
   ]);
 
   // Show Resend Invite button only if the client has never logged in
@@ -792,6 +903,8 @@ function closeClientWorkspace() {
   _selectedEngagementId = null;
   _allEngagements = [];
   _clientProductAccess = [];
+  _adminActionItems = [];
+  _editingActionItemId = null;
   document.getElementById('clientWorkspace').style.display = 'none';
   document.getElementById('clientsTable').style.display = 'block';
   document.querySelectorAll('.client-list-item').forEach(el => el.classList.remove('active'));
@@ -887,32 +1000,45 @@ function renderEngagements(engagements) {
     const activeAccess = (_clientProductAccess || []).find(
       a => a.product_tier === eng.engagement_type && !a.revoked_at
     );
-    return `
-    <div class="engagement-card" style="margin-bottom:0.75rem">
-      <div class="engagement-icon">
-        <span class="material-symbols-outlined">verified_user</span>
-      </div>
-      <div class="engagement-info" style="flex:1">
-        <div class="engagement-name">${escHtml(productName)}</div>
-      </div>
-      <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
-        ${activeAccess ? `
-        <button class="btn-ghost" onclick="openRevokeModal('${activeAccess.id}','${eng.id}','${escHtml(clientName)}','${escHtml(productName)}')"
-          style="color:#dc2626;font-size:0.8rem;padding:0.3rem 0.6rem;display:inline-flex;align-items:center;gap:4px" title="Revoke access">
-          <span class="material-symbols-outlined" style="font-size:0.875rem">lock</span>
-          Revoke Access
-        </button>` : ''}
-        <select class="p-select" onchange="handleUpdateEngagementStatus('${eng.id}', this.value)" style="width:120px;font-size:0.8125rem;padding:0.35rem 0.625rem">
-          <option value="active"    ${eng.status==='active'   ?'selected':''}>Active</option>
-          <option value="paused"    ${eng.status==='paused'   ?'selected':''}>Paused</option>
-          <option value="completed" ${eng.status==='completed'?'selected':''}>Completed</option>
-          <option value="refunded"  ${eng.status==='refunded' ?'selected':''}>Refunded</option>
-          <option value="upgraded"  ${eng.status==='upgraded' ?'selected':''}>Upgraded</option>
+    // Progress stage selector (only for types that have defined stages)
+    const stages = getProgressStagesForType(eng.engagement_type);
+    const stageSelector = stages.length ? `
+      <div style="margin-top:0.875rem;padding-top:0.875rem;border-top:1px solid var(--border)">
+        <div style="font-size:0.675rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.4rem">Progress Stage</div>
+        <select class="p-select" onchange="handleUpdateProgressStage('${eng.id}',this.value)" style="font-size:0.8125rem;padding:0.35rem 0.625rem">
+          <option value="">Not started</option>
+          ${stages.map(s => `<option value="${s.id}" ${eng.progress_stage === s.id ? 'selected' : ''}>${escHtml(s.label)}</option>`).join('')}
         </select>
-        <button class="file-action-btn delete" onclick="handleRemoveEngagement('${eng.id}')" title="Remove engagement">
-          <span class="material-symbols-outlined">delete</span>
-        </button>
+      </div>` : '';
+    return `
+    <div class="engagement-card" style="margin-bottom:0.75rem;flex-direction:column;align-items:stretch;gap:0">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <div class="engagement-icon">
+          <span class="material-symbols-outlined">verified_user</span>
+        </div>
+        <div class="engagement-info" style="flex:1">
+          <div class="engagement-name">${escHtml(productName)}</div>
+        </div>
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
+          ${activeAccess ? `
+          <button class="btn-ghost" onclick="openRevokeModal('${activeAccess.id}','${eng.id}','${escHtml(clientName)}','${escHtml(productName)}')"
+            style="color:#dc2626;font-size:0.8rem;padding:0.3rem 0.6rem;display:inline-flex;align-items:center;gap:4px" title="Revoke access">
+            <span class="material-symbols-outlined" style="font-size:0.875rem">lock</span>
+            Revoke Access
+          </button>` : ''}
+          <select class="p-select" onchange="handleUpdateEngagementStatus('${eng.id}', this.value)" style="width:120px;font-size:0.8125rem;padding:0.35rem 0.625rem">
+            <option value="active"    ${eng.status==='active'   ?'selected':''}>Active</option>
+            <option value="paused"    ${eng.status==='paused'   ?'selected':''}>Paused</option>
+            <option value="completed" ${eng.status==='completed'?'selected':''}>Completed</option>
+            <option value="refunded"  ${eng.status==='refunded' ?'selected':''}>Refunded</option>
+            <option value="upgraded"  ${eng.status==='upgraded' ?'selected':''}>Upgraded</option>
+          </select>
+          <button class="file-action-btn delete" onclick="handleRemoveEngagement('${eng.id}')" title="Remove engagement">
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+        </div>
       </div>
+      ${stageSelector}
     </div>
   `}).join('');
 }
@@ -1019,6 +1145,10 @@ async function handleAdminUpload() {
       true  // adminMode: allow Word docs, 50MB
     );
     showToast('Deliverable uploaded to client workspace.', 'success');
+    // Notify client of new document
+    sendNotification('document_shared', _selectedClientId, {
+      doc_name: _adminSelectedFile.name,
+    });
     closeAdminUploadModal();
     await refreshWorkspaceDocs();
   } catch (err) {
@@ -1125,11 +1255,13 @@ function selectEnquiry(enquiryId) {
   if (!_selectedEnquiry) return;
 
   const interestLabels = {
-    free_audit: 'Free AI Governance Audit',
-    toolkit: 'Baseline Compliance Toolkit',
-    iso_pathway: 'ISO 42001 Readiness Pathway',
-    retainer: 'Governance Retainer',
-    general: 'General enquiry'
+    free_audit:        'Free AI Governance Audit',
+    au_compliance_core:'AU Compliance Core',
+    full_toolkit:      'Full Responsible AI Toolkit',
+    retainer:          'Governance Retainer',
+    iso_pathway:       'ISO 42001 Certification Pathway',
+    toolkit:           'Baseline Compliance Toolkit',  // legacy label
+    general:           'General enquiry',
   };
 
   const enq = _selectedEnquiry;
@@ -1350,8 +1482,195 @@ async function handleResendInvite() {
   }
 }
 
+async function handleSendPasswordReset() {
+  const client = _allClients.find(c => c.id === _selectedClientId);
+  if (!client) return;
+
+  const btn = document.getElementById('sendPasswordResetBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Sending...';
+
+  try {
+    const session = await getSession();
+    if (!session) throw new Error('Not authenticated');
+    const res = await fetch('/api/send-password-reset', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ email: client.email }),
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Failed to send reset email');
+    showToast(`Password reset email sent to ${client.email}`, 'success');
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:0.9rem">lock_reset</span> Reset Password';
+  }
+}
+
 function escHtml(str) {
   return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ─── Action Items ──────────────────────────────────────────────
+
+async function refreshAdminActionItems() {
+  if (!_selectedClientId) return;
+  _adminActionItems = await getAdminActionItems(_selectedClientId);
+  renderAdminActionItems(_adminActionItems);
+}
+
+function renderAdminActionItems(items) {
+  const el = document.getElementById('wsActionItemsList');
+  if (!items.length) {
+    el.innerHTML = `<div style="padding:0.75rem 1rem;font-size:0.8125rem;color:var(--muted)">No action items yet.</div>`;
+    return;
+  }
+  el.innerHTML = items.map(item => {
+    const statusClass = `action-status-${item.status}`;
+    const statusLabel = item.status === 'pending' ? 'Pending' : item.status === 'in_progress' ? 'In Progress' : 'Complete';
+    const assignedLabel = item.assigned_to === 'client' ? 'Client' : 'Ethos';
+    return `
+    <div class="action-item-row" style="border-bottom:1px solid var(--border);border-radius:0;margin:0">
+      <div class="action-item-dot ${item.status}"></div>
+      <div class="action-item-body">
+        <div class="action-item-title${item.status === 'complete' ? ' complete' : ''}">${escHtml(item.title)}</div>
+        <div class="action-item-meta">
+          <span class="action-status-badge ${statusClass}">${statusLabel}</span>
+          <span style="opacity:0.35">·</span>
+          <span>Assigned to: ${assignedLabel}</span>
+          ${item.due_date ? `<span style="opacity:0.35">·</span><span>Due ${formatDate(item.due_date)}</span>` : ''}
+        </div>
+        ${item.notes ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(item.notes)}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <button class="file-action-btn" onclick="openEditActionItemModal('${item.id}')" title="Edit">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+        <button class="file-action-btn delete" onclick="handleDeleteAdminActionItem('${item.id}')" title="Delete">
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+  // Remove bottom border from last item
+  const rows = el.querySelectorAll('.action-item-row');
+  if (rows.length) rows[rows.length - 1].style.borderBottom = 'none';
+}
+
+function openCreateActionItemModal() {
+  _editingActionItemId = null;
+  document.getElementById('actionItemModalTitle').textContent = 'Add Action Item';
+  document.getElementById('saveActionItemBtnLabel').textContent = 'Add Action Item';
+  document.getElementById('actionItemTitle').value    = '';
+  document.getElementById('actionItemStatus').value  = 'pending';
+  document.getElementById('actionItemAssignedTo').value = 'client';
+  document.getElementById('actionItemDueDate').value  = '';
+  document.getElementById('actionItemNotes').value    = '';
+  document.getElementById('createActionItemOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('actionItemTitle').focus(), 100);
+}
+
+function openEditActionItemModal(id) {
+  const item = _adminActionItems.find(i => i.id === id);
+  if (!item) return;
+  _editingActionItemId = id;
+  document.getElementById('actionItemModalTitle').textContent = 'Edit Action Item';
+  document.getElementById('saveActionItemBtnLabel').textContent = 'Save Changes';
+  document.getElementById('actionItemTitle').value      = item.title;
+  document.getElementById('actionItemStatus').value     = item.status;
+  document.getElementById('actionItemAssignedTo').value = item.assigned_to;
+  document.getElementById('actionItemDueDate').value    = item.due_date || '';
+  document.getElementById('actionItemNotes').value      = item.notes || '';
+  document.getElementById('createActionItemOverlay').classList.add('open');
+}
+
+function closeCreateActionItemModal() {
+  document.getElementById('createActionItemOverlay').classList.remove('open');
+  _editingActionItemId = null;
+}
+
+async function handleSaveActionItem() {
+  const title      = document.getElementById('actionItemTitle').value.trim();
+  const status     = document.getElementById('actionItemStatus').value;
+  const assignedTo = document.getElementById('actionItemAssignedTo').value;
+  const dueDate    = document.getElementById('actionItemDueDate').value || null;
+  const notes      = document.getElementById('actionItemNotes').value.trim() || null;
+
+  if (!title) { showToast('Please enter a title.', 'error'); return; }
+
+  const btn = document.getElementById('saveActionItemBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+  try {
+    if (_editingActionItemId) {
+      // Update existing
+      const ok = await updateActionItem(_editingActionItemId, { title, status, assigned_to: assignedTo, due_date: dueDate, notes });
+      if (!ok) throw new Error('Update failed');
+      showToast('Action item updated.', 'success');
+    } else {
+      // Create new — use the first/active engagement
+      const engId = _selectedEngagementId;
+      if (!engId) { showToast('No engagement found for this client.', 'error'); return; }
+      const item = await createActionItem({
+        engagementId: engId,
+        clientId:     _selectedClientId,
+        title, status, assignedTo, dueDate, notes,
+      });
+      if (!item) throw new Error('Create failed');
+      // Notify client if assigned to them
+      if (assignedTo === 'client') {
+        sendNotification('action_item_created', _selectedClientId, {
+          title,
+          due_date: dueDate || null,
+        });
+      }
+      showToast('Action item added.', 'success');
+    }
+    closeCreateActionItemModal();
+    await refreshAdminActionItems();
+  } catch (err) {
+    showToast(err.message || 'Something went wrong.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = `<span class="material-symbols-outlined" style="font-size:1rem">add_task</span> <span id="saveActionItemBtnLabel">${_editingActionItemId ? 'Save Changes' : 'Add Action Item'}</span>`;
+  }
+}
+
+async function handleDeleteAdminActionItem(id) {
+  const item = _adminActionItems.find(i => i.id === id);
+  if (!confirm(`Delete "${item?.title || 'this action item'}"? This cannot be undone.`)) return;
+  const ok = await deleteActionItem(id);
+  if (ok) {
+    showToast('Action item deleted.', 'success');
+    await refreshAdminActionItems();
+  }
+}
+
+// ─── Progress Stage ────────────────────────────────────────────
+
+async function handleUpdateProgressStage(engId, stage) {
+  const ok = await updateProgressStage(engId, stage || null);
+  if (ok) {
+    const eng = _allEngagements.find(e => e.id === engId);
+    if (eng) eng.progress_stage = stage || null;
+    showToast('Progress stage updated.', 'success');
+    // Notify client if a stage was set (not cleared)
+    if (stage && _selectedClientId) {
+      const stages = getProgressStagesForType(eng?.engagement_type);
+      const stageObj = stages.find(s => s.id === stage);
+      sendNotification('progress_updated', _selectedClientId, {
+        stage_label: stageObj?.label || stage,
+      });
+    }
+  } else {
+    showToast('Failed to update progress stage.', 'error');
+  }
 }
 
 // ─── Invoices ──────────────────────────────────────────────────
@@ -1540,6 +1859,271 @@ async function refreshDownloadActivity() {
   }).join('');
 
   el.innerHTML = summary + rows;
+}
+
+// ─── Admin Messages ────────────────────────────────────────────
+
+async function loadAdminMessages() {
+  _adminUnreadCounts = await getAllThreadUnreadCounts();
+  renderMessagesClientList();
+  updateAdminMessagesBadge();
+}
+
+function updateAdminMessagesBadge() {
+  const total = Object.values(_adminUnreadCounts).reduce((s, n) => s + n, 0);
+  const badge = document.getElementById('adminMessagesBadge');
+  if (total > 0) { badge.textContent = total; badge.style.display = 'inline-flex'; }
+  else           { badge.style.display = 'none'; }
+}
+
+function renderMessagesClientList() {
+  const el = document.getElementById('messagesClientList');
+  if (!_allClients.length) {
+    el.innerHTML = `<div style="padding:1rem;font-size:0.8125rem;color:var(--muted)">No clients yet.</div>`;
+    return;
+  }
+  el.innerHTML = _allClients.map(c => {
+    const unread = _adminUnreadCounts[c.id] || 0;
+    return `
+    <button class="messages-client-row${_adminMessagesClientId === c.id ? ' active' : ''}"
+      id="msgClientRow_${c.id}"
+      onclick="openAdminThread('${c.id}')">
+      <div class="client-avatar" style="width:28px;height:28px;font-size:0.65rem;flex-shrink:0">${getInitials(c.full_name)}</div>
+      <div class="messages-client-row-info">
+        <div class="messages-client-row-name">${escHtml(c.full_name)}</div>
+        <div class="messages-client-row-preview">${escHtml(c.company_name || 'No company')}</div>
+      </div>
+      ${unread ? `<div class="messages-unread-dot" title="${unread} unread"></div>` : ''}
+    </button>`;
+  }).join('');
+}
+
+async function openAdminThread(clientId) {
+  _adminMessagesClientId = clientId;
+  // Update active state
+  document.querySelectorAll('.messages-client-row').forEach(el => el.classList.remove('active'));
+  const row = document.getElementById(`msgClientRow_${clientId}`);
+  if (row) row.classList.add('active');
+
+  const client = _allClients.find(c => c.id === clientId);
+  await loadAdminThread(clientId, client);
+  startAdminMessagePoll(clientId, client);
+}
+
+async function loadAdminThread(clientId, client) {
+  const msgs = await getMessages(clientId);
+  _adminThreadMessages = msgs;
+
+  // Mark client messages as read
+  const hasUnread = msgs.some(m => m.sender_role === 'client' && !m.is_read);
+  if (hasUnread) {
+    markThreadRead(clientId, 'admin');
+    delete _adminUnreadCounts[clientId];
+    updateAdminMessagesBadge();
+    // Remove unread dot from sidebar
+    renderMessagesClientList();
+  }
+
+  renderAdminThread(clientId, client, msgs);
+}
+
+function renderAdminThread(clientId, client, msgs) {
+  const panel = document.getElementById('messagesThreadPanel');
+  const clientName = client ? client.full_name : 'Client';
+  const clientEmail = client ? client.email : '';
+
+  panel.innerHTML = `
+    <div class="messages-thread-header">
+      <div class="client-avatar" style="width:32px;height:32px;font-size:0.7rem;flex-shrink:0">${getInitials(clientName)}</div>
+      <div>
+        <div class="messages-thread-title">${escHtml(clientName)}</div>
+        <div class="messages-thread-sub">${escHtml(clientEmail)}</div>
+      </div>
+    </div>
+    <div class="messages-thread-messages" id="adminThreadMessages">
+      ${renderAdminThreadMessages(clientId, msgs)}
+    </div>
+    <div class="messages-thread-input">
+      <div class="chat-file-preview" id="adminMsgFilePreview" style="display:none">
+        <span class="material-symbols-outlined">attach_file</span>
+        <span id="adminMsgFileName"></span>
+        <button onclick="clearAdminMsgFile()" aria-label="Remove file">
+          <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
+        </button>
+      </div>
+      <div class="chat-input-row">
+        <button class="chat-attach-btn" onclick="document.getElementById('adminMsgFileInput').click()" title="Attach a document">
+          <span class="material-symbols-outlined">attach_file</span>
+        </button>
+        <input type="file" id="adminMsgFileInput" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none" onchange="setAdminMsgFile(this.files[0])"/>
+        <textarea class="chat-textarea" id="adminMsgInput" placeholder="Message ${escHtml(clientName)}…" rows="1"
+          onkeydown="handleAdminMsgKeydown(event)"
+          oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+        <button class="chat-send-btn" id="adminMsgSendBtn" onclick="handleAdminSendMessage('${clientId}')" title="Send">
+          <span class="material-symbols-outlined">send</span>
+        </button>
+      </div>
+    </div>`;
+
+  setTimeout(() => {
+    const el = document.getElementById('adminThreadMessages');
+    if (el) el.scrollTop = el.scrollHeight;
+  }, 0);
+
+  // Wire file input
+  const fi = document.getElementById('adminMsgFileInput');
+  if (fi) fi.addEventListener('change', e => { if (e.target.files[0]) setAdminMsgFile(e.target.files[0]); });
+}
+
+function renderAdminThreadMessages(clientId, msgs) {
+  if (!msgs.length) {
+    return `<div class="chat-empty"><span class="material-symbols-outlined">chat</span><p>No messages yet. Send the first message.</p></div>`;
+  }
+
+  let html = '';
+  let lastDate = null;
+  msgs.forEach(msg => {
+    const msgDate = new Date(msg.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    if (msgDate !== lastDate) {
+      html += `<div class="chat-date-divider"><span>${msgDate}</span></div>`;
+      lastDate = msgDate;
+    }
+    const isAdmin = msg.sender_role === 'admin';
+    const time = new Date(msg.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+    const initials = isAdmin ? 'EA' : getInitials(msg.profiles?.full_name || 'C');
+
+    let bodyHtml = '';
+    if (msg.body) bodyHtml = `<div>${escHtml(msg.body).replace(/\n/g,'<br>')}</div>`;
+    if (msg.document_id) {
+      bodyHtml += `
+        <div class="chat-file-attachment">
+          <span class="material-symbols-outlined">description</span>
+          <span class="chat-file-name">Attachment</span>
+        </div>`;
+    }
+
+    html += `
+    <div class="chat-message ${isAdmin ? 'from-client' : 'from-admin'}">
+      <div class="chat-avatar">${initials}</div>
+      <div>
+        <div class="chat-bubble">${bodyHtml}</div>
+        <span class="chat-time">${time}</span>
+      </div>
+    </div>`;
+  });
+  return html;
+}
+
+function setAdminMsgFile(file) {
+  _adminMsgFile = file;
+  document.getElementById('adminMsgFileName').textContent = file.name;
+  document.getElementById('adminMsgFilePreview').style.display = 'flex';
+}
+
+function clearAdminMsgFile() {
+  _adminMsgFile = null;
+  const fi = document.getElementById('adminMsgFileInput');
+  if (fi) fi.value = '';
+  document.getElementById('adminMsgFilePreview').style.display = 'none';
+}
+
+function handleAdminMsgKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handleAdminSendMessage(_adminMessagesClientId);
+  }
+}
+
+async function handleAdminSendMessage(clientId) {
+  if (_adminMsgSending || !clientId) return;
+  const input = document.getElementById('adminMsgInput');
+  const body  = input ? input.value.trim() : '';
+  if (!body && !_adminMsgFile) return;
+
+  _adminMsgSending = true;
+  const sendBtn = document.getElementById('adminMsgSendBtn');
+  if (sendBtn) sendBtn.disabled = true;
+
+  try {
+    let documentId = null;
+
+    // Upload file if attached (admin can upload PDF or Word)
+    if (_adminMsgFile) {
+      // Find active engagement for this client
+      const clientEngagements = await getEngagements(clientId);
+      const engagement = clientEngagements.find(e => e.status === 'active') || clientEngagements[0];
+      if (!engagement) throw new Error('No engagement found for this client.');
+
+      const doc = await uploadDocument(
+        _adminMsgFile,
+        engagement.id,
+        clientId,
+        null,
+        'ethos_deliverable',
+        null,
+        true  // adminMode
+      );
+      if (!doc) throw new Error('File upload failed.');
+      documentId = doc.id;
+
+      // Notify client of new document
+      sendNotification('document_shared', clientId, { doc_name: _adminMsgFile.name });
+      clearAdminMsgFile();
+    }
+
+    const msg = await sendMessage({
+      clientId,
+      body:       body || null,
+      documentId,
+      senderRole: 'admin',
+    });
+
+    if (!msg) throw new Error('Failed to send message.');
+
+    // Notify client of new admin message
+    sendNotification('new_message_from_admin', clientId, {
+      preview: body ? body.slice(0, 120) : null,
+    });
+
+    if (input) { input.value = ''; input.style.height = 'auto'; }
+
+    // Reload thread
+    const client = _allClients.find(c => c.id === clientId);
+    await loadAdminThread(clientId, client);
+
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    _adminMsgSending = false;
+    if (sendBtn) sendBtn.disabled = false;
+  }
+}
+
+function startAdminMessagePoll(clientId, client) {
+  stopAdminMessagePoll();
+  _adminMsgPollTimer = setInterval(async () => {
+    if (_adminMessagesClientId !== clientId) return;
+    const msgs = await getMessages(clientId);
+    if (msgs.length !== _adminThreadMessages.length) {
+      _adminThreadMessages = msgs;
+      // Mark client messages as read
+      markThreadRead(clientId, 'admin');
+      delete _adminUnreadCounts[clientId];
+      updateAdminMessagesBadge();
+
+      // Re-render thread messages (preserve scroll)
+      const threadEl = document.getElementById('adminThreadMessages');
+      if (threadEl) {
+        const atBottom = threadEl.scrollHeight - threadEl.scrollTop - threadEl.clientHeight < 60;
+        threadEl.innerHTML = renderAdminThreadMessages(clientId, msgs);
+        if (atBottom) threadEl.scrollTop = threadEl.scrollHeight;
+      }
+    }
+  }, 15000);
+}
+
+function stopAdminMessagePoll() {
+  if (_adminMsgPollTimer) { clearInterval(_adminMsgPollTimer); _adminMsgPollTimer = null; }
 }
 
 // ─── Enquiry Tab ───────────────────────────────────────────────

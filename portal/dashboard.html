@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Workspace - Ethos AI Governance</title>
+  <title>My Portal - Ethos AI Governance</title>
   <link rel="stylesheet" href="portal.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 </head>
@@ -30,50 +30,149 @@
   </div>
 </nav>
 
-<!-- Main Content -->
+<!-- Portal Layout -->
 <div class="portal-page">
-  <div class="portal-main">
+<div class="admin-layout">
 
-    <!-- Header -->
-    <div class="dash-header">
-      <div>
-        <h1 class="dash-welcome" id="dashWelcome">Welcome</h1>
-        <p class="dash-subtitle" id="dashCompany"></p>
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-section">
+      <span class="admin-sidebar-label">Menu</span>
+      <div class="client-list" style="padding:0">
+        <button class="admin-nav-item active" id="navDashboard" onclick="showClientView('dashboard')">
+          <span class="material-symbols-outlined">grid_view</span>
+          Dashboard
+          <span id="actionItemsBadge" class="status-badge status-new" style="margin-left:auto;display:none;font-size:0.625rem;padding:2px 7px"></span>
+        </button>
+        <button class="admin-nav-item" id="navDocuments" onclick="showClientView('documents')">
+          <span class="material-symbols-outlined">description</span>
+          Documents
+        </button>
+        <button class="admin-nav-item" id="navMessages" onclick="showClientView('messages')">
+          <span class="material-symbols-outlined">chat</span>
+          Messages
+          <span id="messagesBadge" class="status-badge status-new" style="margin-left:auto;display:none;font-size:0.625rem;padding:2px 7px"></span>
+        </button>
+        <button class="admin-nav-item" id="navSettings" onclick="showClientView('settings')">
+          <span class="material-symbols-outlined">settings</span>
+          Settings
+        </button>
       </div>
     </div>
 
-    <!-- No engagement state -->
-    <div id="noEngagementState" style="display:none">
-      <div class="portal-card" style="margin-bottom:2rem">
-        <div class="portal-card-body">
-          <div class="empty-state" style="padding:3rem">
-            <span class="material-symbols-outlined empty-state-icon">hourglass_empty</span>
-            <div class="empty-state-title">Your workspace is being set up</div>
-            <p class="empty-state-text">We'll be in touch shortly. If you have any questions, contact us at hello@ethosaigovernance.com.au</p>
+    <div class="admin-sidebar-divider"></div>
+
+    <div class="admin-sidebar-section">
+      <span class="admin-sidebar-label">Current Engagement</span>
+      <div id="sidebarEngagementInfo">
+        <div style="font-size:0.8125rem;color:var(--muted)">Loading...</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+
+    <!-- ─── Dashboard View ─── -->
+    <div id="viewDashboard">
+
+      <!-- No engagement state -->
+      <div id="noEngagementState" style="display:none">
+        <div class="client-section-title">Dashboard</div>
+        <div class="portal-card">
+          <div class="portal-card-body">
+            <div class="empty-state" style="padding:3rem">
+              <span class="material-symbols-outlined empty-state-icon">hourglass_empty</span>
+              <div class="empty-state-title">Your workspace is being set up</div>
+              <p class="empty-state-text">We'll be in touch shortly. If you have any questions, contact us at <a href="mailto:hello@ethosaigovernance.com.au" style="color:var(--brass)">hello@ethosaigovernance.com.au</a></p>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- Dashboard content (shown when engagement exists) -->
+      <div id="workspaceContent" style="display:none">
+
+        <div class="client-section-title">
+          <span id="dashWelcome">Dashboard</span>
+        </div>
+
+        <!-- Action Required Banner -->
+        <div class="action-required-banner" id="actionRequiredBanner" style="display:none">
+          <div class="action-required-header">
+            <div class="action-required-icon">
+              <span class="material-symbols-outlined">priority_high</span>
+            </div>
+            <div>
+              <div class="action-required-title">Action Required</div>
+              <div class="action-required-sub" id="actionRequiredSub"></div>
+            </div>
+          </div>
+          <div class="action-items-list" id="dashActionItemsList"></div>
+        </div>
+
+        <!-- Engagement Card -->
+        <div class="portal-card" style="margin-bottom:1.5rem" id="engagementCard">
+          <div class="portal-card-header">
+            <div>
+              <div style="font-size:0.675rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--brass);margin-bottom:4px">Active Engagement</div>
+              <div class="portal-card-title" id="engagementName"></div>
+            </div>
+            <span class="status-badge" id="engagementStatusBadge"></span>
+          </div>
+          <div class="portal-card-body" id="engagementCardBody" style="padding-top:0.75rem;padding-bottom:0.75rem">
+            <div id="engagementNotes" style="font-size:0.875rem;color:var(--muted)"></div>
+          </div>
+        </div>
+
+        <!-- Progress Card -->
+        <div class="portal-card" id="progressCard" style="margin-bottom:1.5rem;display:none">
+          <div class="portal-card-header">
+            <div class="portal-card-title" style="display:flex;align-items:center;gap:8px">
+              <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">track_changes</span>
+              Your Progress
+            </div>
+          </div>
+          <div class="portal-card-body" id="progressCardBody"></div>
+        </div>
+
+        <!-- All action items (completed + pending) shown below progress -->
+        <div class="portal-card" id="allActionItemsCard" style="display:none">
+          <div class="portal-card-header">
+            <div class="portal-card-title" style="display:flex;align-items:center;gap:8px">
+              <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">task_alt</span>
+              Action Items
+            </div>
+          </div>
+          <div class="action-items-list" id="allActionItemsList" style="padding:0.375rem"></div>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Engagement + Documents (shown when engagement exists) -->
-    <div id="workspaceContent" style="display:none">
-
-      <!-- Engagement Card -->
-      <div class="engagement-card" id="engagementCard">
-        <div class="engagement-icon">
-          <span class="material-symbols-outlined">verified_user</span>
-        </div>
-        <div class="engagement-info">
-          <div class="engagement-type" id="engagementTypeLabel"></div>
-          <div class="engagement-name" id="engagementName"></div>
-          <div class="engagement-notes" id="engagementNotes"></div>
-        </div>
-        <span class="status-badge status-active" id="engagementStatusBadge">Active</span>
+    <!-- ─── Documents View ─── -->
+    <div id="viewDocuments" style="display:none">
+      <div class="client-section-title">
+        <span>Documents</span>
+        <button class="btn-navy" onclick="openUploadModal()" id="uploadBtnHeader" style="display:none;font-size:0.8125rem;padding:0.5rem 1rem">
+          <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
+          Upload
+        </button>
       </div>
 
-      <!-- Document Panels -->
-      <div class="doc-panels">
+      <div id="docsNoEngagement" style="display:none">
+        <div class="portal-card">
+          <div class="portal-card-body">
+            <div class="empty-state" style="padding:2.5rem">
+              <span class="material-symbols-outlined empty-state-icon">folder_open</span>
+              <div class="empty-state-title">No workspace yet</div>
+              <p class="empty-state-text">Documents will appear here once your engagement is set up.</p>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="doc-panels" id="docPanels" style="display:none">
         <!-- Your Documents -->
         <div class="doc-panel">
           <div class="doc-panel-header">
@@ -81,10 +180,6 @@
               <span class="material-symbols-outlined">upload_file</span>
               Your Documents
             </div>
-            <button class="btn-navy" onclick="openUploadModal()" style="font-size:0.8125rem;padding:0.5rem 1rem">
-              <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
-              Upload
-            </button>
           </div>
           <div class="doc-panel-body">
             <div class="file-list" id="clientDocList">
@@ -115,11 +210,95 @@
             </div>
           </div>
         </div>
-
       </div>
-    </div><!-- /workspaceContent -->
+    </div>
 
-  </div>
+    <!-- ─── Messages View ─── -->
+    <div id="viewMessages" style="display:none">
+      <div class="client-section-title">Messages</div>
+      <div class="portal-card chat-card">
+        <div class="chat-messages" id="chatMessages">
+          <div class="chat-empty">
+            <span class="material-symbols-outlined">chat</span>
+            <p>Loading your conversation...</p>
+          </div>
+        </div>
+        <div class="chat-input-area">
+          <div class="chat-file-preview" id="chatFilePreview" style="display:none">
+            <span class="material-symbols-outlined">attach_file</span>
+            <span id="chatFileName"></span>
+            <button onclick="clearChatFile()" aria-label="Remove file">
+              <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
+            </button>
+          </div>
+          <div class="chat-input-row">
+            <button class="chat-attach-btn" onclick="document.getElementById('chatFileInput').click()" title="Attach a PDF">
+              <span class="material-symbols-outlined">attach_file</span>
+            </button>
+            <input type="file" id="chatFileInput" accept=".pdf,application/pdf" style="display:none"/>
+            <textarea class="chat-textarea" id="chatInput" placeholder="Message your Ethos advisor…" rows="1" onkeydown="handleChatKeydown(event)" oninput="autoGrowTextarea(this)"></textarea>
+            <button class="chat-send-btn" id="chatSendBtn" onclick="handleSendMessage()" title="Send">
+              <span class="material-symbols-outlined">send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── Settings View ─── -->
+    <div id="viewSettings" style="display:none">
+      <div class="client-section-title">Settings</div>
+
+      <div class="portal-card" style="max-width:540px">
+        <div class="portal-card-header">
+          <div class="portal-card-title">Profile</div>
+        </div>
+        <div class="portal-card-body">
+          <div class="p-form-row" style="margin-bottom:1.25rem">
+            <div class="p-form-group" style="margin-bottom:0">
+              <label class="p-label" for="settingsFullName">Full Name</label>
+              <input class="p-input" type="text" id="settingsFullName"/>
+            </div>
+            <div class="p-form-group" style="margin-bottom:0">
+              <label class="p-label" for="settingsCompany">Company</label>
+              <input class="p-input" type="text" id="settingsCompany" placeholder="Your organisation"/>
+            </div>
+          </div>
+          <div class="p-form-group">
+            <label class="p-label">Email address</label>
+            <div class="settings-email-display" id="settingsEmail"></div>
+            <div style="font-size:0.75rem;color:var(--muted);margin-top:0.375rem">To change your email address, contact us at hello@ethosaigovernance.com.au</div>
+          </div>
+          <button class="btn-gold" id="saveSettingsBtn" onclick="handleSaveSettings()">
+            <span class="material-symbols-outlined" style="font-size:1rem">save</span>
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      <!-- Notification Preferences -->
+      <div class="portal-card" style="max-width:540px;margin-top:1.5rem">
+        <div class="portal-card-header">
+          <div class="portal-card-title" style="display:flex;align-items:center;gap:8px">
+            <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">notifications</span>
+            Email Notifications
+          </div>
+        </div>
+        <div class="portal-card-body">
+          <p style="font-size:0.8125rem;color:var(--muted);margin-bottom:1.25rem">Choose which emails you receive from your Ethos portal.</p>
+          <div class="notif-prefs-list" id="notifPrefsList">
+            <div style="padding:1rem;font-size:0.8125rem;color:var(--muted)">Loading preferences…</div>
+          </div>
+          <button class="btn-gold" id="saveNotifsBtn" onclick="handleSaveNotifPrefs()">
+            <span class="material-symbols-outlined" style="font-size:1rem">save</span>
+            Save Preferences
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
 </div>
 
 <!-- Upload Modal -->
@@ -132,7 +311,6 @@
       </button>
     </div>
 
-    <!-- Drop zone -->
     <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
       <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
       <div class="drop-zone-text">Drop your PDF here, or click to browse</div>
@@ -140,7 +318,6 @@
       <input type="file" id="fileInput" accept=".pdf,application/pdf"/>
     </div>
 
-    <!-- Selected file preview -->
     <div class="selected-file" id="selectedFile">
       <span class="material-symbols-outlined" style="color:#dc2626;font-size:1.25rem">picture_as_pdf</span>
       <span class="selected-file-name" id="selectedFileName"></span>
@@ -150,13 +327,11 @@
       </button>
     </div>
 
-    <!-- Description field -->
     <div class="p-form-group">
       <label class="p-label" for="uploadDescription">What is this document? <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
       <input class="p-input" type="text" id="uploadDescription" placeholder="e.g. Current privacy policy, data handling procedures"/>
     </div>
 
-    <!-- Progress -->
     <div class="upload-progress" id="uploadProgress">
       <div class="upload-progress-bar">
         <div class="upload-progress-fill" id="uploadProgressFill"></div>
@@ -164,7 +339,6 @@
       <div class="upload-progress-text" id="uploadProgressText">Uploading...</div>
     </div>
 
-    <!-- Actions -->
     <div style="display:flex;gap:0.75rem;margin-top:1rem">
       <button class="btn-outline" onclick="closeUploadModal()" style="flex:1">Cancel</button>
       <button class="btn-gold" id="uploadBtn" onclick="handleUpload()" style="flex:2" disabled>
@@ -179,10 +353,14 @@
 <script src="config.js"></script>
 <script src="portal.js"></script>
 <script>
-let _currentSession = null;
-let _currentProfile = null;
+let _currentSession  = null;
+let _currentProfile  = null;
 let _currentEngagement = null;
-let _selectedFile = null;
+let _allClientEngagements = [];
+let _actionItems     = [];
+let _productAccess   = [];
+let _downloadActivity = { templates: [], downloads: [] };
+let _selectedFile    = null;
 
 // ─── Init ──────────────────────────────────────────────────────
 (async () => {
@@ -192,38 +370,112 @@ let _selectedFile = null;
   _currentProfile = await getProfile(_currentSession.user.id);
   if (!_currentProfile) { window.location.href = '/portal/login'; return; }
 
-  // Redirect admins to admin dashboard
+  // Redirect admins
   if (_currentProfile.role === 'admin') {
     window.location.href = '/portal/admin'; return;
   }
 
   // Populate nav
-  const firstName = _currentProfile.full_name.split(' ')[0];
   document.getElementById('navUserName').textContent = _currentProfile.full_name;
-  document.getElementById('dashWelcome').textContent = `Welcome, ${firstName}`;
-  document.getElementById('dashCompany').textContent = _currentProfile.company_name || '';
 
-  // Load engagements and templates in parallel
-  const [engagements, templates] = await Promise.all([
+  // Load engagements + templates + product access in parallel
+  const [engagements, templates, productAccess] = await Promise.all([
     getEngagements(_currentProfile.id),
     getProductTemplates(),
+    getMyProductAccess(),
   ]);
 
-  // Show workspace if there is an engagement OR purchased templates
+  _allClientEngagements = engagements;
+  _productAccess = productAccess;
+
+  // Determine active engagement (most recent active, else first)
+  _currentEngagement = engagements.find(e => e.status === 'active') || engagements[0] || null;
+
+  // Show no-engagement state if truly nothing exists
   if (!engagements.length && !templates.length) {
     document.getElementById('noEngagementState').style.display = 'block';
+    renderSidebarEngagement(null);
     hideLoader();
     return;
   }
 
-  _currentEngagement = engagements[0] || null;
-  document.getElementById('workspaceContent').style.display = 'block';
+  // Load action items + documents + download activity in parallel
+  const [actionItems, , downloadActivity] = await Promise.all([
+    _currentEngagement ? getClientActionItems(_currentEngagement.id) : Promise.resolve([]),
+    refreshDocuments(engagements, templates),
+    getMyDownloadActivity(),
+  ]);
 
-  // Populate engagement card (hidden if no engagement)
+  _actionItems = actionItems;
+  _downloadActivity = downloadActivity;
+
+  // Render dashboard
+  renderDashboard();
+  renderSidebarEngagement(_currentEngagement);
+
+  // Check for unread messages (shows badge on Messages nav)
+  checkMessagesUnread();
+
+  hideLoader();
+})();
+
+// ─── View Switcher ─────────────────────────────────────────────
+function showClientView(view) {
+  const views = ['dashboard', 'documents', 'messages', 'settings'];
+  views.forEach(v => {
+    document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`).style.display =
+      v === view ? 'block' : 'none';
+    document.getElementById(`nav${v.charAt(0).toUpperCase() + v.slice(1)}`).className =
+      'admin-nav-item' + (v === view ? ' active' : '');
+  });
+}
+
+// ─── Sidebar ───────────────────────────────────────────────────
+function renderSidebarEngagement(engagement) {
+  const el = document.getElementById('sidebarEngagementInfo');
+  if (!engagement) {
+    el.innerHTML = `<div style="font-size:0.8125rem;color:var(--muted);font-style:italic;padding:0 0.25rem">No active engagement</div>`;
+    return;
+  }
+  const label = engagementLabel(engagement.engagement_type);
+  el.innerHTML = `
+    <div class="sidebar-engagement-card">
+      <div class="sidebar-engagement-name">${escHtml(label)}</div>
+      <span class="status-badge status-${engagement.status}" style="font-size:0.65rem;padding:2px 8px">
+        ${engagement.status.charAt(0).toUpperCase() + engagement.status.slice(1)}
+      </span>
+    </div>`;
+}
+
+function updateActionItemsBadge(items) {
+  const pending = items.filter(i => i.status !== 'complete');
+  const badge = document.getElementById('actionItemsBadge');
+  if (pending.length) {
+    badge.textContent = pending.length;
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+// ─── Dashboard Render ──────────────────────────────────────────
+function renderDashboard() {
+  const ws = document.getElementById('workspaceContent');
+  ws.style.display = 'block';
+
+  const firstName = _currentProfile.full_name.split(' ')[0];
+  document.getElementById('dashWelcome').textContent = `Welcome back, ${escHtml(firstName)}`;
+
+  // Engagement card
   if (_currentEngagement) {
-    document.getElementById('engagementTypeLabel').textContent = 'Active Engagement';
     document.getElementById('engagementName').textContent = engagementLabel(_currentEngagement.engagement_type);
-    document.getElementById('engagementNotes').textContent = _currentEngagement.notes || '';
+    const notes = _currentEngagement.notes || '';
+    const notesEl = document.getElementById('engagementNotes');
+    if (notes) {
+      notesEl.textContent = notes;
+    } else {
+      notesEl.parentElement.style.display = 'none';
+    }
     const badge = document.getElementById('engagementStatusBadge');
     badge.textContent = _currentEngagement.status.charAt(0).toUpperCase() + _currentEngagement.status.slice(1);
     badge.className = `status-badge status-${_currentEngagement.status}`;
@@ -231,42 +483,255 @@ let _selectedFile = null;
     document.getElementById('engagementCard').style.display = 'none';
   }
 
-  // Load documents
-  await refreshDocuments();
+  // Action items
+  renderActionItems(_actionItems);
+  updateActionItemsBadge(_actionItems);
 
-  hideLoader();
-})();
+  // Progress tracker
+  if (_currentEngagement) {
+    renderProgressTracker(_currentEngagement, _productAccess, _downloadActivity);
+  }
+}
+
+// ─── Action Items ──────────────────────────────────────────────
+function renderActionItems(items) {
+  const pendingItems = items.filter(i => i.status !== 'complete');
+  const completedItems = items.filter(i => i.status === 'complete');
+
+  // Action Required Banner
+  const banner = document.getElementById('actionRequiredBanner');
+  const bannerList = document.getElementById('dashActionItemsList');
+  if (pendingItems.length) {
+    document.getElementById('actionRequiredSub').textContent =
+      `You have ${pendingItems.length} item${pendingItems.length !== 1 ? 's' : ''} waiting for your attention`;
+    bannerList.innerHTML = pendingItems.map(item => renderActionItemRow(item)).join('');
+    banner.style.display = 'block';
+  } else {
+    banner.style.display = 'none';
+  }
+
+  // All action items card (shows pending + complete)
+  const allCard = document.getElementById('allActionItemsCard');
+  if (items.length) {
+    document.getElementById('allActionItemsList').innerHTML = items.map(item => renderActionItemRow(item)).join('');
+    allCard.style.display = 'block';
+  } else {
+    allCard.style.display = 'none';
+  }
+}
+
+function renderActionItemRow(item) {
+  const isComplete = item.status === 'complete';
+  let dueMeta = '';
+  if (item.due_date && !isComplete) {
+    const due = new Date(item.due_date);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const overdue = due < today;
+    dueMeta = `<span class="${overdue ? 'action-item-due-overdue' : ''}">Due ${formatDate(item.due_date)}${overdue ? ' — overdue' : ''}</span>`;
+  }
+  const notesMeta = item.notes ? `<span>${escHtml(item.notes)}</span>` : '';
+
+  return `
+  <div class="action-item-row">
+    <div class="action-item-dot ${item.status}"></div>
+    <div class="action-item-body">
+      <div class="action-item-title${isComplete ? ' complete' : ''}">${escHtml(item.title)}</div>
+      ${(dueMeta || notesMeta) ? `<div class="action-item-meta">${dueMeta}${dueMeta && notesMeta ? '<span style="opacity:0.35">·</span>' : ''}${notesMeta}</div>` : ''}
+    </div>
+    ${!isComplete ? `
+    <button class="btn-outline" onclick="handleClientCompleteAction('${item.id}')"
+      style="font-size:0.75rem;padding:0.3rem 0.75rem;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">
+      <span class="material-symbols-outlined" style="font-size:0.875rem">check</span>
+      Done
+    </button>` : `
+    <span class="status-badge status-active" style="font-size:0.65rem;padding:2px 8px">Complete</span>`}
+  </div>`;
+}
+
+async function handleClientCompleteAction(id) {
+  const item = _actionItems.find(i => i.id === id);
+  const ok = await completeActionItem(id);
+  if (!ok) { showToast('Could not update. Please try again.', 'error'); return; }
+  if (item) item.status = 'complete';
+  renderActionItems(_actionItems);
+  updateActionItemsBadge(_actionItems);
+  showToast('Marked as complete.', 'success');
+  // Notify admin
+  sendNotification('action_item_completed', _currentProfile.id, { title: item?.title });
+}
+
+// ─── Progress Tracker ──────────────────────────────────────────
+function renderProgressTracker(engagement, productAccess, downloadActivity) {
+  const card = document.getElementById('progressCard');
+  const body = document.getElementById('progressCardBody');
+  const type = engagement.engagement_type;
+  const stage = engagement.progress_stage;
+
+  // Retainer — show active status and dates
+  if (type === 'retainer') {
+    const access = productAccess.find(a => a.product_tier === 'full_toolkit');
+    let html = `<div class="retainer-status-display">
+      <div class="retainer-active-pulse"></div>
+      <div>
+        <div style="font-weight:600;font-size:0.9375rem;color:var(--navy)">Governance Retainer — Active</div>`;
+    if (access && access.retainer_start_date) {
+      html += `<div style="font-size:0.8125rem;color:var(--muted);margin-top:4px">
+        ${formatDate(access.retainer_start_date)} – ${formatDate(access.retainer_end_date)}
+      </div>`;
+    }
+    html += `</div></div>`;
+    body.innerHTML = html;
+    card.style.display = 'block';
+    return;
+  }
+
+  // AU Compliance Core — template delivery checklist
+  if (type === 'au_compliance_core') {
+    const { templates, downloads } = downloadActivity;
+    if (!templates.length) {
+      body.innerHTML = `<div style="font-size:0.875rem;color:var(--muted);padding:0.5rem 0">Your documents are being prepared.</div>`;
+      card.style.display = 'block';
+      return;
+    }
+    const downloadMap = {};
+    downloads.forEach(d => { if (!downloadMap[d.template_id]) downloadMap[d.template_id] = d.downloaded_at; });
+    const accessed = templates.filter(t => downloadMap[t.id]).length;
+    body.innerHTML = `
+      <div style="font-size:0.8125rem;color:var(--muted);margin-bottom:1rem">${accessed} of ${templates.length} document${templates.length !== 1 ? 's' : ''} accessed</div>
+      <div class="progress-checklist">
+        ${templates.map(t => {
+          const downloaded = downloadMap[t.id];
+          return `
+          <div class="progress-checklist-item ${downloaded ? 'complete' : 'upcoming'}">
+            <div class="progress-check-icon">
+              <span class="material-symbols-outlined" style="font-size:0.875rem">${downloaded ? 'check' : 'description'}</span>
+            </div>
+            <div class="progress-checklist-label">${escHtml(t.display_name)}</div>
+            ${downloaded ? `<div style="font-size:0.7rem;color:var(--muted);white-space:nowrap">${formatDate(downloaded)}</div>` : ''}
+          </div>`;
+        }).join('')}
+      </div>`;
+    card.style.display = 'block';
+    return;
+  }
+
+  // Full Toolkit — vertical 8-step checklist
+  if (type === 'full_toolkit') {
+    const milestones = PROGRESS_MILESTONES.full_toolkit;
+    const { templates, downloads } = downloadActivity;
+    const downloadMap = {};
+    downloads.forEach(d => { if (!downloadMap[d.template_id]) downloadMap[d.template_id] = d.downloaded_at; });
+    const stageIdx = stage ? milestones.findIndex(m => m.id === stage) : -1;
+
+    body.innerHTML = `
+      <div style="font-size:0.8125rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.75rem">Implementation Progress</div>
+      <div class="progress-checklist" style="margin-bottom:${templates.length ? '1.5rem' : '0'}">
+        ${milestones.map((m, i) => {
+          let stateClass = 'upcoming';
+          if (stageIdx >= 0) {
+            if (i < stageIdx) stateClass = 'complete';
+            else if (i === stageIdx) stateClass = 'current';
+          }
+          return `
+          <div class="progress-checklist-item ${stateClass}">
+            <div class="progress-check-icon">
+              <span class="material-symbols-outlined" style="font-size:0.875rem">${stateClass === 'complete' ? 'check' : stateClass === 'current' ? 'pending' : 'circle'}</span>
+            </div>
+            <div class="progress-checklist-label">${escHtml(m.label)}</div>
+            ${stateClass === 'complete' ? `<span class="action-status-badge action-status-complete">Done</span>` : ''}
+            ${stateClass === 'current'  ? `<span class="action-status-badge action-status-in_progress">In Progress</span>` : ''}
+          </div>`;
+        }).join('')}
+      </div>
+      ${templates.length ? `
+        <div style="font-size:0.8125rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.75rem">Document Access</div>
+        <div class="progress-checklist">
+          ${templates.map(t => {
+            const downloaded = downloadMap[t.id];
+            return `
+            <div class="progress-checklist-item ${downloaded ? 'complete' : 'upcoming'}">
+              <div class="progress-check-icon">
+                <span class="material-symbols-outlined" style="font-size:0.875rem">${downloaded ? 'check' : 'description'}</span>
+              </div>
+              <div class="progress-checklist-label">${escHtml(t.display_name)}</div>
+              ${downloaded ? `<div style="font-size:0.7rem;color:var(--muted);white-space:nowrap">${formatDate(downloaded)}</div>` : ''}
+            </div>`;
+          }).join('')}
+        </div>` : ''}`;
+    card.style.display = 'block';
+    return;
+  }
+
+  // ISO Pathway & Free Audit — horizontal step bar
+  const milestones = PROGRESS_MILESTONES[type];
+  if (!milestones) { card.style.display = 'none'; return; }
+
+  const stageIdx = stage ? milestones.findIndex(m => m.id === stage) : -1;
+  body.innerHTML = buildHorizontalSteps(milestones, stageIdx);
+  card.style.display = 'block';
+}
+
+function buildHorizontalSteps(milestones, currentIdx) {
+  return `
+  <div class="progress-track">
+    ${milestones.map((m, i) => {
+      let stateClass = 'upcoming';
+      if (currentIdx >= 0) {
+        if (i < currentIdx) stateClass = 'complete';
+        else if (i === currentIdx) stateClass = 'current';
+      }
+      return `
+      <div class="progress-track-step ${stateClass}">
+        <div class="progress-track-node">
+          ${stateClass === 'complete'
+            ? `<span class="material-symbols-outlined" style="font-size:0.875rem">check</span>`
+            : `<span style="font-size:0.75rem;font-weight:700">${i + 1}</span>`}
+        </div>
+        <div class="progress-track-label">${escHtml(m.label)}</div>
+        ${m.sublabel ? `<div class="progress-track-sublabel">${escHtml(m.sublabel)}</div>` : ''}
+      </div>`;
+    }).join('')}
+  </div>`;
+}
 
 // ─── Documents ─────────────────────────────────────────────────
+async function refreshDocuments(engagements, templates) {
+  const hasEngagement = engagements && engagements.length > 0;
+  const hasTemplates  = templates  && templates.length  > 0;
 
-async function refreshDocuments() {
-  // Fetch per-engagement documents (if an engagement exists)
+  document.getElementById('uploadBtnHeader').style.display = hasEngagement ? 'inline-flex' : 'none';
+  document.getElementById('docsNoEngagement').style.display = (!hasEngagement && !hasTemplates) ? 'block' : 'none';
+  document.getElementById('docPanels').style.display = (hasEngagement || hasTemplates) ? 'grid' : 'none';
+
+  if (!hasEngagement && !hasTemplates) return;
+
   let clientDocs = [];
   let manualEthosDocs = [];
+
   if (_currentEngagement) {
     const docs = await getDocuments(_currentEngagement.id);
     clientDocs      = docs.filter(d => d.document_type === 'client_upload');
     manualEthosDocs = docs.filter(d => d.document_type === 'ethos_deliverable' || d.document_type === 'shared_working');
   }
 
-  // Fetch shared product templates (RLS restricts to tiers the client has purchased)
-  const templates = await getProductTemplates();
-  const templateItems = templates.map(t => ({
-    _isTemplate:  true,
-    _templateId:  t.id,
-    file_name:    t.display_name,
-    file_path:    t.file_path,
+  const templateItems = (templates || []).map(t => ({
+    _isTemplate:     true,
+    _templateId:     t.id,
+    file_name:       t.display_name,
+    file_path:       t.file_path,
     file_size_bytes: null,
-    created_at:   t.created_at,
-    description:  null,
-    scan_status:  'reviewed',
+    created_at:      t.created_at,
+    description:     null,
+    scan_status:     'reviewed',
   }));
 
-  // Templates first, then any manually uploaded deliverables
-  const ethosDocs = [...templateItems, ...manualEthosDocs];
-
   renderDocList('clientDocList', clientDocs, true);
-  renderDocList('ethosDocList', ethosDocs, false);
+  renderDocList('ethosDocList', [...templateItems, ...manualEthosDocs], false);
+}
+
+async function reloadDocuments() {
+  const templates = await getProductTemplates();
+  await refreshDocuments(_allClientEngagements, templates);
 }
 
 function renderDocList(containerId, docs, showDelete) {
@@ -286,13 +751,14 @@ function renderDocList(containerId, docs, showDelete) {
   }
 
   el.innerHTML = docs.map(doc => {
+    const ext = (doc.file_name || '').split('.').pop().toLowerCase();
+    const fileTypeLabel = (ext === 'doc' || ext === 'docx') ? 'DOC' : 'PDF';
     const downloadOnclick = doc._isTemplate
       ? `downloadTemplate('${doc._templateId}','${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`
       : `downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`;
-
     return `
     <div class="file-item">
-      <div class="file-icon">PDF</div>
+      <div class="file-icon">${fileTypeLabel}</div>
       <div class="file-info">
         <div class="file-name" title="${escHtml(doc.file_name)}">${escHtml(doc.file_name)}</div>
         <div class="file-meta">
@@ -312,8 +778,8 @@ function renderDocList(containerId, docs, showDelete) {
           <span class="material-symbols-outlined">delete</span>
         </button>` : ''}
       </div>
-    </div>
-  `}).join('');
+    </div>`;
+  }).join('');
 }
 
 async function handleDeleteDoc(docId, filePath) {
@@ -321,12 +787,11 @@ async function handleDeleteDoc(docId, filePath) {
   const ok = await deleteDocument(docId, filePath);
   if (ok) {
     showToast('Document deleted.', 'success');
-    await refreshDocuments();
+    await reloadDocuments();
   }
 }
 
 // ─── Upload Modal ──────────────────────────────────────────────
-
 function openUploadModal() {
   document.getElementById('uploadModalOverlay').classList.add('open');
 }
@@ -344,7 +809,6 @@ document.getElementById('fileInput').addEventListener('change', (e) => {
   if (file) setSelectedFile(file);
 });
 
-// Drag and drop
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
@@ -394,13 +858,371 @@ async function handleUpload() {
     );
     showToast('Document uploaded successfully.', 'success');
     closeUploadModal();
-    await refreshDocuments();
+    await reloadDocuments();
+
+    // 30-min debounce: notify admin of new document
+    const key = DOC_NOTIF_KEY();
+    const last = parseInt(localStorage.getItem(key) || '0', 10);
+    if (Date.now() - last > 30 * 60 * 1000) {
+      sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+      localStorage.setItem(key, String(Date.now()));
+    }
   } catch (err) {
     showToast(err.message, 'error');
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">upload</span> Upload Document';
   }
+}
+
+// ─── Settings ──────────────────────────────────────────────────
+function loadSettingsForm() {
+  document.getElementById('settingsFullName').value = _currentProfile.full_name || '';
+  document.getElementById('settingsCompany').value  = _currentProfile.company_name || '';
+  document.getElementById('settingsEmail').textContent = _currentProfile.email;
+}
+
+async function handleSaveSettings() {
+  const fullName = document.getElementById('settingsFullName').value.trim();
+  const company  = document.getElementById('settingsCompany').value.trim();
+
+  if (!fullName) { showToast('Please enter your name.', 'error'); return; }
+
+  const sb = getSupabase();
+  if (!sb) return;
+
+  const btn = document.getElementById('saveSettingsBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+  try {
+    const { error } = await sb
+      .from('profiles')
+      .update({ full_name: fullName, company_name: company || null, updated_at: new Date().toISOString() })
+      .eq('id', _currentProfile.id);
+    if (error) throw error;
+
+    _currentProfile.full_name    = fullName;
+    _currentProfile.company_name = company || null;
+    document.getElementById('navUserName').textContent = fullName;
+    showToast('Settings saved.', 'success');
+  } catch (err) {
+    showToast('Failed to save. Please try again.', 'error');
+    console.error('Save settings error:', err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">save</span> Save Changes';
+  }
+}
+
+// ─── View switcher (extended) ──────────────────────────────────
+const _origShowClientView = showClientView;
+function showClientView(view) {
+  _origShowClientView(view);
+  if (view === 'settings') {
+    loadSettingsForm();
+    loadNotifPrefs();
+  }
+  if (view === 'messages') {
+    initChat();
+  } else {
+    stopChatPolling();
+  }
+}
+
+// ─── Messaging ─────────────────────────────────────────────────
+let _messages          = [];
+let _chatPollTimer     = null;
+let _chatFile          = null;
+let _chatSending       = false;
+// 30-min debounce key for doc-upload notifications
+const DOC_NOTIF_KEY    = () => `doc_notif_${_currentProfile?.id}`;
+
+async function initChat() {
+  if (!_currentEngagement) {
+    document.getElementById('chatMessages').innerHTML = `
+      <div class="chat-empty">
+        <span class="material-symbols-outlined">chat</span>
+        <p>Your workspace is being set up. You'll be able to message your advisor here shortly.</p>
+      </div>`;
+    return;
+  }
+  await loadMessages();
+  startChatPolling();
+}
+
+async function loadMessages(scrollToBottom = true) {
+  const clientId = _currentProfile.id;
+  const msgs = await getMessages(clientId);
+  _messages = msgs;
+
+  // Mark any unread admin messages as read
+  const unread = msgs.filter(m => m.sender_role === 'admin' && !m.is_read);
+  if (unread.length) {
+    markThreadRead(clientId, 'client');
+    // Clear badge
+    const badge = document.getElementById('messagesBadge');
+    if (badge) badge.style.display = 'none';
+  }
+
+  renderMessages(msgs, scrollToBottom);
+}
+
+function renderMessages(msgs, scrollToBottom = true) {
+  const el = document.getElementById('chatMessages');
+
+  if (!msgs.length) {
+    el.innerHTML = `
+      <div class="chat-empty">
+        <span class="material-symbols-outlined">chat</span>
+        <p>No messages yet. Send a message to start the conversation with your Ethos advisor.</p>
+      </div>`;
+    return;
+  }
+
+  let html = '';
+  let lastDate = null;
+  msgs.forEach(msg => {
+    const msgDate = new Date(msg.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    if (msgDate !== lastDate) {
+      html += `<div class="chat-date-divider"><span>${msgDate}</span></div>`;
+      lastDate = msgDate;
+    }
+    html += renderMessageBubble(msg);
+  });
+
+  el.innerHTML = html;
+
+  if (scrollToBottom) {
+    setTimeout(() => { el.scrollTop = el.scrollHeight; }, 0);
+  }
+}
+
+function renderMessageBubble(msg) {
+  const isClient = msg.sender_role === 'client';
+  const time = new Date(msg.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
+  const initials = isClient
+    ? getInitials(_currentProfile.full_name)
+    : 'EA'; // Ethos Admin
+
+  let bodyHtml = '';
+  if (msg.body) {
+    bodyHtml = `<div>${escHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
+  }
+  if (msg.document_id && msg._doc_file_name) {
+    bodyHtml += `
+      <div class="chat-file-attachment" onclick="downloadDocument('${escHtml(msg._doc_file_path || '')}', '${escHtml(msg._doc_file_name || '')}')">
+        <span class="material-symbols-outlined">picture_as_pdf</span>
+        <span class="chat-file-name">${escHtml(msg._doc_file_name)}</span>
+        <span class="material-symbols-outlined" style="font-size:0.9rem;opacity:0.6">download</span>
+      </div>`;
+  } else if (msg.document_id) {
+    bodyHtml += `
+      <div class="chat-file-attachment">
+        <span class="material-symbols-outlined">picture_as_pdf</span>
+        <span class="chat-file-name">Attachment</span>
+      </div>`;
+  }
+
+  return `
+  <div class="chat-message ${isClient ? 'from-client' : 'from-admin'}">
+    <div class="chat-avatar">${initials}</div>
+    <div>
+      <div class="chat-bubble">${bodyHtml}</div>
+      <span class="chat-time">${time}</span>
+    </div>
+  </div>`;
+}
+
+function startChatPolling() {
+  stopChatPolling();
+  _chatPollTimer = setInterval(async () => {
+    const clientId = _currentProfile?.id;
+    if (!clientId) return;
+    const msgs = await getMessages(clientId);
+    if (msgs.length !== _messages.length) {
+      _messages = msgs;
+      // Mark new admin messages as read
+      const unread = msgs.filter(m => m.sender_role === 'admin' && !m.is_read);
+      if (unread.length) markThreadRead(clientId, 'client');
+      renderMessages(msgs, true);
+    }
+  }, 15000);
+}
+
+function stopChatPolling() {
+  if (_chatPollTimer) { clearInterval(_chatPollTimer); _chatPollTimer = null; }
+}
+
+function autoGrowTextarea(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+function handleChatKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    handleSendMessage();
+  }
+}
+
+document.getElementById('chatFileInput').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (file) setChatFile(file);
+});
+
+function setChatFile(file) {
+  _chatFile = file;
+  document.getElementById('chatFileName').textContent = file.name;
+  document.getElementById('chatFilePreview').style.display = 'flex';
+}
+
+function clearChatFile() {
+  _chatFile = null;
+  document.getElementById('chatFileInput').value = '';
+  document.getElementById('chatFilePreview').style.display = 'none';
+}
+
+async function handleSendMessage() {
+  if (_chatSending) return;
+  const input = document.getElementById('chatInput');
+  const body  = input.value.trim();
+  if (!body && !_chatFile) return;
+  if (!_currentEngagement || !_currentProfile) return;
+
+  _chatSending = true;
+  const sendBtn = document.getElementById('chatSendBtn');
+  sendBtn.disabled = true;
+
+  try {
+    let documentId = null;
+
+    // Upload file attachment first if any
+    if (_chatFile) {
+      const doc = await uploadDocument(
+        _chatFile,
+        _currentEngagement.id,
+        _currentProfile.id,
+        null,
+        'client_upload',
+        null
+      );
+      if (!doc) throw new Error('File upload failed. Please try again.');
+      documentId = doc.id;
+
+      // 30-min debounce for doc-upload admin notification
+      const key = DOC_NOTIF_KEY();
+      const last = parseInt(localStorage.getItem(key) || '0', 10);
+      if (Date.now() - last > 30 * 60 * 1000) {
+        sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+        localStorage.setItem(key, String(Date.now()));
+      }
+
+      clearChatFile();
+    }
+
+    const msg = await sendMessage({
+      clientId:   _currentProfile.id,
+      body:       body || null,
+      documentId,
+      senderRole: 'client',
+    });
+
+    if (!msg) throw new Error('Failed to send message. Please try again.');
+
+    // Notify admin
+    sendNotification('new_message_from_client', _currentProfile.id, {
+      preview: body ? body.slice(0, 120) : null,
+    });
+
+    input.value = '';
+    input.style.height = 'auto';
+
+    // Reload so the new message (with any doc info) appears
+    await loadMessages(true);
+
+    // Also refresh Documents panel if a file was uploaded
+    if (documentId) reloadDocuments();
+
+  } catch (err) {
+    showToast(err.message, 'error');
+  } finally {
+    _chatSending = false;
+    sendBtn.disabled = false;
+  }
+}
+
+// Check for unread admin messages on load and show badge
+async function checkMessagesUnread() {
+  if (!_currentProfile) return;
+  const clientId = _currentProfile.id;
+  const sb = getSupabase();
+  if (!sb) return;
+  const { count } = await sb
+    .from('messages')
+    .select('id', { count: 'exact', head: true })
+    .eq('client_id', clientId)
+    .eq('sender_role', 'admin')
+    .eq('is_read', false);
+  if (count > 0) {
+    const badge = document.getElementById('messagesBadge');
+    badge.textContent = count;
+    badge.style.display = 'inline-flex';
+  }
+}
+
+// ─── Notification Preferences ──────────────────────────────────
+let _notifPrefs = {};
+const NOTIF_DEFS = [
+  { key: 'new_message',         label: 'New messages',        sub: 'When your Ethos advisor sends you a message' },
+  { key: 'new_action_item',     label: 'New action items',    sub: 'When a task is added to your workspace' },
+  { key: 'progress_update',     label: 'Progress updates',    sub: 'When your engagement moves to a new stage' },
+  { key: 'new_document',        label: 'New documents',       sub: 'When a document is shared with you' },
+];
+
+async function loadNotifPrefs() {
+  _notifPrefs = await getMyNotificationPrefs();
+  renderNotifPrefs();
+}
+
+function renderNotifPrefs() {
+  const el = document.getElementById('notifPrefsList');
+  el.innerHTML = NOTIF_DEFS.map(def => {
+    const checked = _notifPrefs[def.key] !== false; // default true
+    return `
+    <div class="notif-pref-row">
+      <div>
+        <div class="notif-pref-label">${def.label}</div>
+        <div class="notif-pref-sub">${def.sub}</div>
+      </div>
+      <label class="notif-toggle" aria-label="${def.label}">
+        <input type="checkbox" id="notif_${def.key}" ${checked ? 'checked' : ''}/>
+        <span class="notif-toggle-slider"></span>
+      </label>
+    </div>`;
+  }).join('');
+}
+
+async function handleSaveNotifPrefs() {
+  const prefs = {};
+  NOTIF_DEFS.forEach(def => {
+    prefs[def.key] = document.getElementById(`notif_${def.key}`).checked;
+  });
+
+  const btn = document.getElementById('saveNotifsBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Saving...';
+
+  const ok = await updateNotificationPrefs(prefs);
+  if (ok) {
+    _notifPrefs = prefs;
+    showToast('Notification preferences saved.', 'success');
+  } else {
+    showToast('Failed to save. Please try again.', 'error');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">save</span> Save Preferences';
 }
 
 function escHtml(str) {

@@ -439,12 +439,14 @@ function getFileTypeLabel(fileName) {
 
 function engagementLabel(type) {
   const labels = {
-    free_audit:          'Free Governance Audit',
-    toolkit_self_service:'Baseline Compliance Toolkit (Self-Service)',
-    toolkit_consulting:  'Baseline Compliance Toolkit (Consulting)',
-    retainer:            'Governance Retainer',
-    iso_pathway:         'ISO 42001 Readiness Pathway',
-    au_compliance_core:  'AU Compliance Core',
+    free_audit:           'Free AI Governance Audit',
+    au_compliance_core:   'AU Compliance Core',
+    full_toolkit:         'Full Responsible AI Toolkit',
+    retainer:             'Governance Retainer',
+    iso_pathway:          'ISO 42001 Certification Pathway',
+    // Legacy — kept for graceful display of historical records
+    toolkit_self_service: 'Baseline Compliance Toolkit (Self-Service)',
+    toolkit_consulting:   'Baseline Compliance Toolkit (Consulting)',
   };
   return labels[type] || type;
 }
@@ -704,4 +706,282 @@ async function getClientDownloadActivity(clientId) {
     templates: templatesRes.data || [],
     downloads: downloadsRes.data || [],
   };
+}
+
+// ─── Client: Own Product Access ───────────────────────────────
+// Used for retainer date display on client dashboard.
+
+async function getMyProductAccess() {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data: { user } } = await sb.auth.getUser();
+  const { data, error } = await sb
+    .from('product_access')
+    .select('*')
+    .eq('client_id', user.id)
+    .is('revoked_at', null)
+    .order('created_at', { ascending: false });
+  if (error) { console.error('My product access error:', error); return []; }
+  return data || [];
+}
+
+// ─── Client: Own Download Activity ───────────────────────────
+// Used for au_compliance_core / full_toolkit progress display.
+
+async function getMyDownloadActivity() {
+  const sb = getSupabase();
+  if (!sb) return { templates: [], downloads: [] };
+  const { data: { user } } = await sb.auth.getUser();
+  const [templatesRes, downloadsRes] = await Promise.all([
+    sb.from('product_templates').select('*').order('sort_order'),
+    sb.from('template_downloads').select('*').eq('client_id', user.id),
+  ]);
+  return {
+    templates: templatesRes.data || [],
+    downloads: downloadsRes.data || [],
+  };
+}
+
+// ─── Action Items ─────────────────────────────────────────────
+
+// Client: get action items assigned to them (RLS filters to client's own)
+async function getClientActionItems(engagementId) {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('action_items')
+    .select('*')
+    .eq('engagement_id', engagementId)
+    .order('created_at', { ascending: true });
+  if (error) { console.error('Action items error:', error); return []; }
+  return data || [];
+}
+
+// Admin: get all action items for a client (across all engagements)
+async function getAdminActionItems(clientId) {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('action_items')
+    .select('*')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: false });
+  if (error) { console.error('Admin action items error:', error); return []; }
+  return data || [];
+}
+
+// Admin: create a new action item
+async function createActionItem({ engagementId, clientId, title, status, assignedTo, dueDate, notes }) {
+  const sb = getSupabase();
+  if (!sb) return null;
+  const { data: { user } } = await sb.auth.getUser();
+  const { data, error } = await sb
+    .from('action_items')
+    .insert({
+      engagement_id: engagementId,
+      client_id:     clientId,
+      title,
+      status:      status      || 'pending',
+      assigned_to: assignedTo || 'client',
+      due_date:    dueDate    || null,
+      notes:       notes      || null,
+      created_by:  user.id,
+    })
+    .select()
+    .single();
+  if (error) { console.error('Create action item error:', error); return null; }
+  return data;
+}
+
+// Admin: update any field on an action item
+async function updateActionItem(id, updates) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb
+    .from('action_items')
+    .update({ ...updates, updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) { console.error('Update action item error:', error); return false; }
+  return true;
+}
+
+// Admin: delete an action item
+async function deleteActionItem(id) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb.from('action_items').delete().eq('id', id);
+  if (error) { console.error('Delete action item error:', error); return false; }
+  return true;
+}
+
+// Client: mark an action item complete
+async function completeActionItem(id) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb
+    .from('action_items')
+    .update({ status: 'complete', updated_at: new Date().toISOString() })
+    .eq('id', id);
+  if (error) { console.error('Complete action item error:', error); return false; }
+  return true;
+}
+
+// ─── Progress Stage ───────────────────────────────────────────
+
+// Admin: update the progress_stage on an engagement
+async function updateProgressStage(engagementId, stage) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { error } = await sb
+    .from('engagements')
+    .update({ progress_stage: stage || null, updated_at: new Date().toISOString() })
+    .eq('id', engagementId);
+  if (error) { console.error('Update progress stage error:', error); return false; }
+  return true;
+}
+
+// ─── Progress Milestone Definitions ──────────────────────────
+// Shared between client dashboard and admin portal.
+
+const PROGRESS_MILESTONES = {
+  iso_pathway: [
+    { id: 'gap_analysis',          label: 'Gap Analysis',        sublabel: 'Months 1–2' },
+    { id: 'aims_documentation',    label: 'AIMS Documentation',  sublabel: 'Months 3–5' },
+    { id: 'internal_audit_prep',   label: 'Internal Audit Prep', sublabel: 'Months 6–7' },
+    { id: 'cert_readiness_review', label: 'Cert. Readiness',     sublabel: 'Month 8'    },
+    { id: 'certification_ready',   label: 'Certification Ready', sublabel: 'Month 9'    },
+  ],
+  free_audit: [
+    { id: 'questionnaire_submitted', label: 'Questionnaire Submitted' },
+    { id: 'under_review',            label: 'Under Review'            },
+    { id: 'report_delivered',        label: 'Report Delivered'        },
+  ],
+  full_toolkit: [
+    { id: 'governance_policy',     label: 'Governance Policy'      },
+    { id: 'ai_inventory',          label: 'AI System Inventory'    },
+    { id: 'risk_register',         label: 'Risk Register'          },
+    { id: 'data_governance',       label: 'Data Governance'        },
+    { id: 'incident_response',     label: 'Incident Response'      },
+    { id: 'procurement_readiness', label: 'Procurement Readiness'  },
+    { id: 'stakeholder_comms',     label: 'Stakeholder Comms'      },
+    { id: 'ongoing_governance',    label: 'Ongoing Governance'     },
+  ],
+};
+
+function getProgressStagesForType(type) {
+  return PROGRESS_MILESTONES[type] || [];
+}
+
+// ─── Messages ─────────────────────────────────────────────────
+
+// Fetch all messages in a client's thread (ordered oldest → newest)
+async function getMessages(clientId) {
+  const sb = getSupabase();
+  if (!sb) return [];
+  const { data, error } = await sb
+    .from('messages')
+    .select('*, profiles!sender_id(full_name)')
+    .eq('client_id', clientId)
+    .order('created_at', { ascending: true });
+  if (error) { console.error('Messages error:', error); return []; }
+  return data || [];
+}
+
+// Send a message (client or admin — pass senderRole explicitly)
+async function sendMessage({ clientId, body, documentId, senderRole }) {
+  const sb = getSupabase();
+  if (!sb) return null;
+  const { data: { user } } = await sb.auth.getUser();
+  const { data, error } = await sb
+    .from('messages')
+    .insert({
+      client_id:   clientId,
+      sender_id:   user.id,
+      sender_role: senderRole || 'client',
+      body:        body || null,
+      document_id: documentId || null,
+    })
+    .select('*, profiles!sender_id(full_name)')
+    .single();
+  if (error) { console.error('Send message error:', error); return null; }
+  return data;
+}
+
+// Mark all unread messages in a thread as read
+// (marks messages where sender_role ≠ viewerRole — i.e. the ones the viewer receives)
+async function markThreadRead(clientId, viewerRole) {
+  const sb = getSupabase();
+  if (!sb) return;
+  const senderRole = viewerRole === 'admin' ? 'client' : 'admin';
+  await sb
+    .from('messages')
+    .update({ is_read: true })
+    .eq('client_id', clientId)
+    .eq('sender_role', senderRole)
+    .eq('is_read', false);
+}
+
+// Admin: get unread (from client) count per client as a map { clientId: count }
+async function getAllThreadUnreadCounts() {
+  const sb = getSupabase();
+  if (!sb) return {};
+  const { data, error } = await sb
+    .from('messages')
+    .select('client_id')
+    .eq('sender_role', 'client')
+    .eq('is_read', false);
+  if (error) return {};
+  const counts = {};
+  (data || []).forEach(m => {
+    counts[m.client_id] = (counts[m.client_id] || 0) + 1;
+  });
+  return counts;
+}
+
+// ─── Notification Preferences ─────────────────────────────────
+
+async function getMyNotificationPrefs() {
+  const sb = getSupabase();
+  if (!sb) return {};
+  const { data: { user } } = await sb.auth.getUser();
+  const { data, error } = await sb
+    .from('profiles')
+    .select('notification_prefs')
+    .eq('id', user.id)
+    .single();
+  if (error) return {};
+  return data?.notification_prefs || {};
+}
+
+async function updateNotificationPrefs(prefs) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const { data: { user } } = await sb.auth.getUser();
+  const { error } = await sb
+    .from('profiles')
+    .update({ notification_prefs: prefs })
+    .eq('id', user.id);
+  if (error) { console.error('Update notif prefs error:', error); return false; }
+  return true;
+}
+
+// ─── Portal Notifications (fire-and-forget) ───────────────────
+// Calls the send-notification API. Silently swallows errors so
+// a failed notification never blocks the user action.
+
+async function sendNotification(event, clientId, metadata = {}) {
+  const session = await getSession();
+  if (!session) return;
+  try {
+    fetch('/api/send-notification', {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': `Bearer ${session.access_token}`,
+      },
+      body: JSON.stringify({ event, clientId, metadata }),
+    }).catch(err => console.error('Notification send error:', err));
+  } catch (err) {
+    console.error('Notification send error:', err);
+  }
 }
