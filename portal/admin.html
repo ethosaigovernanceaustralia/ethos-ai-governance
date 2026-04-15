@@ -1070,6 +1070,11 @@ async function handleAddEngagement() {
   if (eng) {
     _allEngagements.unshift(eng);
     _selectedEngagementId = eng.id;
+    // Auto-provision product access so templates appear in the client's Documents panel
+    if (type === 'au_compliance_core' || type === 'full_toolkit') {
+      await grantProductAccess(_selectedClientId, type, eng.id);
+      _clientProductAccess = await getClientProductAccess(_selectedClientId);
+    }
     renderEngagements(_allEngagements);
     closeAddEngagementModal();
     await refreshWorkspaceDocs();

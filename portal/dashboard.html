@@ -428,6 +428,15 @@ function showClientView(view) {
     document.getElementById(`nav${v.charAt(0).toUpperCase() + v.slice(1)}`).className =
       'admin-nav-item' + (v === view ? ' active' : '');
   });
+  if (view === 'settings') {
+    loadSettingsForm();
+    loadNotifPrefs();
+  }
+  if (view === 'messages') {
+    initChat();
+  } else {
+    stopChatPolling();
+  }
 }
 
 // ─── Sidebar ───────────────────────────────────────────────────
@@ -912,21 +921,6 @@ async function handleSaveSettings() {
   } finally {
     btn.disabled = false;
     btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">save</span> Save Changes';
-  }
-}
-
-// ─── View switcher (extended) ──────────────────────────────────
-const _origShowClientView = showClientView;
-function showClientView(view) {
-  _origShowClientView(view);
-  if (view === 'settings') {
-    loadSettingsForm();
-    loadNotifPrefs();
-  }
-  if (view === 'messages') {
-    initChat();
-  } else {
-    stopChatPolling();
   }
 }
 

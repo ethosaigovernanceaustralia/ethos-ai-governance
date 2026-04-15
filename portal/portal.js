@@ -742,6 +742,25 @@ async function getMyDownloadActivity() {
   };
 }
 
+// ─── Admin: Grant Product Access ─────────────────────────────
+// Called when admin manually creates an engagement that has associated templates.
+// Uses a synthetic session ID (admin_grant_<engagementId>) as the unique key.
+// Skips silently if access already exists for this tier.
+
+async function grantProductAccess(clientId, productTier, engagementId) {
+  const sb = getSupabase();
+  if (!sb) return false;
+  const syntheticSessionId = `admin_grant_${engagementId}`;
+  const { error } = await sb
+    .from('product_access')
+    .upsert(
+      { client_id: clientId, product_tier: productTier, stripe_session_id: syntheticSessionId },
+      { onConflict: 'stripe_session_id', ignoreDuplicates: true }
+    );
+  if (error) { console.error('Grant product access error:', error); return false; }
+  return true;
+}
+
 // ─── Action Items ─────────────────────────────────────────────
 
 // Client: get action items assigned to them (RLS filters to client's own)
