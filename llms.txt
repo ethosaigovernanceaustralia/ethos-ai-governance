@@ -1,0 +1,51 @@
+# Ethos AI Governance
+
+> Ethos AI Governance is an Australian AI governance consultancy that helps companies which build and sell AI products establish responsible governance frameworks, achieve compliance with Australian obligations, and prepare for ISO/IEC 42001:2023 certification.
+
+## Key Information
+- Business: Ethos AI Governance (ABN 49 548 860 916)
+- Location: Australia (Western Australia)
+- Website: https://ethosaigovernance.com.au
+- Contact: Mike@ethosaigovernance.com.au
+- Specialisation: AI governance consulting exclusively for AI vendors (companies that build and sell AI products)
+- Not a law firm. Provides governance consulting, not legal advice.
+
+## Services
+- Free AI Governance Audit: No-cost governance health check with traffic-light risk report. Limited to 3 per month.
+- AU Compliance Core ($999 AUD one-time): Governance templates covering all current Australian AI regulatory obligations.
+- Full Responsible AI Toolkit ($1,699 AUD one-time): Complete branded governance framework with done-for-you delivery and 6 months retainer included.
+- ISO 42001 Certification Pathway ($13,990 AUD): Approximately 9-month consulting engagement to prepare for ISO/IEC 42001 certification. Maximum 3 concurrent clients.
+- Ongoing Governance Retainer: Regulatory alerts within 48 hours, automatic template updates, annual health check and priority consulting. Included in Full Responsible AI Toolkit. Available separately for AU Compliance Core purchasers.
+
+## Target Clients
+- Companies that build and sell AI products (AI SaaS, AI platforms, AI APIs)
+- Small to mid-market AI vendors (under 10 to approximately 200 people)
+- Australian AI vendors specifically
+- Not for companies that only use AI tools internally
+
+## Regulatory Coverage
+- Privacy Act 1988 (Cth) and Australian Privacy Principles
+- Privacy Act 2024 amendments (December 2026 automated decision-making obligations)
+- Australian Consumer Law (ACCC enforcement)
+- Anti-discrimination law (algorithmic bias)
+- Guidance for AI Adoption (GfAA, October 2025)
+- Australia's 8 AI Ethics Principles (2019)
+- OAIC Guidance on Privacy and Generative AI (October 2024)
+- ISO/IEC 42001:2023 (adopted in Australia as AS ISO/IEC 42001:2023, February 2024)
+
+## Key Facts
+- ISO/IEC 42001:2023 specifies 38 controls across 9 governance areas
+- Fewer than approximately 30 companies worldwide hold ISO 42001 certification (as of early 2026)
+- December 2026: Privacy Act automated decision-making transparency obligations take effect
+- February 2024: AS ISO/IEC 42001:2023 formally adopted in Australia
+- Both AU Compliance Core and Full Responsible AI Toolkit include a 30-day relevance guarantee
+
+## Pages
+- Homepage: https://ethosaigovernance.com.au/
+- Services: https://ethosaigovernance.com.au/#services
+- About: https://ethosaigovernance.com.au/#about
+- Regulatory Landscape: https://ethosaigovernance.com.au/#regulatory
+- Resources: https://ethosaigovernance.com.au/#resources
+- FAQ: https://ethosaigovernance.com.au/#faq
+- Contact: https://ethosaigovernance.com.au/#contact
+- Client Portal: https://ethosaigovernance.com.au/portal/login (restricted — existing clients only)
