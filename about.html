@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>About Ethos | AI Governance Built for AI Vendors</title>
+  <meta name="description" content="Ethos works exclusively with companies that build and sell AI products. Governance frameworks built from Australian law outward, not US or EU models adapted for Australia."/>
+  <link rel="canonical" href="https://ethosaigovernance.com.au/about"/>
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="icon" type="image/png" href="assets/logo-icon.png"/>
+  <link rel="apple-touch-icon" href="assets/logo-icon.png"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ethosaigovernance.com.au/about"/>
+  <meta property="og:title" content="About Ethos | AI Governance Built for AI Vendors"/>
+  <meta property="og:description" content="Ethos works exclusively with companies that build and sell AI products. Governance frameworks built from Australian law outward, not US or EU models adapted for Australia."/>
+  <meta property="og:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+  <meta property="og:site_name" content="Ethos AI Governance"/>
+  <meta property="og:locale" content="en_AU"/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="About Ethos | AI Governance Built for AI Vendors"/>
+  <meta name="twitter:description" content="Ethos works exclusively with companies that build and sell AI products. Governance frameworks built from Australian law outward, not US or EU models adapted for Australia."/>
+  <meta name="twitter:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta name="twitter:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Ethos AI Governance",
+    "url": "https://ethosaigovernance.com.au",
+    "description": "AI governance consulting services built exclusively for Australian AI vendors.",
+    "areaServed": { "@type": "Country", "name": "Australia" },
+    "knowsAbout": ["AI Governance", "ISO 42001", "Australian Privacy Act", "Responsible AI", "AI Compliance"]
+  }
+  </script>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-icon.png" class="nav-logo-icon" alt="Ethos AI Governance logo" width="40" height="40"/>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-brand">ETHOS</span>
+        <span class="nav-logo-tagline">AI Governance</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" data-page="home">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="/services" data-page="services">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
+        <div class="nav-dropdown">
+          <a href="/services#free-audit">Free Audit</a>
+          <a href="/services#compare-tiers">Compare Tiers</a>
+          <a href="/services#iso-42001">ISO 42001</a>
+        </div>
+      </li>
+      <li><a href="/about" data-page="about">About</a></li>
+      <li><a href="/regulatory" data-page="regulatory">Regulatory Landscape</a></li>
+      <li><a href="/resources" data-page="resources">Resources</a></li>
+      <li><a href="/faq" data-page="faq">FAQ</a></li>
+      <li><a href="/contact" data-page="contact">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
+    </ul>
+    <a href="/services" class="btn-nav">Get Free Audit</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <ul>
+    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
+    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
+    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
+    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
+    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
+  </ul>
+  <a href="/services" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+</div>
+
+<main>
+<div class="page active" id="page-about">
+
+  <!-- HERO — light background -->
+  <section class="page-hero about-hero-light">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Our Story</div>
+      <h1 class="page-hero-h1 about-hero-h1" data-aos="fade-up" data-aos-delay="60">AI Governance Built Exclusively for AI Vendors</h1>
+      <div class="about-hero-rule" data-aos="fade-up" data-aos-delay="80"></div>
+      <p class="page-hero-sub about-hero-sub" data-aos="fade-up" data-aos-delay="100">Most governance frameworks are designed for companies that use AI tools. Ethos exists for companies that build and sell them. The compliance obligations, the risk surface, the procurement questions and the governance documentation requirements are fundamentally different when AI is your product. We built Ethos around that difference.</p>
+    </div>
+  </section>
+
+  <!-- WHY AI VENDORS — dark -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label light-label" data-aos="fade-up">Our Focus</div>
+      <h2 class="section-heading light-heading" data-aos="fade-up" data-aos-delay="60">Why We Work Exclusively With AI Vendors</h2>
+      <p class="section-sub light-sub" data-aos="fade-up" data-aos-delay="100">The compliance obligations, risk surface and governance requirements for companies that build and sell AI products are fundamentally different from those that use AI tools internally. Ethos was built for that context. We don't dilute our focus by serving both.</p>
+
+      <div class="about-focus-grid" data-aos="fade-up" data-aos-delay="120">
+        <div class="about-focus-col about-focus-serve">
+          <div class="about-focus-col-label">
+            <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">check_circle</span>
+            Who we serve
+          </div>
+          <ul class="about-focus-list about-focus-list-serve">
+            <li>AI SaaS companies</li>
+            <li>AI-powered platform providers</li>
+            <li>Companies offering AI APIs or models</li>
+            <li>B2B AI vendors at any stage from micro-startup to ~200 people</li>
+          </ul>
+        </div>
+        <div class="about-focus-col about-focus-noserve">
+          <div class="about-focus-col-label about-focus-col-label-no">
+            <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">cancel</span>
+            Who we don't serve
+          </div>
+          <ul class="about-focus-list about-focus-list-noserve">
+            <li>Companies using AI tools internally (no AI product)</li>
+            <li>General IT consultancies or software vendors</li>
+            <li>Non-AI software companies</li>
+            <li>Those seeking legal representation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY — paper background, dark cards pop -->
+  <section class="section section-paper">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Our Philosophy</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">How We Think About Governance</h2>
+      <div class="philosophy-grid">
+        <div class="philosophy-card" data-aos="fade-up" data-aos-delay="80">
+          <span class="material-symbols-outlined philosophy-icon">trending_up</span>
+          <h3>Governance as Competitive Advantage</h3>
+          <p>Done properly, AI governance is not a cost of compliance: it is a commercial asset. It unlocks enterprise contracts, satisfies investor due diligence and signals technical and operational maturity to the market.</p>
+        </div>
+        <div class="philosophy-card" data-aos="fade-up" data-aos-delay="160">
+          <span class="material-symbols-outlined philosophy-icon">target</span>
+          <h3>Precision Over Generality</h3>
+          <p>Vague "best practices" are not governance. Ethos works from specific obligations: the Privacy Act, the APPs, Australian Consumer Law, the GfAA and ISO 42001. It produces documentation that can withstand scrutiny.</p>
+        </div>
+        <div class="philosophy-card" data-aos="fade-up" data-aos-delay="240">
+          <span class="material-symbols-outlined philosophy-icon">rocket_launch</span>
+          <h3>Accessible to Startups, Not Just Enterprise</h3>
+          <p>Early-stage AI companies face the same governance questions as large enterprises, without the same resources. The Ethos tiered model was designed with this in mind.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM — dark, expanded credential items -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label light-label" data-aos="fade-up">About the Team</div>
+      <h2 class="section-heading light-heading" data-aos="fade-up" data-aos-delay="60">The Team</h2>
+      <p class="section-sub light-sub" data-aos="fade-up" data-aos-delay="100">The Ethos team holds qualifications across law, engineering and finance: the intersection that makes rigorous AI governance possible.</p>
+      <div class="about-credential-grid" data-aos="fade-up" data-aos-delay="120">
+        <div class="about-credential-item">
+          <span class="material-symbols-outlined about-credential-icon">gavel</span>
+          <div class="about-credential-title">Law</div>
+          <div class="about-credential-desc">Experience with Australian law &amp; regulatory frameworks, including privacy, consumer protection and AI-specific obligations.</div>
+        </div>
+        <div class="about-credential-item">
+          <span class="material-symbols-outlined about-credential-icon">engineering</span>
+          <div class="about-credential-title">Engineering</div>
+          <div class="about-credential-desc">An understanding of AI systems architecture, development lifecycle and risk surface: essential for governance that actually holds up.</div>
+        </div>
+        <div class="about-credential-item">
+          <span class="material-symbols-outlined about-credential-icon">trending_up</span>
+          <div class="about-credential-title">Finance</div>
+          <div class="about-credential-desc">Commercial and financial acumen: governance designed to open doors and satisfy investor due diligence, not just check compliance boxes.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/logo-icon.png" class="footer-logo-icon" alt="Ethos AI Governance logo" width="38" height="38"/>
+            <span class="footer-logo-wordmark">
+              <span class="footer-logo-brand">ETHOS</span>
+              <span class="footer-logo-tagline">AI Governance</span>
+            </span>
+          </div>
+          <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/regulatory">Regulatory Landscape</a>
+          <a href="/resources">Resources</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Ethos AI Governance. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-about -->
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

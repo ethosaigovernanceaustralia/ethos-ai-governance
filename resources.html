@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>AI Governance Reference Library | Ethos AI Governance</title>
+  <meta name="description" content="Curated reference library of key Australian AI regulatory documents, government guidance, and external bodies relevant to AI governance for AI vendors."/>
+  <link rel="canonical" href="https://ethosaigovernance.com.au/resources"/>
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="icon" type="image/png" href="assets/logo-icon.png"/>
+  <link rel="apple-touch-icon" href="assets/logo-icon.png"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ethosaigovernance.com.au/resources"/>
+  <meta property="og:title" content="AI Governance Reference Library | Ethos AI Governance"/>
+  <meta property="og:description" content="Curated reference library of key Australian AI regulatory documents, government guidance, and external bodies relevant to AI governance for AI vendors."/>
+  <meta property="og:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+  <meta property="og:site_name" content="Ethos AI Governance"/>
+  <meta property="og:locale" content="en_AU"/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="AI Governance Reference Library | Ethos AI Governance"/>
+  <meta name="twitter:description" content="Curated reference library of key Australian AI regulatory documents, government guidance, and external bodies relevant to AI governance for AI vendors."/>
+  <meta name="twitter:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta name="twitter:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-icon.png" class="nav-logo-icon" alt="Ethos AI Governance logo" width="40" height="40"/>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-brand">ETHOS</span>
+        <span class="nav-logo-tagline">AI Governance</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" data-page="home">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="/services" data-page="services">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
+        <div class="nav-dropdown">
+          <a href="/services#free-audit">Free Audit</a>
+          <a href="/services#compare-tiers">Compare Tiers</a>
+          <a href="/services#iso-42001">ISO 42001</a>
+        </div>
+      </li>
+      <li><a href="/about" data-page="about">About</a></li>
+      <li><a href="/regulatory" data-page="regulatory">Regulatory Landscape</a></li>
+      <li><a href="/resources" data-page="resources">Resources</a></li>
+      <li><a href="/faq" data-page="faq">FAQ</a></li>
+      <li><a href="/contact" data-page="contact">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
+    </ul>
+    <a href="/services" class="btn-nav">Get Free Audit</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <ul>
+    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
+    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
+    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
+    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
+    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
+  </ul>
+  <a href="/services" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+</div>
+
+<main>
+<div class="page active" id="page-resources">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Reference Library</div>
+      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">Reference Library</h1>
+      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">A curated reference library of key regulatory documents, guidance materials and external bodies relevant to AI governance in Australia. Updated as the landscape evolves.</p>
+    </div>
+  </section>
+
+  <!-- KEY REGULATORY DOCUMENTS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Documents</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Key Regulatory Documents</h2>
+      <div class="resources-list">
+        <a class="resource-card" href="https://www.legislation.gov.au/Series/C2004A03712" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="60">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">Privacy Act 1988 (Cth)</div>
+              <div class="resource-source">Federal Register of Legislation - legislation.gov.au</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.oaic.gov.au/privacy/australian-privacy-principles" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="80">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">Australian Privacy Principles</div>
+              <div class="resource-source">Office of the Australian Information Commissioner - oaic.gov.au</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.industry.gov.au/publications/guidance-ai-adoption" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="100">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">Guidance for AI Adoption (GfAA)</div>
+              <div class="resource-source">Department of Industry, Science and Resources - industry.gov.au</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="120">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">OAIC Guidance on Privacy and AI Products</div>
+              <div class="resource-source">Office of the Australian Information Commissioner - oaic.gov.au · Published October 2024</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-framework/australias-ai-ethics-principles" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="140">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">Australia's 8 AI Ethics Principles</div>
+              <div class="resource-source">Department of Industry - industry.gov.au</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://www.iso.org/standard/81230.html" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="160">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">ISO/IEC 42001:2023 Overview</div>
+              <div class="resource-source">International Organization for Standardization - iso.org</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+        <a class="resource-card" href="https://store.standards.org.au/product/as-iso-iec-42001-2023" target="_blank" rel="noopener" data-aos="fade-up" data-aos-delay="180">
+          <div class="resource-card-inner">
+            <span class="material-symbols-outlined resource-icon">article</span>
+            <div class="resource-content">
+              <div class="resource-title">AS ISO/IEC 42001:2023</div>
+              <div class="resource-source">Standards Australia - standards.org.au</div>
+            </div>
+            <span class="material-symbols-outlined resource-ext">open_in_new</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY EXTERNAL BODIES -->
+  <section class="section section-light-alt">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Organisations</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Key External Bodies</h2>
+      <div class="bodies-grid">
+        <div class="body-card" data-aos="fade-up" data-aos-delay="60">
+          <h4>OAIC</h4>
+          <p>Office of the Australian Information Commissioner - the primary privacy regulator in Australia.</p>
+        </div>
+        <div class="body-card" data-aos="fade-up" data-aos-delay="100">
+          <h4>Australian AI Safety Institute</h4>
+          <p>AISI - provides risk assessments and guidance on AI safety for high-risk AI systems. Operational from early 2026.</p>
+        </div>
+        <div class="body-card" data-aos="fade-up" data-aos-delay="140">
+          <h4>ISO</h4>
+          <p>International Organization for Standardization - publisher of ISO/IEC 42001:2023 and ISO/IEC 27001.</p>
+        </div>
+        <div class="body-card" data-aos="fade-up" data-aos-delay="180">
+          <h4>Standards Australia</h4>
+          <p>The peak non-government standards body in Australia. Adopted AS ISO/IEC 42001:2023 in February 2024.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Timeline</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Key Dates</h2>
+      <div class="timeline">
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="60">
+          <div class="timeline-date">February 2024</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">AS ISO/IEC 42001:2023 formally adopted in Australia</div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="100">
+          <div class="timeline-date">October 2024</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">OAIC Guidance on Privacy and Generative AI published</div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="140">
+          <div class="timeline-date">October 2025</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">Guidance for AI Adoption (GfAA) published</div>
+        </div>
+        <div class="timeline-item" data-aos="fade-right" data-aos-delay="180">
+          <div class="timeline-date">Early 2026</div>
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">Australian AI Safety Institute (AISI) operational</div>
+        </div>
+        <div class="timeline-item timeline-item-highlight" data-aos="fade-right" data-aos-delay="220">
+          <div class="timeline-date timeline-date-highlight">December 2026</div>
+          <div class="timeline-dot timeline-dot-highlight"></div>
+          <div class="timeline-content timeline-content-highlight">Privacy Act automated decision-making transparency obligations take effect</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ETHOS RESOURCES -->
+  <section class="section section-light-alt">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Ethos Resources</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Ethos Resources</h2>
+
+      <!-- Free resource -->
+      <div class="free-resource-card" data-aos="fade-up" data-aos-delay="80">
+        <div class="free-resource-badge">Free Download</div>
+        <div class="free-resource-inner">
+          <span class="material-symbols-outlined free-resource-icon">checklist_rtl</span>
+          <div class="free-resource-body">
+            <h3>AI Governance Procurement Checklist</h3>
+            <p>A one-page overview of what enterprise buyers and procurement teams are looking for when they assess AI vendor governance. Use it to understand where you stand before the questions arrive.</p>
+            <a href="/contact" class="btn-outline">Request Free Download</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ethos-resources-note" data-aos="fade-up" data-aos-delay="100" style="margin-top:2rem">
+        <span class="material-symbols-outlined" style="color:var(--brass);flex-shrink:0">lock</span>
+        <p>Full governance resources (including checklists, regulatory summaries and implementation guides) are available to Ethos clients. Enquire via the <a href="/contact" style="color:var(--brass);font-weight:500">contact page</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/logo-icon.png" class="footer-logo-icon" alt="Ethos AI Governance logo" width="38" height="38"/>
+            <span class="footer-logo-wordmark">
+              <span class="footer-logo-brand">ETHOS</span>
+              <span class="footer-logo-tagline">AI Governance</span>
+            </span>
+          </div>
+          <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/regulatory">Regulatory Landscape</a>
+          <a href="/resources">Resources</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Ethos AI Governance. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-resources -->
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

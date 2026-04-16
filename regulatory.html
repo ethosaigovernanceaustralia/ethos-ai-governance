@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Australian AI Regulatory Landscape | Ethos AI Governance</title>
+  <meta name="description" content="A structured overview of current Australian AI obligations: Privacy Act, Australian Consumer Law, GfAA, ISO 42001 and the December 2026 automated decision-making deadline."/>
+  <link rel="canonical" href="https://ethosaigovernance.com.au/regulatory"/>
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="icon" type="image/png" href="assets/logo-icon.png"/>
+  <link rel="apple-touch-icon" href="assets/logo-icon.png"/>
+
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://ethosaigovernance.com.au/regulatory"/>
+  <meta property="og:title" content="Australian AI Regulatory Landscape | Ethos AI Governance"/>
+  <meta property="og:description" content="A structured overview of current Australian AI obligations: Privacy Act, Australian Consumer Law, GfAA, ISO 42001 and the December 2026 automated decision-making deadline."/>
+  <meta property="og:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+  <meta property="og:site_name" content="Ethos AI Governance"/>
+  <meta property="og:locale" content="en_AU"/>
+
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Australian AI Regulatory Landscape | Ethos AI Governance"/>
+  <meta name="twitter:description" content="A structured overview of current Australian AI obligations: Privacy Act, Australian Consumer Law, GfAA, ISO 42001 and the December 2026 automated decision-making deadline."/>
+  <meta name="twitter:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta name="twitter:image:alt" content="Ethos AI Governance — AI Governance for Australian AI Vendors"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-icon.png" class="nav-logo-icon" alt="Ethos AI Governance logo" width="40" height="40"/>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-brand">ETHOS</span>
+        <span class="nav-logo-tagline">AI Governance</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" data-page="home">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="/services" data-page="services">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
+        <div class="nav-dropdown">
+          <a href="/services#free-audit">Free Audit</a>
+          <a href="/services#compare-tiers">Compare Tiers</a>
+          <a href="/services#iso-42001">ISO 42001</a>
+        </div>
+      </li>
+      <li><a href="/about" data-page="about">About</a></li>
+      <li><a href="/regulatory" data-page="regulatory">Regulatory Landscape</a></li>
+      <li><a href="/resources" data-page="resources">Resources</a></li>
+      <li><a href="/faq" data-page="faq">FAQ</a></li>
+      <li><a href="/contact" data-page="contact">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
+    </ul>
+    <a href="/services" class="btn-nav">Get Free Audit</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <ul>
+    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
+    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
+    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
+    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
+    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
+  </ul>
+  <a href="/services" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+</div>
+
+<main>
+<div class="page active" id="page-regulatory">
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Reference</div>
+      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">The Australian AI Governance Landscape</h1>
+      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">A structured overview of current Australian obligations, government guidance and the ISO 42001 standard - as they apply to companies that build and sell AI products.</p>
+      <p class="page-hero-note" data-aos="fade-up" data-aos-delay="140">This page reflects the regulatory position as understood in early 2026. It is provided for informational purposes and does not constitute legal advice.</p>
+    </div>
+  </section>
+
+  <!-- KEY DATES CALLOUT -->
+  <section class="section section-keydates-top">
+    <div class="container">
+      <div class="key-dates-box" data-aos="fade-up">
+        <h3 class="kd-title"><span class="material-symbols-outlined" style="vertical-align:middle;margin-right:8px">calendar_today</span>Key Dates</h3>
+        <div class="kd-items">
+          <div class="kd-item">
+            <div class="kd-date">February 2024</div>
+            <div class="kd-desc">AS ISO/IEC 42001:2023 formally adopted in Australia</div>
+          </div>
+          <div class="kd-item">
+            <div class="kd-date">October 2024</div>
+            <div class="kd-desc">OAIC Guidance on Privacy and Generative AI published</div>
+          </div>
+          <div class="kd-item">
+            <div class="kd-date">October 2025</div>
+            <div class="kd-desc">Guidance for AI Adoption (GfAA) published</div>
+          </div>
+          <div class="kd-item kd-item-highlight">
+            <div class="kd-date kd-date-highlight">December 2026</div>
+            <div class="kd-desc">Privacy Act automated decision-making transparency obligations take effect</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BINDING OBLIGATIONS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Current Law</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Current Legal Obligations</h2>
+      <div class="reg-cards-grid">
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="reg-card-type binding">Binding</div>
+          <h3>Privacy Act 1988 (Cth) &amp; Australian Privacy Principles</h3>
+          <p>Governs the handling of personal information used in or generated by AI systems. Applies to organisations with annual turnover above $3M and certain others. Key obligations include transparency around automated processing of personal information.</p>
+        </div>
+        <div class="reg-card reg-card-urgent" data-aos="fade-up" data-aos-delay="130">
+          <div class="reg-card-type binding">Key Date: December 2026</div>
+          <h3>Privacy Act 2024 Amendments</h3>
+          <p>New automated decision-making transparency obligations take effect. AI vendors whose systems make or substantially inform decisions affecting individuals must provide meaningful transparency about how those decisions are made. Entities subject to the Privacy Act should be preparing now.</p>
+        </div>
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="180">
+          <div class="reg-card-type binding">Binding</div>
+          <h3>Australian Consumer Law</h3>
+          <p>Enforced by the ACCC. Prohibits misleading or deceptive conduct in relation to AI-powered products and services - including misleading representations about AI system capabilities, accuracy, or reliability. Applies to all AI vendors operating in Australia regardless of size.</p>
+        </div>
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="230">
+          <div class="reg-card-type binding">Binding</div>
+          <h3>Anti-Discrimination Law</h3>
+          <p>Federal and state anti-discrimination legislation applies where AI systems make or inform decisions affecting individuals across protected characteristics. Algorithmic bias is an increasingly active area of enforcement attention.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GOVERNMENT GUIDANCE -->
+  <section class="section section-light-alt">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Voluntary</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Government Guidance</h2>
+      <p class="section-sub" data-aos="fade-up" data-aos-delay="100">The following is voluntary guidance - not legally binding - but increasingly referenced by enterprise procurement teams and government agencies.</p>
+      <div class="reg-cards-grid">
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="80">
+          <div class="reg-card-type voluntary">Voluntary Guidance</div>
+          <h3>Guidance for AI Adoption (GfAA)</h3>
+          <p>Published October 2025 by the Department of Industry, Science and Resources. The current primary Australian government guidance document on AI adoption. Supersedes the previous Voluntary AI Safety Standard (VAISS).</p>
+        </div>
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="130">
+          <div class="reg-card-type voluntary">Voluntary Guidance</div>
+          <h3>Australia's 8 AI Ethics Principles</h3>
+          <p>Published 2019 by the Department of Industry. Still current and widely referenced. Covers human, societal and environmental wellbeing; human-centred values; fairness; privacy protection; reliability and safety; transparency and explainability; contestability; and accountability.</p>
+        </div>
+        <div class="reg-card" data-aos="fade-up" data-aos-delay="180">
+          <div class="reg-card-type voluntary">OAIC Guidance</div>
+          <h3>OAIC Guidance on Privacy and Generative AI</h3>
+          <p>Published October 2024. Provides the Office of the Australian Information Commissioner's position on how the Privacy Act applies to generative AI systems, including guidance for entities deploying third-party AI tools.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HORIZON -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">Emerging</div>
+      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">On the Horizon</h2>
+      <div class="horizon-grid">
+        <div class="horizon-card" data-aos="fade-up" data-aos-delay="80">
+          <span class="material-symbols-outlined horizon-icon">security</span>
+          <h3>Australian AI Safety Institute (AISI)</h3>
+          <p>Operational from early 2026. Provides risk assessments and guidance on AI safety, with particular focus on high-risk AI systems. Still developing its scope and enforcement posture.</p>
+        </div>
+        <div class="horizon-card" data-aos="fade-up" data-aos-delay="140">
+          <span class="material-symbols-outlined horizon-icon">policy</span>
+          <h3>Mandatory Guardrails for High-Risk AI</h3>
+          <p>Active government consultation is underway regarding mandatory requirements for certain categories of high-risk AI. Timing and scope remain under consideration.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ISO 42001 -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="section-label light-label" data-aos="fade-up">The International Standard</div>
+      <h2 class="section-heading light-heading" data-aos="fade-up" data-aos-delay="60">ISO/IEC 42001:2023</h2>
+      <p class="section-sub light-sub" data-aos="fade-up" data-aos-delay="100">The world's first international standard for AI Management Systems. Formally adopted in Australia as AS ISO/IEC 42001:2023 in February 2024. Specifies 38 controls across 9 governance areas covering AI risk management, transparency, accountability, data governance and more.</p>
+      <h3 class="svc-subheading" style="color:var(--brass-light);margin-top:2.5rem" data-aos="fade-up">Why It Matters for AI Vendors</h3>
+      <ul class="iso-matters-list" data-aos="fade-up" data-aos-delay="80">
+        <li>Enterprise procurement teams are beginning to ask for ISO 42001 as a vendor qualification requirement</li>
+        <li>Government procurement is expected to follow as the standard matures</li>
+        <li>Inherently covers and in many respects exceeds current Australian regulatory obligations</li>
+        <li>Fewer than approximately 30 companies worldwide hold certification as of early 2026 - early movers gain a significant competitive advantage</li>
+        <li>Functions similarly to ISO 27001 as a market trust signal</li>
+      </ul>
+      <div style="margin-top:2.5rem" data-aos="fade-up" data-aos-delay="100">
+        <a href="/services#iso-42001" class="btn-primary">Explore ISO 42001 Pathway</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/logo-icon.png" class="footer-logo-icon" alt="Ethos AI Governance logo" width="38" height="38"/>
+            <span class="footer-logo-wordmark">
+              <span class="footer-logo-brand">ETHOS</span>
+              <span class="footer-logo-tagline">AI Governance</span>
+            </span>
+          </div>
+          <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/regulatory">Regulatory Landscape</a>
+          <a href="/resources">Resources</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Ethos AI Governance. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-regulatory -->
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,64 +1,21 @@
 /* ===================================================
    ETHOS AI GOVERNANCE — Interactive App
-   Vanilla JS SPA — 7 pages, GSAP + AOS + CountUp
+   Multi-page vanilla JS — GSAP (home) + AOS + CountUp
 =================================================== */
 
 'use strict';
 
-// ─── State ────────────────────────────────────────
-let currentPage = 'home';
-const PAGES = ['home', 'services', 'about', 'regulatory', 'resources', 'faq', 'contact'];
-
-// ─── Page Navigation ─────────────────────────────
-function navigate(page) {
-  if (!PAGES.includes(page)) return;
-
-  const oldPage = document.getElementById(`page-${currentPage}`);
-  const newPage = document.getElementById(`page-${page}`);
-  if (!newPage) return;
-
-  // Fade out old page
-  if (oldPage && page !== currentPage) {
-    oldPage.style.opacity = '0';
-    oldPage.style.transform = 'translateY(10px)';
-    oldPage.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-    setTimeout(() => {
-      oldPage.classList.remove('active');
-      oldPage.style.opacity = '';
-      oldPage.style.transform = '';
-      oldPage.style.transition = '';
-    }, 240);
-  }
-
-  // Show new page
-  setTimeout(() => {
-    newPage.classList.add('active');
-    newPage.classList.add('page-transition-enter');
-    setTimeout(() => newPage.classList.remove('page-transition-enter'), 600);
-
-    currentPage = page;
-    updateNavActive(page);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-
-    // Refresh AOS for new page
-    setTimeout(() => {
-      AOS.refresh();
-      initBentoTilt();
-      initSubnavHighlight();
-      if (page === 'home') {
-        initCountUp();
-      }
-    }, 100);
-  }, page === currentPage ? 0 : 230);
-
-  history.pushState(null, '', `#${page}`);
-}
-
 // ─── Nav Active State ─────────────────────────────
-function updateNavActive(page) {
+function updateNavActive() {
+  const path = window.location.pathname;
   document.querySelectorAll('[data-page]').forEach(link => {
     link.classList.remove('active');
-    if (link.dataset.page === page) link.classList.add('active');
+    const href = link.getAttribute('href');
+    if (path === '/' && href === '/') {
+      link.classList.add('active');
+    } else if (path !== '/' && href && href !== '/' && path.startsWith(href)) {
+      link.classList.add('active');
+    }
   });
 }
 
@@ -85,8 +42,8 @@ function scrollToSection(sectionId) {
 
 // ─── Sub-nav active highlight on scroll ──────────
 function initSubnavHighlight() {
-  if (currentPage !== 'services') return;
-  const sections = ['audit', 'pricing-comparison', 'iso42001'];
+  if (!document.getElementById('servicesSubnav')) return;
+  const sections = ['free-audit', 'compare-tiers', 'iso-42001'];
   const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 80;
 
   const observer = new IntersectionObserver((entries) => {
@@ -129,14 +86,6 @@ function toggleFaq(btn) {
     item.classList.add('open');
     btn.setAttribute('aria-expanded', 'true');
   }
-}
-
-// ─── Contact form type switcher ───────────────────
-function showContactForm(type) {
-  const typeInput = document.getElementById('enquiryType');
-  if (typeInput) typeInput.value = type;
-  const form = document.getElementById('contactFormWrap');
-  if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ─── Character count ──────────────────────────────
@@ -184,15 +133,13 @@ async function handleFormSubmit(e) {
     await submitEnquiryToSupabase(data);
   } catch (err) {
     console.error('Form submission error:', err);
-    // Still show success to the user — don't penalise them for backend issues
   }
 
-  // Fire-and-forget notification email (non-blocking)
   fetch('/api/notify-enquiry', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).catch(() => {}); // silently ignore failures
+  }).catch(() => {});
 
   btn.innerHTML = originalBtnHTML;
   btn.disabled = false;
@@ -206,7 +153,6 @@ async function handleFormSubmit(e) {
 async function submitEnquiryToSupabase(data) {
   const cfg = window.SUPABASE_CONFIG;
   if (!cfg || cfg.url.includes('YOUR_PROJECT_REF')) {
-    // Not yet configured — simulate a short delay so the spinner shows
     return new Promise(resolve => setTimeout(resolve, 1200));
   }
 
@@ -322,7 +268,7 @@ function initBentoTilt() {
   });
 }
 
-// ─── GSAP Hero Animation ─────────────────────────
+// ─── GSAP Hero Animation (home only) ─────────────
 function initGSAPHero() {
   if (typeof gsap === 'undefined') return;
 
@@ -355,7 +301,6 @@ function initGSAPHero() {
     '-=0.7'
   );
 
-  // Subtle letter-spacing on h1
   const h1 = document.querySelector('#hero-h1');
   if (h1) {
     h1.style.letterSpacing = '-0.05em';
@@ -364,7 +309,7 @@ function initGSAPHero() {
   }
 }
 
-// ─── CountUp Stat Counters ────────────────────────
+// ─── CountUp Stat Counters (home only) ───────────
 let countUpInitialised = false;
 
 function initCountUp() {
@@ -392,77 +337,7 @@ function initCountUp() {
   observer.observe(el);
 }
 
-// ─── Hash-based Routing ──────────────────────────
-function handleHash() {
-  const hash = window.location.hash.replace('#', '');
-  if (PAGES.includes(hash)) {
-    currentPage = hash;
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const targetPage = document.getElementById(`page-${hash}`);
-    if (targetPage) targetPage.classList.add('active');
-    updateNavActive(hash);
-  }
-}
-
-// ─── Page Initialisation ─────────────────────────
-function initPage() {
-  // Default active page
-  const hash = window.location.hash.replace('#', '');
-  const startPage = PAGES.includes(hash) ? hash : 'home';
-
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  const activePage = document.getElementById(`page-${startPage}`);
-  if (activePage) activePage.classList.add('active');
-  currentPage = startPage;
-  updateNavActive(startPage);
-
-  // Init AOS
-  AOS.init({
-    duration: 700,
-    easing: 'ease-out-cubic',
-    once: true,
-    offset: 60
-  });
-
-  // Init all interactive elements
-  initCursor();
-  initNavScroll();
-  initParticles();
-  initBentoTilt();
-  initSubnavHighlight();
-
-  // GSAP hero animation (home only)
-  if (startPage === 'home') {
-    initGSAPHero();
-    initCountUp();
-  }
-
-  // Browser back/forward
-  window.addEventListener('popstate', () => {
-    const h = window.location.hash.replace('#', '') || 'home';
-    if (PAGES.includes(h) && h !== currentPage) {
-      const oldEl = document.getElementById(`page-${currentPage}`);
-      if (oldEl) oldEl.classList.remove('active');
-      currentPage = h;
-      const newEl = document.getElementById(`page-${h}`);
-      if (newEl) {
-        newEl.classList.add('active');
-        newEl.classList.add('page-transition-enter');
-        setTimeout(() => newEl.classList.remove('page-transition-enter'), 600);
-      }
-      updateNavActive(h);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      setTimeout(() => {
-        AOS.refresh();
-        initBentoTilt();
-        initSubnavHighlight();
-        if (h === 'home') initCountUp();
-      }, 100);
-    }
-  });
-}
-
-// ─── Hero Panoramic Carousel ─────────────────────
+// ─── Hero Panoramic Carousel (home only) ─────────
 (function() {
   const CIRC = 2 * Math.PI * 26;
 
@@ -522,7 +397,7 @@ function initPage() {
     }
   };
 
-  let pOrder = [0, 1, 2]; // [left, center, right]
+  let pOrder = [0, 1, 2];
   let pCenter = 1;
   let pLoopTimer = null;
   let pAnimTimer = null;
@@ -592,7 +467,6 @@ async function handlePathFormSubmit(e, pathType) {
   const successEl = form.querySelector('.form-success-inline');
   if (!submitBtn) return;
 
-  // Basic validation
   const requiredFields = form.querySelectorAll('[required]');
   let valid = true;
   requiredFields.forEach(f => {
@@ -608,7 +482,6 @@ async function handlePathFormSubmit(e, pathType) {
   submitBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem;animation:spin 0.8s linear infinite;vertical-align:middle">refresh</span> Sending...';
   submitBtn.disabled = true;
 
-  // Collect form data
   const fd = new FormData(form);
   const data = {};
   fd.forEach((val, key) => { data[key] = val; });
@@ -640,15 +513,11 @@ function toggleBonusSecondary(summaryEl) {
 }
 
 // ─── Stripe Checkout ─────────────────────────────
-// Called by the "Get AU Compliance Core" buttons on the website.
-// Passes `this` so the button can show a loading state during the API call.
-
 async function startCheckout(productTier, btn) {
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
   btn.textContent = 'Loading...';
 
-  // Remove any previous error message near this button
   const prev = btn.parentElement.querySelector('.checkout-error');
   if (prev) prev.remove();
 
@@ -661,7 +530,6 @@ async function startCheckout(productTier, btn) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Could not start checkout');
 
-    // Redirect to Stripe-hosted checkout page
     window.location.href = data.url;
   } catch (err) {
     console.error('[checkout]', err);
@@ -674,6 +542,35 @@ async function startCheckout(productTier, btn) {
     errEl.textContent = 'Something went wrong. Please try again.';
     btn.insertAdjacentElement('afterend', errEl);
     setTimeout(() => errEl.remove(), 5000);
+  }
+}
+
+// ─── Page Initialisation ─────────────────────────
+function initPage() {
+  AOS.init({
+    duration: 700,
+    easing: 'ease-out-cubic',
+    once: true,
+    offset: 60
+  });
+
+  updateNavActive();
+  initCursor();
+  initNavScroll();
+  initParticles();
+  initBentoTilt();
+  initSubnavHighlight();
+
+  // GSAP and CountUp only on home page (scripts only loaded there)
+  if (document.getElementById('hero-h1')) {
+    initGSAPHero();
+    initCountUp();
+  }
+
+  // On services page: if hash on load, scroll with nav offset
+  if (document.getElementById('servicesSubnav') && window.location.hash) {
+    const targetId = window.location.hash.replace('#', '');
+    setTimeout(() => scrollToSection(targetId), 300);
   }
 }
 

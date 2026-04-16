@@ -42,10 +42,10 @@
 
 ## Pages
 - Homepage: https://ethosaigovernance.com.au/
-- Services: https://ethosaigovernance.com.au/#services
-- About: https://ethosaigovernance.com.au/#about
-- Regulatory Landscape: https://ethosaigovernance.com.au/#regulatory
-- Resources: https://ethosaigovernance.com.au/#resources
-- FAQ: https://ethosaigovernance.com.au/#faq
-- Contact: https://ethosaigovernance.com.au/#contact
+- Services: https://ethosaigovernance.com.au/services
+- About: https://ethosaigovernance.com.au/about
+- Regulatory Landscape: https://ethosaigovernance.com.au/regulatory
+- Resources: https://ethosaigovernance.com.au/resources
+- FAQ: https://ethosaigovernance.com.au/faq
+- Contact: https://ethosaigovernance.com.au/contact
 - Client Portal: https://ethosaigovernance.com.au/portal/login (restricted — existing clients only)

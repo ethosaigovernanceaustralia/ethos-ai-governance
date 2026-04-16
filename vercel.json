@@ -1,5 +1,11 @@
 {
   "rewrites": [
+    { "source": "/services",              "destination": "/services.html" },
+    { "source": "/about",                 "destination": "/about.html" },
+    { "source": "/regulatory",            "destination": "/regulatory.html" },
+    { "source": "/resources",             "destination": "/resources.html" },
+    { "source": "/faq",                   "destination": "/faq.html" },
+    { "source": "/contact",               "destination": "/contact.html" },
     { "source": "/portal/login",          "destination": "/portal/login.html" },
     { "source": "/portal/dashboard",      "destination": "/portal/dashboard.html" },
     { "source": "/portal/admin",          "destination": "/portal/admin.html" },
