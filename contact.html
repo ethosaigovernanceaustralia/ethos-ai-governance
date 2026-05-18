@@ -106,7 +106,7 @@
   <section class="section">
     <div class="container">
 
-      <!-- Three Contact Path Cards -->
+      <!-- Two Main Contact Path Cards -->
       <div class="contact-paths" data-aos="fade-up">
 
         <!-- Path 1: Free Audit -->
@@ -167,36 +167,42 @@
           </div>
         </div>
 
-        <!-- Path 3: General Enquiry -->
-        <div class="contact-path-card">
-          <div class="contact-path-header">
-            <span class="material-symbols-outlined contact-option-icon">mail</span>
-            <h3>General Enquiry</h3>
-            <p>Questions, media enquiries, or any other matters. We respond to all enquiries within one business day.</p>
-          </div>
-          <form class="contact-path-form" id="generalForm" onsubmit="handlePathFormSubmit(event, 'general')" novalidate>
+      </div><!-- /contact-paths -->
+
+      <!-- General Enquiry Accordion -->
+      <div class="general-enquiry-accordion" data-aos="fade-up">
+        <button class="general-enquiry-toggle" onclick="toggleGeneralEnquiry()" aria-expanded="false" aria-controls="generalEnquiryBody">
+          <span class="general-enquiry-toggle-left">
+            <span class="material-symbols-outlined">mail</span>
+            Have a general enquiry?
+          </span>
+          <span class="material-symbols-outlined general-enquiry-chevron">expand_more</span>
+        </button>
+        <div class="general-enquiry-body" id="generalEnquiryBody" hidden>
+          <form class="general-enquiry-form" id="generalForm" onsubmit="handlePathFormSubmit(event, 'general')" novalidate>
             <input type="hidden" name="enquiry_type" value="general"/>
-            <div class="form-group">
-              <label>Name <span class="required">*</span></label>
-              <input type="text" name="name" required placeholder="Your name"/>
+            <div class="general-enquiry-fields">
+              <div class="form-group">
+                <label>Name <span class="required">*</span></label>
+                <input type="text" name="name" required placeholder="Your name"/>
+              </div>
+              <div class="form-group">
+                <label>Email <span class="required">*</span></label>
+                <input type="email" name="email" required placeholder="you@company.com"/>
+              </div>
+              <div class="form-group general-enquiry-message">
+                <label>Message <span class="required">*</span></label>
+                <textarea name="additional_notes" rows="4" required placeholder="Your message" maxlength="500"></textarea>
+              </div>
             </div>
-            <div class="form-group">
-              <label>Email <span class="required">*</span></label>
-              <input type="email" name="email" required placeholder="you@company.com"/>
-            </div>
-            <div class="form-group">
-              <label>Message <span class="required">*</span></label>
-              <textarea name="additional_notes" rows="5" required placeholder="Your message" maxlength="500"></textarea>
-            </div>
-            <button type="submit" class="btn-outline" style="width:100%">Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
+            <button type="submit" class="btn-outline">Send Enquiry <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
             <div class="form-success-inline" style="display:none">
               <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
               Message sent. We'll be in touch within one business day.
             </div>
           </form>
         </div>
-
-      </div><!-- /contact-paths -->
+      </div><!-- /general-enquiry-accordion -->
 
       <div class="contact-disclaimer" data-aos="fade-up">
         <p>Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
@@ -244,6 +250,16 @@
   (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.eu/embed/embed.js", "init");
   Cal("init", "discovery-call-ethos-ai-governance", {origin:"https://app.cal.eu"});
   Cal.ns["discovery-call-ethos-ai-governance"]("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
+</script>
+<script>
+  function toggleGeneralEnquiry() {
+    var accordion = document.querySelector('.general-enquiry-accordion');
+    var body = document.getElementById('generalEnquiryBody');
+    var btn = document.querySelector('.general-enquiry-toggle');
+    var isOpen = accordion.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+    body.hidden = !isOpen;
+  }
 </script>
 </body>
 </html>
