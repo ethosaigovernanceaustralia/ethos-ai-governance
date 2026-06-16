@@ -18,6 +18,215 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <style>
+    /* ─── Free Audit page ──────────────────────────────────────── */
+    .fa-section {
+      background: #F8F7F5;
+      padding: 4rem 0 5.5rem;
+    }
+
+    .fa-card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow:
+        0 1px 3px rgba(13,31,60,0.04),
+        0 6px 24px rgba(13,31,60,0.07),
+        0 20px 60px rgba(13,31,60,0.06);
+      padding: 2.75rem 2.75rem 2.25rem;
+      max-width: 580px;
+      margin: 0 auto;
+      border-top: 4px solid #A8833A;
+      transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.28s ease;
+      position: relative;
+    }
+
+    .fa-card:hover {
+      transform: translateY(-8px);
+      box-shadow:
+        0 2px 6px rgba(13,31,60,0.05),
+        0 12px 40px rgba(13,31,60,0.10),
+        0 32px 80px rgba(13,31,60,0.08);
+    }
+
+    .fa-slot-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.3rem 0.875rem;
+      background: rgba(168,131,58,0.09);
+      border: 1px solid rgba(168,131,58,0.28);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #8a6a2e;
+      letter-spacing: 0.02em;
+      margin-bottom: 1.5rem;
+    }
+
+    .fa-slot-badge .material-symbols-outlined {
+      font-size: 0.9rem;
+    }
+
+    .fa-eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #A8833A;
+      margin-bottom: 0.375rem;
+    }
+
+    .fa-heading {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: #0D1F3C;
+      margin: 0 0 1.75rem;
+      line-height: 1.2;
+    }
+
+    .fa-list {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .fa-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.875rem;
+      padding: 0.875rem 1rem;
+      border-radius: 12px;
+      background: #F8F7F5;
+      border: 1px solid transparent;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+      cursor: default;
+    }
+
+    .fa-list-item:hover {
+      transform: translateX(5px);
+      border-color: rgba(168,131,58,0.22);
+      background: #ffffff;
+      box-shadow: 0 2px 14px rgba(13,31,60,0.06);
+    }
+
+    .fa-check {
+      width: 24px;
+      height: 24px;
+      min-width: 24px;
+      border-radius: 50%;
+      background: rgba(168,131,58,0.11);
+      border: 1.5px solid rgba(168,131,58,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .fa-list-item:hover .fa-check {
+      background: rgba(168,131,58,0.2);
+      border-color: #A8833A;
+    }
+
+    .fa-check svg {
+      width: 11px;
+      height: 11px;
+      stroke: #A8833A;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .fa-item-text {
+      font-size: 0.9375rem;
+      color: #0D1F3C;
+      line-height: 1.55;
+    }
+
+    .fa-divider {
+      height: 1px;
+      background: rgba(13,31,60,0.07);
+      margin: 0 0 1.75rem;
+    }
+
+    .fa-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      width: 100%;
+      padding: 1rem 1.5rem;
+      background: #A8833A;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition:
+        background 0.2s ease,
+        transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+        box-shadow 0.22s ease;
+      box-shadow: 0 3px 10px rgba(168,131,58,0.32);
+    }
+
+    .fa-cta:hover {
+      background: #9a7632;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(168,131,58,0.42);
+    }
+
+    .fa-cta:active {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 10px rgba(168,131,58,0.32);
+    }
+
+    .fa-cta .material-symbols-outlined {
+      font-size: 1.125rem;
+      transition: transform 0.2s ease;
+    }
+
+    .fa-cta:hover .material-symbols-outlined {
+      transform: translateX(3px);
+    }
+
+    .fa-cta-note {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: rgba(13,31,60,0.45);
+      margin-top: 0.75rem;
+    }
+
+    .fa-disclaimer {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: rgba(13,31,60,0.4);
+      font-style: italic;
+      max-width: 520px;
+      margin: 2.25rem auto 0;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .fa-card {
+        padding: 2rem 1.5rem 1.75rem;
+        margin: 0 0.75rem;
+      }
+      .fa-heading {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -86,46 +295,58 @@
     </div>
   </section>
 
-  <section class="section">
+  <section class="fa-section">
     <div class="container">
 
-      <div style="max-width:600px;margin:0 auto" data-aos="fade-up">
-        <div class="contact-path-card contact-path-featured">
-          <div class="contact-path-header">
-            <span class="material-symbols-outlined contact-option-icon">search</span>
-            <h3>What You'll Receive</h3>
-            <ul style="list-style:none;padding:0;margin:0.75rem 0 0;text-align:left;display:flex;flex-direction:column;gap:0.625rem">
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem">
-                <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass);margin-top:2px;flex-shrink:0">check_circle</span>
-                A structured assessment of your current AI governance posture
-              </li>
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem">
-                <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass);margin-top:2px;flex-shrink:0">check_circle</span>
-                Traffic-light risk report against the Privacy Act, Australian Privacy Principles and OAIC guidance
-              </li>
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem">
-                <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass);margin-top:2px;flex-shrink:0">check_circle</span>
-                Clear recommended next steps — no pitch, no obligation
-              </li>
-              <li style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.9375rem">
-                <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass);margin-top:2px;flex-shrink:0">check_circle</span>
-                Report delivered within 5 business days
-              </li>
-            </ul>
-          </div>
-          <div class="contact-path-form" style="display:flex;flex-direction:column;align-items:stretch;gap:1rem;padding-top:0.5rem">
-            <a href="/portal/login?signup=1" class="btn-primary" style="width:100%;text-align:center">
-              Create Your Free Account
-              <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span>
-            </a>
-            <p style="font-size:0.8rem;color:var(--muted);margin-top:0;text-align:center">3 slots available per month. No credit card required.</p>
-          </div>
+      <div class="fa-card" data-aos="fade-up" data-aos-delay="60">
+
+        <div class="fa-slot-badge">
+          <span class="material-symbols-outlined">schedule</span>
+          3 slots available this month
         </div>
+
+        <div class="fa-eyebrow">What You'll Receive</div>
+        <h2 class="fa-heading">Your Free AI Governance Audit</h2>
+
+        <ul class="fa-list">
+          <li class="fa-list-item">
+            <div class="fa-check">
+              <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+            </div>
+            <span class="fa-item-text">A structured assessment of your current AI governance posture</span>
+          </li>
+          <li class="fa-list-item">
+            <div class="fa-check">
+              <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+            </div>
+            <span class="fa-item-text">Traffic-light risk report against the Privacy Act, Australian Privacy Principles and OAIC guidance</span>
+          </li>
+          <li class="fa-list-item">
+            <div class="fa-check">
+              <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+            </div>
+            <span class="fa-item-text">Clear recommended next steps — no pitch, no obligation</span>
+          </li>
+          <li class="fa-list-item">
+            <div class="fa-check">
+              <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+            </div>
+            <span class="fa-item-text">Report delivered within 5 business days</span>
+          </li>
+        </ul>
+
+        <div class="fa-divider"></div>
+
+        <a href="/portal/login?signup=1" class="fa-cta">
+          Create Your Free Account
+          <span class="material-symbols-outlined">arrow_forward</span>
+        </a>
+        <p class="fa-cta-note">No credit card required. Takes under 2 minutes.</p>
+
       </div>
 
-      <div class="contact-disclaimer" data-aos="fade-up">
-        <p>Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
-      </div>
+      <p class="fa-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+
     </div>
   </section>
 
