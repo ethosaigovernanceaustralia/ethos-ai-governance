@@ -22,39 +22,87 @@
 
   <!-- Login Card -->
   <div class="login-card">
-    <div class="login-card-header">
-      <h1 class="login-card-title">Client Portal</h1>
-      <p class="login-card-sub">Sign in to access your governance workspace.</p>
-    </div>
 
-    <!-- Error / Success messages -->
+    <!-- Error / Success messages (shared between views) -->
     <div class="auth-error" id="authError" style="display:none">
       <span class="material-symbols-outlined" style="font-size:1.1rem">error</span>
       <span id="authErrorMsg">Invalid email or password.</span>
     </div>
-
     <div class="auth-success" id="authSuccess" style="display:none">
       <span class="material-symbols-outlined" style="font-size:1.1rem">check_circle</span>
       <span id="authSuccessMsg">Check your email for a password reset link.</span>
     </div>
 
-    <!-- Sign In Form -->
-    <form id="loginForm" novalidate>
-      <div class="p-form-group">
-        <label class="p-label" for="loginEmail">Email</label>
-        <input class="p-input" type="email" id="loginEmail" placeholder="you@company.com" required autocomplete="email"/>
+    <!-- Sign In View -->
+    <div id="loginView">
+      <div class="login-card-header">
+        <h1 class="login-card-title">Client Portal</h1>
+        <p class="login-card-sub">Sign in to access your governance workspace.</p>
       </div>
-      <div class="p-form-group">
-        <label class="p-label" for="loginPassword">Password</label>
-        <input class="p-input" type="password" id="loginPassword" placeholder="Your password" required autocomplete="current-password"/>
-      </div>
-      <button type="submit" class="btn-gold btn-gold-full" id="loginBtn" style="margin-top:0.5rem">
-        Sign In
-        <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
-      </button>
-    </form>
+      <form id="loginForm" novalidate>
+        <div class="p-form-group">
+          <label class="p-label" for="loginEmail">Email</label>
+          <input class="p-input" type="email" id="loginEmail" placeholder="you@company.com" required autocomplete="email"/>
+        </div>
+        <div class="p-form-group">
+          <label class="p-label" for="loginPassword">Password</label>
+          <input class="p-input" type="password" id="loginPassword" placeholder="Your password" required autocomplete="current-password"/>
+        </div>
+        <button type="submit" class="btn-gold btn-gold-full" id="loginBtn" style="margin-top:0.5rem">
+          Sign In
+          <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+        </button>
+      </form>
+      <a href="#" class="forgot-link" id="forgotLink">Forgot your password?</a>
+    </div>
 
-    <a href="#" class="forgot-link" id="forgotLink">Forgot your password?</a>
+    <!-- Signup View -->
+    <div id="signupView" style="display:none">
+      <div class="login-card-header">
+        <h1 class="login-card-title">Free Audit Account</h1>
+        <p class="login-card-sub">Create your account to claim your free AI governance audit slot.</p>
+      </div>
+      <form id="signupForm" novalidate>
+        <!-- Honeypot — must stay hidden, never filled by real users -->
+        <input type="text" id="signupHp" name="_hp" style="display:none;position:absolute" tabindex="-1" autocomplete="off"/>
+        <div class="p-form-group">
+          <label class="p-label" for="signupName">Full Name <span style="color:#dc2626">*</span></label>
+          <input class="p-input" type="text" id="signupName" maxlength="100" required autocomplete="name" placeholder="Your name"/>
+        </div>
+        <div class="p-form-group">
+          <label class="p-label" for="signupCompany">Company <span style="color:#dc2626">*</span></label>
+          <input class="p-input" type="text" id="signupCompany" maxlength="100" required autocomplete="organization" placeholder="Your company name"/>
+        </div>
+        <div class="p-form-group">
+          <label class="p-label" for="signupEmail">Work Email <span style="color:#dc2626">*</span></label>
+          <input class="p-input" type="email" id="signupEmail" required autocomplete="email" placeholder="you@company.com"/>
+        </div>
+        <div class="p-form-group">
+          <label class="p-label" for="signupPassword">Password <span style="color:#dc2626">*</span></label>
+          <input class="p-input" type="password" id="signupPassword" required minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters"/>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">
+          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+            <input type="checkbox" id="consentTerms" style="margin-top:2px;flex-shrink:0"/>
+            <span>I agree to the <a href="/legal/terms" target="_blank" rel="noopener" style="color:var(--brass)">Portal Terms of Service</a></span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+            <input type="checkbox" id="consentPrivacy" style="margin-top:2px;flex-shrink:0"/>
+            <span>I agree to the <a href="/legal/privacy" target="_blank" rel="noopener" style="color:var(--brass)">Privacy Policy</a></span>
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+            <input type="checkbox" id="consentApp8" style="margin-top:2px;flex-shrink:0"/>
+            <span>I expressly consent to my information being disclosed to overseas service providers (Supabase, USA; Resend, USA), and I acknowledge that APP 8.1 (reasonable steps) will not apply and that I may not be able to seek redress under the Privacy Act if an overseas recipient mishandles my information.</span>
+          </label>
+        </div>
+        <button type="submit" class="btn-gold btn-gold-full" id="signupBtn">
+          Create Account
+          <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+        </button>
+      </form>
+      <a href="#" class="forgot-link" id="backToLogin">Already have an account? Sign in</a>
+    </div>
+
   </div>
 
   <p class="login-tagline">Secure document exchange for Ethos clients</p>
@@ -72,7 +120,6 @@
   if (session) {
     const profile = await getProfile(session.user.id);
     if (!profile) {
-      // Profile not set up yet — sign out to avoid redirect loop
       const sb = getSupabase();
       if (sb) await sb.auth.signOut();
     } else {
@@ -81,14 +128,29 @@
     }
   }
 
+  // ─── View switching ────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('signup') === '1') {
+    document.getElementById('loginView').style.display = 'none';
+    document.getElementById('signupView').style.display = 'block';
+  }
+
+  document.getElementById('backToLogin').addEventListener('click', (e) => {
+    e.preventDefault();
+    document.getElementById('authError').style.display = 'none';
+    document.getElementById('authSuccess').style.display = 'none';
+    document.getElementById('signupView').style.display = 'none';
+    document.getElementById('loginView').style.display = 'block';
+  });
+
   // ─── Sign In ───────────────────────────────────────────────
   document.getElementById('loginForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('loginEmail').value.trim();
+    const email    = document.getElementById('loginEmail').value.trim();
     const password = document.getElementById('loginPassword').value;
-    const btn = document.getElementById('loginBtn');
-    const errEl = document.getElementById('authError');
+    const btn      = document.getElementById('loginBtn');
+    const errEl    = document.getElementById('authError');
 
     errEl.style.display = 'none';
     btn.disabled = true;
@@ -139,6 +201,79 @@
     document.getElementById('authError').style.display = 'none';
     document.getElementById('authSuccessMsg').textContent = 'Check your email for a password reset link.';
     document.getElementById('authSuccess').style.display = 'flex';
+  });
+
+  // ─── Sign Up ───────────────────────────────────────────────
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name     = document.getElementById('signupName').value.trim();
+    const company  = document.getElementById('signupCompany').value.trim();
+    const email    = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const hp       = document.getElementById('signupHp').value;
+
+    const terms   = document.getElementById('consentTerms').checked;
+    const privacy = document.getElementById('consentPrivacy').checked;
+    const app8    = document.getElementById('consentApp8').checked;
+
+    const errEl  = document.getElementById('authError');
+    const succEl = document.getElementById('authSuccess');
+    const btn    = document.getElementById('signupBtn');
+
+    errEl.style.display  = 'none';
+    succEl.style.display = 'none';
+
+    if (!terms || !privacy || !app8) {
+      document.getElementById('authErrorMsg').textContent = 'Please accept all three items to continue.';
+      errEl.style.display = 'flex';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Creating account...';
+
+    try {
+      const res = await fetch('/api/free-audit-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name, company, email, password,
+          consents: { terms, privacy, app8 },
+          consentVersion: '1.0',
+          _hp: hp,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.error === 'duplicate') {
+        document.getElementById('authErrorMsg').innerHTML =
+          'An account with this email already exists. <a href="/portal/login" style="color:var(--brass)">Sign in</a>';
+        errEl.style.display = 'flex';
+        return;
+      }
+
+      if (!data.success) {
+        document.getElementById('authErrorMsg').textContent = 'Something went wrong. Please try again.';
+        errEl.style.display = 'flex';
+        return;
+      }
+
+      // Success — switch to login view with pre-filled email
+      document.getElementById('authSuccessMsg').textContent = 'Your account has been created. Sign in below.';
+      succEl.style.display = 'flex';
+      document.getElementById('loginEmail').value = email;
+      document.getElementById('signupView').style.display = 'none';
+      document.getElementById('loginView').style.display = 'block';
+
+    } catch (err) {
+      document.getElementById('authErrorMsg').textContent = 'Something went wrong. Please try again.';
+      errEl.style.display = 'flex';
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = 'Create Account <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>';
+    }
   });
 })();
 </script>

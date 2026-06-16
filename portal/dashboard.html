@@ -97,6 +97,19 @@
           <span id="dashWelcome">Dashboard</span>
         </div>
 
+        <!-- Pending Review Banner -->
+        <div class="action-required-banner" id="pendingReviewBanner" style="display:none">
+          <div class="action-required-header">
+            <div class="action-required-icon">
+              <span class="material-symbols-outlined">hourglass_top</span>
+            </div>
+            <div>
+              <div class="action-required-title">Audit Slot Pending Confirmation</div>
+              <div class="action-required-sub">Your audit slot is being confirmed. We'll be in touch within one business day.</div>
+            </div>
+          </div>
+        </div>
+
         <!-- Action Required Banner -->
         <div class="action-required-banner" id="actionRequiredBanner" style="display:none">
           <div class="action-required-header">
@@ -492,6 +505,12 @@ function renderDashboard() {
     document.getElementById('engagementCard').style.display = 'none';
   }
 
+  // Pending review banner
+  const pendingBanner = document.getElementById('pendingReviewBanner');
+  if (pendingBanner) {
+    pendingBanner.style.display = _currentEngagement?.status === 'pending' ? 'block' : 'none';
+  }
+
   // Action items
   renderActionItems(_actionItems);
   updateActionItemsBadge(_actionItems);
@@ -708,7 +727,7 @@ async function refreshDocuments(engagements, templates) {
   const hasEngagement = engagements && engagements.length > 0;
   const hasTemplates  = templates  && templates.length  > 0;
 
-  document.getElementById('uploadBtnHeader').style.display = hasEngagement ? 'inline-flex' : 'none';
+  document.getElementById('uploadBtnHeader').style.display = (hasEngagement && _currentEngagement?.status !== 'pending') ? 'inline-flex' : 'none';
   document.getElementById('docsNoEngagement').style.display = (!hasEngagement && !hasTemplates) ? 'block' : 'none';
   document.getElementById('docPanels').style.display = (hasEngagement || hasTemplates) ? 'grid' : 'none';
 

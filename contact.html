@@ -67,7 +67,7 @@
         <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
       </a></li>
     </ul>
-    <a href="/services" class="btn-nav">Get Free Audit</a>
+    <a href="/free-audit" class="btn-nav">Get Free Audit</a>
     <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
@@ -89,7 +89,7 @@
     <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
     <li><a href="/portal/login">Client Portal</a></li>
   </ul>
-  <a href="/services" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
 </div>
 
 <main>
@@ -116,42 +116,10 @@
             <h3>Request a Free Governance Audit</h3>
             <p>Understand your current AI governance posture at no cost. Structured assessment, traffic-light report, clear next steps.</p>
           </div>
-          <form class="contact-path-form" id="auditForm" onsubmit="handlePathFormSubmit(event, 'audit')" novalidate>
-            <input type="hidden" name="enquiry_type" value="audit"/>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Name <span class="required">*</span></label>
-                <input type="text" name="name" required placeholder="Your name"/>
-              </div>
-              <div class="form-group">
-                <label>Company <span class="required">*</span></label>
-                <input type="text" name="company" required placeholder="Your company name"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Work Email <span class="required">*</span></label>
-              <input type="email" name="email" required placeholder="you@company.com"/>
-            </div>
-            <div class="form-group">
-              <label>What does your company build? <span class="required">*</span></label>
-              <input type="text" name="company_builds" required placeholder="e.g. AI-powered fraud detection platform"/>
-            </div>
-            <div class="form-group">
-              <label>Do you have existing governance documentation?</label>
-              <select name="existing_governance">
-                <option value="">Select one...</option>
-                <option value="comprehensive">Yes, comprehensive documentation in place</option>
-                <option value="some_gaps">Some policies but gaps exist</option>
-                <option value="nothing_formal">Nothing formal yet</option>
-                <option value="not_sure">Not sure</option>
-              </select>
-            </div>
-            <button type="submit" class="btn-primary" style="width:100%">Request Free Audit <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></button>
-            <div class="form-success-inline" style="display:none">
-              <span class="material-symbols-outlined" style="color:#16a34a;vertical-align:middle">check_circle</span>
-              Request received. We'll be in touch within one business day.
-            </div>
-          </form>
+          <div class="contact-path-form" style="display:flex;flex-direction:column;align-items:stretch;gap:1rem;padding-top:0.5rem">
+            <a href="/free-audit" class="btn-primary" style="width:100%;text-align:center">Get Your Free Audit <span class="material-symbols-outlined" style="font-size:1rem;vertical-align:middle">arrow_forward</span></a>
+            <p style="font-size:0.8rem;color:var(--muted);margin-top:0;text-align:center">No pitch. No obligation. Report delivered within 5 business days. Limited to 3 slots per month.</p>
+          </div>
         </div>
 
         <!-- Path 2: Discovery Call -->

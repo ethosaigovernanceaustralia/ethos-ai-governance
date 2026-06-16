@@ -1027,6 +1027,7 @@ function renderEngagements(engagements) {
             Revoke Access
           </button>` : ''}
           <select class="p-select" onchange="handleUpdateEngagementStatus('${eng.id}', this.value)" style="width:120px;font-size:0.8125rem;padding:0.35rem 0.625rem">
+            <option value="pending"   ${eng.status==='pending'  ?'selected':''}>Pending</option>
             <option value="active"    ${eng.status==='active'   ?'selected':''}>Active</option>
             <option value="paused"    ${eng.status==='paused'   ?'selected':''}>Paused</option>
             <option value="completed" ${eng.status==='completed'?'selected':''}>Completed</option>

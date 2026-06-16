@@ -1,5 +1,8 @@
 {
   "rewrites": [
+    { "source": "/free-audit",            "destination": "/free-audit.html" },
+    { "source": "/legal/terms",           "destination": "/portal/terms.html" },
+    { "source": "/legal/privacy",         "destination": "/portal/privacy.html" },
     { "source": "/services",              "destination": "/services.html" },
     { "source": "/about",                 "destination": "/about.html" },
     { "source": "/regulatory",            "destination": "/regulatory.html" },
