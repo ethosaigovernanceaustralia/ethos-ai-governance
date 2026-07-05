@@ -5,6 +5,10 @@
 
 'use strict';
 
+// ─── Motion / Input Preferences ──────────────────
+const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COARSE_POINTER = window.matchMedia('(pointer: coarse)').matches;
+
 // ─── Nav Active State ─────────────────────────────
 function updateNavActive() {
   const path = window.location.pathname;
@@ -224,7 +228,7 @@ function initNavScroll() {
 // ─── Particles ───────────────────────────────────
 function initParticles() {
   const container = document.getElementById('particles');
-  if (!container) return;
+  if (!container || REDUCED_MOTION || COARSE_POINTER) return;
 
   const colors = ['rgba(168,131,58,0.25)', 'rgba(201,176,128,0.18)', 'rgba(168,131,58,0.12)', 'rgba(255,255,255,0.06)'];
   const sizes = [3, 5, 4, 6, 3];
@@ -248,6 +252,7 @@ function initParticles() {
 
 // ─── Bento Card Tilt ─────────────────────────────
 function initBentoTilt() {
+  if (REDUCED_MOTION || COARSE_POINTER) return;
   document.querySelectorAll('.bento-card, .ladder-card, .philosophy-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
@@ -270,7 +275,7 @@ function initBentoTilt() {
 
 // ─── GSAP Hero Animation (home only) ─────────────
 function initGSAPHero() {
-  if (typeof gsap === 'undefined') return;
+  if (typeof gsap === 'undefined' || REDUCED_MOTION) return;
 
   gsap.registerPlugin(ScrollTrigger);
 
@@ -295,7 +300,7 @@ function initGSAPHero() {
     { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
     '-=0.35'
   )
-  .fromTo('#hero-visual',
+  .fromTo('#heroPanorama',
     { opacity: 0, x: 40 },
     { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out' },
     '-=0.7'
@@ -414,9 +419,15 @@ function initCountUp() {
     dots[pOrder[1]].classList.add('active');
   }
 
+  function pStopLoop() {
+    clearTimeout(pLoopTimer);
+    clearTimeout(pAnimTimer);
+  }
+
   function pStartLoop() {
     clearTimeout(pLoopTimer);
     clearTimeout(pAnimTimer);
+    if (REDUCED_MOTION) return;
     pLoopTimer = setTimeout(() => {
       Object.values(animConfigs).forEach(c => c.reset());
       void document.body.offsetWidth;
@@ -452,10 +463,27 @@ function initCountUp() {
 
   const panoEl = document.getElementById('heroPanorama');
   if (panoEl) {
+    let panoStarted = false;
+    let panoInView = false;
+
     const obs = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) { initPanorama(); obs.disconnect(); }
+      panoInView = entries[0].isIntersecting;
+      if (panoInView && !panoStarted) {
+        panoStarted = true;
+        initPanorama();
+        return;
+      }
+      if (!panoStarted) return;
+      if (panoInView && !document.hidden) pStartLoop();
+      else pStopLoop();
     }, { threshold: 0.1 });
     obs.observe(panoEl);
+
+    document.addEventListener('visibilitychange', () => {
+      if (!panoStarted) return;
+      if (document.hidden) pStopLoop();
+      else if (panoInView) pStartLoop();
+    });
   }
 })();
 
@@ -545,13 +573,108 @@ async function startCheckout(productTier, btn) {
   }
 }
 
+// ─── Scroll FX: ISO timeline, divider draw, counters ───
+function initScrollFx() {
+  if (!('IntersectionObserver' in window)) return;
+
+  // ISO 42001 timeline draw (services page)
+  const isoWrap = document.querySelector('.iso-ht-wrap');
+  if (isoWrap && !REDUCED_MOTION) {
+    isoWrap.classList.add('iso-anim');
+    const io = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) { isoWrap.classList.add('in-view'); io.disconnect(); }
+    }, { threshold: 0.3 });
+    io.observe(isoWrap);
+  }
+
+  // Section divider rule draw
+  if (!REDUCED_MOTION) {
+    document.querySelectorAll('.section-divider').forEach(divider => {
+      divider.classList.add('divider-anim');
+      const io = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) { divider.classList.add('in-view'); io.disconnect(); }
+      }, { threshold: 0 });
+      io.observe(divider);
+    });
+  }
+
+  // Generic count-up for [data-countup] (vanilla, no library needed)
+  document.querySelectorAll('[data-countup]').forEach(el => {
+    const target = parseInt(el.dataset.countup, 10);
+    if (isNaN(target)) return;
+    const io = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      if (REDUCED_MOTION) return;
+      const prefix = el.dataset.countupPrefix || '';
+      const suffix = el.dataset.countupSuffix || '';
+      const duration = 1800;
+      const start = performance.now();
+      (function tick(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = prefix + Math.round(eased * target) + suffix;
+        if (p < 1) requestAnimationFrame(tick);
+      })(start);
+    }, { threshold: 0.5 });
+    io.observe(el);
+  });
+}
+
+// ─── Magnetic Buttons ────────────────────────────
+function initMagneticButtons() {
+  if (REDUCED_MOTION || COARSE_POINTER) return;
+  document.querySelectorAll('.hero-cta-btn, .btn-primary, .fa-cta').forEach(btn => {
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 6;
+      btn.style.transform = `translate(${x}px, ${y - 2}px)`;
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.style.transform = '';
+    });
+  });
+}
+
+// ─── Sticky Mobile CTA Bar ───────────────────────
+function initMobileCtaBar() {
+  const path = window.location.pathname;
+  if (path.startsWith('/free-audit') || path.startsWith('/portal') || path.startsWith('/success')) return;
+  if (sessionStorage.getItem('ethosCtaBarDismissed') === '1') return;
+
+  const bar = document.createElement('div');
+  bar.className = 'mobile-cta-bar';
+  bar.innerHTML =
+    '<div class="mobile-cta-bar-text"><strong>Free AI governance audit</strong> — 3 slots/month</div>' +
+    '<a href="/free-audit" class="mobile-cta-bar-btn">Claim yours →</a>' +
+    '<button class="mobile-cta-bar-close" aria-label="Dismiss"><span class="material-symbols-outlined" style="font-size:1.25rem">close</span></button>';
+  document.body.appendChild(bar);
+
+  bar.querySelector('.mobile-cta-bar-close').addEventListener('click', () => {
+    bar.classList.remove('visible');
+    sessionStorage.setItem('ethosCtaBarDismissed', '1');
+  });
+
+  let shown = false;
+  window.addEventListener('scroll', () => {
+    if (shown) return;
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (max > 0 && window.scrollY / max > 0.55) {
+      shown = true;
+      bar.classList.add('visible');
+    }
+  }, { passive: true });
+}
+
 // ─── Page Initialisation ─────────────────────────
 function initPage() {
   AOS.init({
     duration: 700,
     easing: 'ease-out-cubic',
     once: true,
-    offset: 60
+    offset: 60,
+    disable: REDUCED_MOTION
   });
 
   updateNavActive();
@@ -560,6 +683,9 @@ function initPage() {
   initParticles();
   initBentoTilt();
   initSubnavHighlight();
+  initScrollFx();
+  initMagneticButtons();
+  initMobileCtaBar();
 
   // GSAP and CountUp only on home page (scripts only loaded there)
   if (document.getElementById('hero-h1')) {

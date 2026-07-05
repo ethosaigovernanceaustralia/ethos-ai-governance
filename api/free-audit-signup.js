@@ -156,7 +156,31 @@ module.exports = async function handler(req, res) {
     return res.status(500).json({ error: 'Setup failed' });
   }
 
-  // 5. Admin notification — best-effort, non-fatal
+  // 5. Welcome email to the signee — best-effort, non-fatal
+  try {
+    const resend = new Resend(process.env.RESEND_API_KEY);
+    const firstName = name.trim().split(/\s+/)[0];
+    await resend.emails.send({
+      from: 'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+      to: emailNorm,
+      subject: 'Your free AI governance audit is booked in',
+      html: `
+        <p>Hi ${escapeHtml(firstName)},</p>
+        <p>Thanks for claiming a free audit slot for ${escapeHtml(company.trim())}. Here's what happens next:</p>
+        <ol>
+          <li>We confirm your audit slot within one business day — audits are limited to three per month.</li>
+          <li>You complete a short questionnaire in your <a href="https://ethosaigovernance.com.au/portal/login">secure portal</a>.</li>
+          <li>Your traffic-light report against the Privacy Act, the Australian Privacy Principles and OAIC guidance is delivered within five business days.</li>
+        </ol>
+        <p>No pitch, no obligation.</p>
+        <p>— Mike<br/>Ethos AI Governance</p>
+      `,
+    });
+  } catch (emailErr) {
+    console.error('[free-audit-signup] welcome email error (non-fatal):', emailErr);
+  }
+
+  // 6. Admin notification — best-effort, non-fatal
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({

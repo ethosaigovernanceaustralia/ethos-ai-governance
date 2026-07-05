@@ -133,6 +133,8 @@
   if (params.get('signup') === '1') {
     document.getElementById('loginView').style.display = 'none';
     document.getElementById('signupView').style.display = 'block';
+    const tagline = document.querySelector('.login-tagline');
+    if (tagline) tagline.textContent = 'Free audit — no credit card, no obligation. Report within 5 business days.';
   }
 
   document.getElementById('backToLogin').addEventListener('click', (e) => {

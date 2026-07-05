@@ -217,6 +217,95 @@
       line-height: 1.6;
     }
 
+    .fa-steps-label {
+      text-align: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .fa-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      max-width: 1080px;
+      margin: 0 auto 3.25rem;
+    }
+
+    .fa-step {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 1.5rem 1.5rem 1.375rem;
+      border: 1px solid rgba(13,31,60,0.05);
+      box-shadow:
+        0 1px 3px rgba(13,31,60,0.04),
+        0 6px 24px rgba(13,31,60,0.05);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+
+    .fa-step:hover {
+      transform: translateY(-4px);
+      border-color: rgba(168,131,58,0.22);
+      box-shadow:
+        0 2px 6px rgba(13,31,60,0.05),
+        0 12px 36px rgba(13,31,60,0.09);
+    }
+
+    .fa-step-num {
+      font-family: 'Newsreader', Georgia, serif;
+      font-size: 1.875rem;
+      font-weight: 600;
+      color: #A8833A;
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+
+    .fa-step-title {
+      font-size: 0.9875rem;
+      font-weight: 600;
+      color: #0D1F3C;
+      margin-bottom: 0.375rem;
+    }
+
+    .fa-step-text {
+      font-size: 0.875rem;
+      color: #5a5a6e;
+      line-height: 1.55;
+    }
+
+    .fa-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 2rem;
+      align-items: start;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .fa-grid .fa-card {
+      margin: 0;
+      max-width: none;
+    }
+
+    .fa-sample-label {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(13,31,60,0.45);
+      margin-bottom: 0.875rem;
+    }
+
+    @media (max-width: 900px) {
+      .fa-steps {
+        grid-template-columns: 1fr;
+        max-width: 580px;
+      }
+      .fa-grid {
+        grid-template-columns: 1fr;
+        max-width: 580px;
+      }
+    }
+
     @media (max-width: 640px) {
       .fa-card {
         padding: 2rem 1.5rem 1.75rem;
@@ -224,6 +313,14 @@
       }
       .fa-heading {
         font-size: 1.5rem;
+      }
+      .fa-steps,
+      .fa-grid {
+        margin-left: 0.75rem;
+        margin-right: 0.75rem;
+      }
+      .fa-grid .fa-card {
+        margin: 0;
       }
     }
   </style>
@@ -298,7 +395,31 @@
   <section class="fa-section">
     <div class="container">
 
-      <div class="fa-card" data-aos="fade-up" data-aos-delay="60">
+      <div class="fa-steps-label" data-aos="fade-up">
+        <div class="section-label">How It Works</div>
+      </div>
+
+      <div class="fa-steps">
+        <div class="fa-step" data-aos="fade-up" data-aos-delay="60">
+          <div class="fa-step-num">01</div>
+          <div class="fa-step-title">Create your free account</div>
+          <p class="fa-step-text">Under 2 minutes, no credit card. Your secure portal is set up instantly.</p>
+        </div>
+        <div class="fa-step" data-aos="fade-up" data-aos-delay="120">
+          <div class="fa-step-num">02</div>
+          <div class="fa-step-title">Complete a short intake</div>
+          <p class="fa-step-text">A focused questionnaire in your portal covering how your AI product handles data, decisions and disclosure.</p>
+        </div>
+        <div class="fa-step" data-aos="fade-up" data-aos-delay="180">
+          <div class="fa-step-num">03</div>
+          <div class="fa-step-title">Get your traffic-light report</div>
+          <p class="fa-step-text">Red / amber / green against your Australian obligations, within 5 business days. No pitch, no obligation.</p>
+        </div>
+      </div>
+
+      <div class="fa-grid">
+
+      <div class="fa-card" data-aos="fade-right" data-aos-delay="60">
 
         <div class="fa-slot-badge">
           <span class="material-symbols-outlined">schedule</span>
@@ -338,10 +459,52 @@
         <div class="fa-divider"></div>
 
         <a href="/portal/login?signup=1" class="fa-cta">
-          Create Your Free Account
+          Claim Your Free Audit
           <span class="material-symbols-outlined">arrow_forward</span>
         </a>
         <p class="fa-cta-note">No credit card required. Takes under 2 minutes.</p>
+
+      </div>
+
+      <div class="fa-sample" data-aos="fade-left" data-aos-delay="120">
+        <div class="fa-sample-label">Sample report — what you'll receive</div>
+        <div class="tl-report-card">
+          <div class="tl-report-header">
+            <span class="tl-report-title">Governance Audit Report</span>
+            <span class="tl-report-sub">Sample - Confidential</span>
+          </div>
+          <div class="tl-report-body">
+            <div class="tl-report-row">
+              <span class="tl-domain">Data Governance</span>
+              <div class="tl-bar-wrap"><div class="tl-bar tl-green" style="width:82%"></div></div>
+              <span class="tl-status green-pill">Green</span>
+            </div>
+            <div class="tl-report-row">
+              <span class="tl-domain">AI Risk Management</span>
+              <div class="tl-bar-wrap"><div class="tl-bar tl-amber" style="width:54%"></div></div>
+              <span class="tl-status amber-pill">Amber</span>
+            </div>
+            <div class="tl-report-row">
+              <span class="tl-domain">Transparency</span>
+              <div class="tl-bar-wrap"><div class="tl-bar tl-red" style="width:23%"></div></div>
+              <span class="tl-status red-pill">Red</span>
+            </div>
+            <div class="tl-report-row">
+              <span class="tl-domain">Incident Response</span>
+              <div class="tl-bar-wrap"><div class="tl-bar tl-green" style="width:75%"></div></div>
+              <span class="tl-status green-pill">Green</span>
+            </div>
+            <div class="tl-report-row">
+              <span class="tl-domain">Accountability</span>
+              <div class="tl-bar-wrap"><div class="tl-bar tl-red" style="width:18%"></div></div>
+              <span class="tl-status red-pill">Red</span>
+            </div>
+          </div>
+          <div class="tl-report-footer">
+            <span class="badge-pill">3 critical gaps · 2 improvements required</span>
+          </div>
+        </div>
+      </div>
 
       </div>
 
