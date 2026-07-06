@@ -8,6 +8,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 const { createClient } = require('@supabase/supabase-js');
+const { unsubscribeToken } = require('./unsubscribe');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -56,7 +57,22 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ sent: 0 });
   }
 
-  console.log(`[recovery] Found ${checkouts.length} abandoned checkout(s) to email`);
+  // Never email an address that has unsubscribed, regardless of which
+  // checkout it's attached to (Spam Act 2003 — unsubscribe must be honoured).
+  const { data: suppressions, error: suppressionError } = await supabase
+    .from('email_suppressions')
+    .select('email');
+
+  if (suppressionError) {
+    console.error('[recovery] Suppression list query failed:', suppressionError.message);
+    return res.status(500).json({ error: suppressionError.message });
+  }
+
+  const suppressed = new Set((suppressions || []).map((s) => s.email.toLowerCase()));
+  const toSend = checkouts.filter((c) => !suppressed.has(c.customer_email.toLowerCase()));
+  const skippedCount = checkouts.length - toSend.length;
+
+  console.log(`[recovery] Found ${checkouts.length} abandoned checkout(s), ${skippedCount} suppressed, ${toSend.length} to email`);
 
   const PRODUCT_NAMES = {
     au_compliance_core: 'AU Compliance Core',
@@ -65,8 +81,9 @@ module.exports = async function handler(req, res) {
 
   let sentCount = 0;
 
-  for (const checkout of checkouts) {
+  for (const checkout of toSend) {
     const productName = PRODUCT_NAMES[checkout.product_tier] || checkout.product_tier;
+    const unsubscribeUrl = `https://ethosaigovernance.com.au/api/unsubscribe?email=${encodeURIComponent(checkout.customer_email)}&token=${unsubscribeToken(checkout.customer_email)}`;
 
     const html = `
       <div style="font-family:sans-serif;max-width:560px;margin:0 auto">
@@ -95,7 +112,8 @@ module.exports = async function handler(req, res) {
           <p style="font-size:14px;color:#374151;margin-bottom:0">— Mike, Ethos AI Governance</p>
         </div>
         <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:16px">
-          Ethos AI Governance · ethosaigovernance.com.au
+          Ethos AI Governance · ethosaigovernance.com.au<br/>
+          <a href="${unsubscribeUrl}" style="color:#9ca3af">Unsubscribe from checkout reminders</a>
         </p>
       </div>
     `;
@@ -111,6 +129,10 @@ module.exports = async function handler(req, res) {
         to:      [checkout.customer_email],
         subject: 'Your AI governance documents are ready whenever you are',
         html,
+        headers: {
+          'List-Unsubscribe': `<${unsubscribeUrl}>`,
+          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        },
       }),
     });
 
@@ -128,6 +150,6 @@ module.exports = async function handler(req, res) {
     }
   }
 
-  console.log(`[recovery] Done. Sent ${sentCount} of ${checkouts.length} emails.`);
-  return res.status(200).json({ sent: sentCount, total: checkouts.length });
+  console.log(`[recovery] Done. Sent ${sentCount} of ${toSend.length} eligible (${skippedCount} suppressed).`);
+  return res.status(200).json({ sent: sentCount, eligible: toSend.length, suppressed: skippedCount });
 };
