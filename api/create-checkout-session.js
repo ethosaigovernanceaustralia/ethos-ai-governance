@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
   const product = PRODUCTS[productTier];
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const params = {
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: [{
@@ -53,11 +53,21 @@ module.exports = async function handler(req, res) {
       metadata: { product_tier: productTier },
       success_url: `${SITE_URL}/success?tier=${productTier}&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${SITE_URL}/#services`,
-      // To add Terms of Service consent in future:
-      // 1. Add a /terms page to the website
-      // 2. Set the URL in Stripe Dashboard > Settings > Checkout & Payment Links > Terms of service
-      // 3. Uncomment: consent_collection: { terms_of_service: 'required' }
-    });
+    };
+
+    // Stripe's hosted Terms-of-Service checkbox. This REQUIRES a Terms of
+    // Service URL to be set in Stripe Dashboard > Settings > Checkout &
+    // Payment Links; Stripe rejects session creation if consent_collection
+    // is set without it. Engagement Terms are now also captured in-app before
+    // this call (see openEngagementTerms in app.js), so the hosted checkbox is
+    // opt-in via env to avoid breaking checkout before the ToS URL / final
+    // legal doc exists. Set STRIPE_COLLECT_TOS=true once the URL is configured.
+    // When enabled, acceptance is recorded to the consents table by stripe-webhook.js.
+    if (process.env.STRIPE_COLLECT_TOS === 'true') {
+      params.consent_collection = { terms_of_service: 'required' };
+    }
+
+    const session = await stripe.checkout.sessions.create(params);
 
     return res.status(200).json({ url: session.url });
   } catch (err) {

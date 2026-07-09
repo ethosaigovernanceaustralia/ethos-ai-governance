@@ -11,6 +11,7 @@
 //   7. Insert invoice record      (non-critical)
 //   8. Send invoice email         (non-critical)
 //   9. Mark abandoned checkout recovered (non-critical)
+//  10. Record Engagement Terms consent  (non-critical)
 //
 // checkout.session.expired:
 //   Records the abandoned checkout for Stage 3 recovery emails.
@@ -19,6 +20,7 @@
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const { CONSENT_VERSION, CONSENT_TEXT } = require('./_consent-constants');
 
 // Disable Vercel's body parser — Stripe needs the raw body to verify the signature
 async function handler(req, res) {
@@ -165,6 +167,21 @@ async function handleCheckoutCompleted(session) {
       .is('completed_at', null)
       .then(({ error }) => { if (error) throw error; })
   );
+
+  // 10. Record Engagement Terms acceptance collected by Stripe checkout
+  //     (consent_collection in create-checkout-session.js)
+  if (session.consent?.terms_of_service === 'accepted') {
+    await tryStep('record-engagement-terms-consent', () =>
+      supabase.from('consents').insert({
+        user_id:      clientId,
+        consent_type: 'engagement_terms',
+        consent_text: CONSENT_TEXT.engagement_terms,
+        consented_at: new Date().toISOString(),
+        user_agent:   `stripe-checkout:${sessionId}`,
+        version:      CONSENT_VERSION,
+      }).then(({ error }) => { if (error) throw error; })
+    );
+  }
 }
 
 

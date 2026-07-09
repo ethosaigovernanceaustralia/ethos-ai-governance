@@ -362,6 +362,47 @@
   </div>
 </div>
 
+<!-- Consent Modal (first-login gate for accounts created without the signup form) -->
+<div class="modal-overlay" id="consentModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Before you continue</h2>
+    </div>
+
+    <p style="font-size:0.875rem;color:var(--muted);line-height:1.5;margin:0 0 1rem">
+      Your account was set up for you, so we need your agreement to our terms and
+      your consent before you use the portal.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentTerms" style="margin-top:2px;flex-shrink:0"/>
+        <span>I agree to the <a href="/legal/terms" target="_blank" rel="noopener" style="color:var(--brass)">Portal Terms of Service</a></span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentPrivacy" style="margin-top:2px;flex-shrink:0"/>
+        <span>I agree to the <a href="/legal/privacy" target="_blank" rel="noopener" style="color:var(--brass)">Privacy Policy</a></span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentApp8" style="margin-top:2px;flex-shrink:0"/>
+        <span>I expressly consent to my information being disclosed to overseas service providers (Supabase, USA; Resend, USA), and I acknowledge that APP 8.1 (reasonable steps) will not apply and that I may not be able to seek redress under the Privacy Act if an overseas recipient mishandles my information.</span>
+      </label>
+    </div>
+
+    <div id="gateConsentError" style="display:none;font-size:0.8125rem;color:#dc2626;margin-bottom:0.75rem">
+      Something went wrong recording your agreement. Please try again.
+    </div>
+
+    <div style="display:flex;gap:0.75rem;align-items:center">
+      <button class="btn-outline" onclick="signOut()" style="flex:1">Sign out</button>
+      <button class="btn-gold" id="gateConsentBtn" onclick="handleConsentContinue()" style="flex:2" disabled>
+        Agree and continue
+        <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="portal.js"></script>
@@ -388,6 +429,73 @@ let _selectedFile    = null;
     window.location.href = '/portal/admin'; return;
   }
 
+  // First-login consent gate — accounts created without the signup form
+  // (e.g. invited after a Stripe purchase) have no consent records yet
+  if (await needsConsentGate()) {
+    hideLoader();
+    showConsentModal();
+    return;
+  }
+
+  await initDashboard();
+})();
+
+// ─── Consent Gate ──────────────────────────────────────────────
+const GATED_CONSENT_TYPES = ['terms_of_service', 'privacy_policy', 'app8_overseas_disclosure'];
+
+async function needsConsentGate() {
+  try {
+    const res = await fetch('/api/record-consents', {
+      headers: { 'Authorization': `Bearer ${_currentSession.access_token}` },
+    });
+    if (!res.ok) { console.error('Consent check failed:', res.status); return false; }
+    const { consents } = await res.json();
+    return GATED_CONSENT_TYPES.some(type => !consents.includes(type));
+  } catch (err) {
+    // Fail open: an API outage should not lock clients out of the portal
+    console.error('Consent check error:', err);
+    return false;
+  }
+}
+
+function showConsentModal() {
+  const boxes = ['gateConsentTerms', 'gateConsentPrivacy', 'gateConsentApp8']
+    .map(id => document.getElementById(id));
+  const btn = document.getElementById('gateConsentBtn');
+  boxes.forEach(box => box.addEventListener('change', () => {
+    btn.disabled = !boxes.every(b => b.checked);
+  }));
+  document.getElementById('consentModalOverlay').classList.add('open');
+}
+
+async function handleConsentContinue() {
+  const btn = document.getElementById('gateConsentBtn');
+  const errorEl = document.getElementById('gateConsentError');
+  btn.disabled = true;
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/record-consents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_currentSession.access_token}`,
+      },
+      body: JSON.stringify({ consents: { terms: true, privacy: true, app8: true } }),
+    });
+    if (!res.ok) throw new Error(`Consent record failed: ${res.status}`);
+
+    document.getElementById('consentModalOverlay').classList.remove('open');
+    await initDashboard();
+  } catch (err) {
+    console.error('Consent record error:', err);
+    errorEl.style.display = 'block';
+    btn.disabled = false;
+  }
+}
+
+// ─── Dashboard Init ────────────────────────────────────────────
+async function initDashboard() {
   // Populate nav
   document.getElementById('navUserName').textContent = _currentProfile.full_name;
 
@@ -430,7 +538,7 @@ let _selectedFile    = null;
   checkMessagesUnread();
 
   hideLoader();
-})();
+}
 
 // ─── View Switcher ─────────────────────────────────────────────
 function showClientView(view) {

@@ -1,14 +1,6 @@
 const { createClient } = require('@supabase/supabase-js');
 const { Resend } = require('resend');
-
-const CONSENT_VERSION = '1.0';
-
-const CONSENT_TEXT = {
-  terms_of_service: 'I agree to the Portal Terms of Service',
-  privacy_policy: 'I agree to the Privacy Policy',
-  app8_overseas_disclosure:
-    'I expressly consent to my information being disclosed to overseas service providers (Supabase, USA; Resend, USA), and I acknowledge that APP 8.1 (reasonable steps) will not apply and that I may not be able to seek redress under the Privacy Act if an overseas recipient mishandles my information',
-};
+const { CONSENT_VERSION, CONSENT_TEXT } = require('./_consent-constants');
 
 function escapeHtml(v = '') {
   return String(v)
