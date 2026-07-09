@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>ADM Self-Check (DRAFT) | Ethos AI Governance</title>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" type="image/png" href="assets/logo-icon.png"/>
+  <link rel="apple-touch-icon" href="assets/logo-icon.png"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+
+<!-- DRAFT PAGE — not linked from nav, sitemap, or homepage. Reachable only by direct URL. -->
+<div style="background:#7a1f1f;color:#fff;text-align:center;padding:0.65rem 1rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.02em;position:relative;z-index:999">
+  DRAFT — not yet live. Pricing to be confirmed.
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-icon.png" class="nav-logo-icon" alt="Ethos AI Governance logo" width="40" height="40"/>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-brand">ETHOS</span>
+        <span class="nav-logo-tagline">AI Governance</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" data-page="home">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="/services" data-page="services">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
+        <div class="nav-dropdown">
+          <a href="/services#free-audit">Free Audit</a>
+          <a href="/services#compare-tiers">Compare Tiers</a>
+          <a href="/services#iso-42001">ISO 42001</a>
+        </div>
+      </li>
+      <li><a href="/about" data-page="about">About</a></li>
+      <li><a href="/regulatory" data-page="regulatory">Regulatory Landscape</a></li>
+      <li><a href="/resources" data-page="resources">Resources</a></li>
+      <li><a href="/faq" data-page="faq">FAQ</a></li>
+      <li><a href="/contact" data-page="contact">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
+    </ul>
+    <a href="/free-audit" class="btn-nav">Get Free Audit</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <ul>
+    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
+    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
+    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
+    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
+    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
+  </ul>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+</div>
+
+<main>
+<div class="page active" id="page-adm-self-check">
+
+  <!-- HERO -->
+  <section class="page-hero page-hero-short">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">ADM Self-Check</div>
+      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">Does the new automated decision-making rule apply to you?</h1>
+      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">A five-minute self-check.</p>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <p class="svc-body" data-aos="fade-up">From 10 December 2026, Australian Privacy Principles 1.7 to 1.9 will require organisations covered by the Privacy Act to include specified information in their privacy policy where a computer program makes, or does something substantially and directly related to making, decisions that could reasonably be expected to significantly affect an individual's rights or interests, and personal information is used in the operation of the program.</p>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="40">The obligation catches more than AI. Rules-based software, scoring engines and eligibility checkers can all qualify. It also catches less than the headlines suggest: it is a privacy-policy disclosure requirement, not a right to human review of individual decisions.</p>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="80">Answer the ten questions below about your own operations. Your result gives an indicative view of whether you are likely to need to act, and what the sensible next step is.</p>
+
+      <div class="auth-error" style="display:flex;align-items:flex-start;gap:0.6rem;margin:1.5rem 0;padding:1rem 1.25rem;border-radius:8px" data-aos="fade-up" data-aos-delay="100">
+        <span class="material-symbols-outlined" style="font-size:1.1rem">info</span>
+        <span><strong>This self-check is a general guide, not legal advice and not a compliance determination.</strong> Ethos provides governance consulting, not legal advice. The scoring is indicative only; borderline cases turn on details a questionnaire cannot capture.</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!--
+    TODO-LEGAL: the scoring logic and question set below are indicative only.
+    Thresholds, weighting and the exact wording of each question and result tier
+    must be legally reviewed before this self-check goes live, alongside the
+    standard guarantee and disclaimer review. See offer-pages.md section 2d,
+    "Build note for Mike".
+  -->
+
+  <!-- QUESTIONNAIRE -->
+  <section class="services-section">
+    <div class="container" style="max-width:760px">
+      <h2 class="svc-heading" data-aos="fade-up">The questions</h2>
+      <form id="admSelfCheckForm" style="margin-top:1.5rem">
+
+        <div class="self-check-q" data-q="1" data-weight="gate" data-aos="fade-up">
+          <p><strong>1.</strong> Is your organisation covered by the Privacy Act? <em>(Broadly: annual turnover above $3 million, or you trade in personal information, hold a Commonwealth contract or another exception to the small-business exemption applies.)</em></p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q1" value="yes"/> Yes</label>
+            <label><input type="radio" name="q1" value="no"/> No</label>
+            <label><input type="radio" name="q1" value="unsure"/> Unsure</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="2" data-weight="scope" data-aos="fade-up">
+          <p><strong>2.</strong> Does any software in your business make decisions about individual people, such as approving, declining, ranking, scoring or prioritising them?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q2" value="yes"/> Yes</label>
+            <label><input type="radio" name="q2" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="3" data-weight="scope" data-aos="fade-up">
+          <p><strong>3.</strong> Does any software produce recommendations, scores or assessments that a staff member then relies on when deciding about an individual?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q3" value="yes"/> Yes</label>
+            <label><input type="radio" name="q3" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="4" data-weight="scope" data-aos="fade-up">
+          <p><strong>4.</strong> Do any of these decisions affect what a person can access, receive or do: for example credit, pricing, employment, insurance, housing, benefits, account access or service eligibility?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q4" value="yes"/> Yes</label>
+            <label><input type="radio" name="q4" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="5" data-weight="scope" data-aos="fade-up">
+          <p><strong>5.</strong> Is personal information about the individual used anywhere in how the software reaches its output?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q5" value="yes"/> Yes</label>
+            <label><input type="radio" name="q5" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="6" data-weight="scope" data-aos="fade-up">
+          <p><strong>6.</strong> Could an individual reasonably consider one of these decisions significant to their rights or interests, judged from their side of the transaction rather than yours?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q6" value="yes"/> Yes</label>
+            <label><input type="radio" name="q6" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="7" data-weight="nextstep" data-aos="fade-up">
+          <p><strong>7.</strong> Do you sell software or AI products that make or shape decisions like these for your clients' end users?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q7" value="yes"/> Yes</label>
+            <label><input type="radio" name="q7" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="8" data-weight="nextstep" data-aos="fade-up">
+          <p><strong>8.</strong> Does your current privacy policy say anything at all about automated decision-making?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q8" value="yes"/> Yes</label>
+            <label><input type="radio" name="q8" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="9" data-weight="nextstep" data-aos="fade-up">
+          <p><strong>9.</strong> Do you have a written list of where automated decisions happen across your business?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q9" value="yes"/> Yes</label>
+            <label><input type="radio" name="q9" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div class="self-check-q" data-q="10" data-weight="nextstep" data-aos="fade-up">
+          <p><strong>10.</strong> Has anyone in your organisation been assigned responsibility for the 10 December 2026 change?</p>
+          <div class="self-check-options">
+            <label><input type="radio" name="q10" value="yes"/> Yes</label>
+            <label><input type="radio" name="q10" value="no"/> No</label>
+          </div>
+        </div>
+
+        <div style="margin-top:2rem" data-aos="fade-up">
+          <button type="submit" class="btn-primary btn-lg">See my result</button>
+          <p id="admSelfCheckError" style="display:none;color:#b3261e;font-size:0.85rem;margin-top:0.75rem">Please answer all ten questions before seeing your result.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="services-section" id="admSelfCheckResultSection" style="display:none">
+    <div class="container" style="max-width:760px">
+      <div class="guarantee-card" id="admSelfCheckResultCard"></div>
+      <p style="font-size:0.85rem;color:var(--muted);margin-top:1.5rem">This result is indicative only. Ethos provides governance consulting, not legal advice.</p>
+    </div>
+  </section>
+
+  <div class="svc-disclaimer">
+    <div class="container">
+      <p>Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/logo-icon-white.png" class="footer-logo-icon" alt="Ethos AI Governance logo" width="38" height="38"/>
+            <span class="footer-logo-wordmark">
+              <span class="footer-logo-brand">ETHOS</span>
+              <span class="footer-logo-tagline">AI Governance</span>
+            </span>
+          </div>
+          <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/regulatory">Regulatory Landscape</a>
+          <a href="/resources">Resources</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Ethos AI Governance. All rights reserved.</p>
+        <p>ABN 49 548 860 916 &middot; <a href="mailto:hello@ethosaigovernance.com.au">hello@ethosaigovernance.com.au</a></p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-adm-self-check -->
+</main>
+
+<style>
+  .self-check-q { padding: 1.1rem 0; border-bottom: 1px solid var(--border); }
+  .self-check-q p { font-size: 0.98rem; line-height: 1.5; margin-bottom: 0.6rem; }
+  .self-check-options { display: flex; gap: 1.5rem; flex-wrap: wrap; font-size: 0.9rem; }
+  .self-check-options label { display: flex; align-items: center; gap: 0.4rem; cursor: pointer; }
+</style>
+
+<script src="app.js"></script>
+<script>
+  // TODO-LEGAL: this scoring logic is indicative only and has not been legally reviewed.
+  // Thresholds below are a provisional interpretation of offer-pages.md section 2d and
+  // must be confirmed (or replaced) once Mike completes the legal review referenced in
+  // the "Build note for Mike" at the top of that source document.
+  (function () {
+    const form = document.getElementById('admSelfCheckForm');
+    const resultSection = document.getElementById('admSelfCheckResultSection');
+    const resultCard = document.getElementById('admSelfCheckResultCard');
+    const errorEl = document.getElementById('admSelfCheckError');
+
+    const TIER_CONTENT = {
+      inScope: {
+        heading: 'Result: likely in scope',
+        html: `
+          <h4>Your answers suggest the APP 1.7 to 1.9 disclosure obligation is likely to apply to you.</h4>
+          <p>You appear to be an APP entity, software plays a real role in decisions about individuals, personal information is involved and the decisions carry weight. From 10 December 2026, your privacy policy will likely need to include the specified information about this automated decision-making. Since December 2024 the OAIC has held expanded enforcement powers, including compliance notices for non-compliant privacy policies, extending from 10 December 2026 to the APP 1.7 requirement specifically.</p>
+          <p>The work is manageable if approached methodically: inventory the decisions, assess each against the criteria, draft the disclosure. This is indicative guidance, not a legal determination; Ethos provides governance consulting, not legal advice.</p>
+          <p><strong>Next step:</strong> two options, depending on how much of the work you want to do yourself. If your automated decision-making is contained and your team can run the exercise, the APP 1.7 Readiness Pack (ETH-RDY-015, $499 to $799 [PRICE TBC]) gives you the scoping worksheet, documentation records and model privacy-policy wording to do it self-serve. If your decision-making spans multiple systems, sits close to the borderline or needs a documented analysis that will stand up to scrutiny, the <a href="/adm-sprint" style="color:var(--brass)">ADM Transparency Sprint</a> does the work with you in 10 business days for a fixed $1,490 [PRICE TBC]: inventory workshop, in-scope analysis, drafted wording and a compliance memo. Pack buyers who upgrade have the pack price credited toward the sprint.</p>
+        `
+      },
+      possible: {
+        heading: 'Result: possibly in scope',
+        html: `
+          <h4>Your answers put you in the grey zone. Some factors point toward the obligation applying; others are unclear or borderline.</h4>
+          <p>Common reasons organisations land here: uncertainty about Privacy Act coverage, software that recommends rather than decides, or genuine doubt about whether a decision "significantly affects" someone's rights or interests. These are exactly the questions the legislation makes turn on your specific facts, and a questionnaire cannot resolve them for you. What the grey zone should not become is a reason to do nothing until December 2026 forces a rushed answer.</p>
+          <p>This result is indicative only. Ethos provides governance consulting, not legal advice.</p>
+          <p><strong>Next step:</strong> a documented inventory of your automated decision-making is the fastest way out of the grey zone, because it converts "possibly" into a reasoned position you can stand behind. The APP 1.7 Readiness Pack (ETH-RDY-015, $499 to $799 [PRICE TBC]) is built for exactly this: a self-serve scoping worksheet and documentation records that walk you through the analysis at your own pace, with the pack price credited toward the <a href="/adm-sprint" style="color:var(--brass)">ADM Transparency Sprint</a> ($1,490 [PRICE TBC]) if you later want the work done with you. If you would rather test the water first, book a 20-minute scoping call at no cost.</p>
+        `
+      },
+      outScope: {
+        heading: 'Result: likely out of scope',
+        html: `
+          <h4>Your answers suggest the APP 1.7 to 1.9 disclosure obligation is unlikely to apply to you today.</h4>
+          <p>Either the Privacy Act does not appear to cover your organisation, or software does not play a meaningful role in decisions about individuals in your operations. Two cautions before you file this away. First, the position changes as you grow: crossing the $3 million turnover threshold, winning a Commonwealth contract or adding an automated decision point can each bring you into scope, and the obligation applies to decisions made on or after 10 December 2026 regardless of when the arrangement was put in place. Second, this self-check is indicative only and is not legal advice; Ethos provides governance consulting, not legal advice.</p>
+          <p><strong>Next step:</strong> no purchase is needed. Diarise a re-check for any material change in turnover, contracts or systems, and follow the Ethos coverage of the December 2026 change so you notice if your position shifts; the free checklist and explainer content cover what to watch for. If you build and sell AI products, your clients may face this obligation even where you do not, and being able to hand them the information they need is a commercial advantage: the free Ethos AI Governance Audit (3 slots per month) is the place to start.</p>
+        `
+      }
+    };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const data = new FormData(form);
+      const answers = {};
+      for (let i = 1; i <= 10; i++) {
+        const v = data.get('q' + i);
+        if (!v) {
+          errorEl.style.display = 'block';
+          return;
+        }
+        answers['q' + i] = v;
+      }
+      errorEl.style.display = 'none';
+
+      // Q1 gates the obligation entirely.
+      if (answers.q1 === 'no') {
+        renderResult('outScope');
+        return;
+      }
+
+      // Q2–Q6 drive scope: count "yes" answers.
+      const scopeQs = ['q2', 'q3', 'q4', 'q5', 'q6'];
+      const scopeYesCount = scopeQs.filter((q) => answers[q] === 'yes').length;
+
+      let tier;
+      if (answers.q1 === 'yes' && scopeYesCount >= 4) {
+        tier = 'inScope';
+      } else if (answers.q1 === 'unsure' || (scopeYesCount >= 1 && scopeYesCount <= 3)) {
+        tier = 'possible';
+      } else {
+        tier = 'outScope';
+      }
+
+      renderResult(tier);
+    });
+
+    function renderResult(tier) {
+      const t = TIER_CONTENT[tier];
+      resultCard.innerHTML = '<h4>' + t.heading + '</h4>' + t.html;
+      resultSection.style.display = 'block';
+      resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  })();
+</script>
+</body>
+</html>

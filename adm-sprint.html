@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>ADM Transparency Sprint (DRAFT) | Ethos AI Governance</title>
+  <meta name="robots" content="noindex, nofollow"/>
+
+  <link rel="icon" type="image/png" href="assets/logo-icon.png"/>
+  <link rel="apple-touch-icon" href="assets/logo-icon.png"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+</head>
+<body>
+
+<!-- DRAFT PAGE — not linked from nav, sitemap, or homepage. Reachable only by direct URL. -->
+<div style="background:#7a1f1f;color:#fff;text-align:center;padding:0.65rem 1rem;font-family:'Inter',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.02em;position:relative;z-index:999">
+  DRAFT — not yet live. Pricing to be confirmed.
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="assets/logo-icon.png" class="nav-logo-icon" alt="Ethos AI Governance logo" width="40" height="40"/>
+      <span class="nav-logo-wordmark">
+        <span class="nav-logo-brand">ETHOS</span>
+        <span class="nav-logo-tagline">AI Governance</span>
+      </span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" data-page="home">Home</a></li>
+      <li class="nav-has-dropdown">
+        <a href="/services" data-page="services">Services <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">expand_more</span></a>
+        <div class="nav-dropdown">
+          <a href="/services#free-audit">Free Audit</a>
+          <a href="/services#compare-tiers">Compare Tiers</a>
+          <a href="/services#iso-42001">ISO 42001</a>
+        </div>
+      </li>
+      <li><a href="/about" data-page="about">About</a></li>
+      <li><a href="/regulatory" data-page="regulatory">Regulatory Landscape</a></li>
+      <li><a href="/resources" data-page="resources">Resources</a></li>
+      <li><a href="/faq" data-page="faq">FAQ</a></li>
+      <li><a href="/contact" data-page="contact">Contact</a></li>
+      <li><a href="/portal/login" class="nav-portal-link">
+        <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle;margin-right:3px">lock</span>Client Portal
+      </a></li>
+    </ul>
+    <a href="/free-audit" class="btn-nav">Get Free Audit</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+  <ul>
+    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
+    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
+    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
+    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
+    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
+    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
+    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/portal/login">Client Portal</a></li>
+  </ul>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+</div>
+
+<main>
+<div class="page active" id="page-adm-sprint">
+
+  <!-- HERO -->
+  <section class="page-hero page-hero-short">
+    <div class="container">
+      <div class="section-label" data-aos="fade-up">ADM Transparency Sprint</div>
+      <h1 class="page-hero-h1" data-aos="fade-up" data-aos-delay="60">From 10 December 2026, your privacy policy has homework.</h1>
+      <p class="page-hero-sub" data-aos="fade-up" data-aos-delay="100">$1,490 [PRICE TBC] &middot; 10 business days</p>
+    </div>
+  </section>
+
+  <!-- HOOK -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <p class="svc-body" data-aos="fade-up">If a computer program makes decisions about individuals in your business, or does something substantially and directly related to making them, and those decisions could reasonably be expected to significantly affect a person's rights or interests, the Privacy Act will require your privacy policy to say so. That is the effect of Australian Privacy Principles 1.7 to 1.9, introduced by the Privacy and Other Legislation Amendment Act 2024 and commencing 10 December 2026.</p>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="40">The obligation is narrower than most commentary suggests. It is a privacy-policy disclosure requirement, not a right to human review of individual decisions. But it comes with real teeth: since December 2024 the OAIC holds expanded enforcement powers, including the ability to issue compliance notices for administrative breaches such as a non-compliant privacy policy, and from 10 December 2026 that power extends to a failure to meet the APP 1.7 transparency requirement specifically.</p>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="80">The hard part is not the drafting. It is working out which of your automated decisions are actually caught. The ADM Transparency Sprint answers that question and produces the disclosure wording, in 10 business days.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- WHO FOR / NOT FOR -->
+  <section class="services-section">
+    <div class="container" style="max-width:900px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2.5rem" class="offer-grid-2col">
+        <div data-aos="fade-right">
+          <h2 class="svc-heading" style="font-size:1.4rem">Who it is for</h2>
+          <ul class="svc-list">
+            <li><span class="material-symbols-outlined svc-check">check_circle</span>Australian organisations covered by the Privacy Act (APP entities) that use automated decision-making anywhere in their operations: eligibility checks, pricing, credit or risk scoring, application triage, account decisions, content or claim assessments.</li>
+            <li><span class="material-symbols-outlined svc-check">check_circle</span>AI vendors whose products make or shape decisions about individuals, and who want their own house in order before clients start asking.</li>
+            <li><span class="material-symbols-outlined svc-check">check_circle</span>Compliance leads who need a defensible written record of how the in-scope analysis was done, not just a paragraph pasted into a policy.</li>
+          </ul>
+          <p style="font-size:0.9rem;color:var(--muted);margin-top:1rem">This offer is deliberately open to any Australian APP entity using automated decision-making. You do not need to be an AI company; the obligation attaches to computer-program decision-making generally, of which AI is only one form.</p>
+        </div>
+        <div data-aos="fade-left">
+          <h2 class="svc-heading" style="font-size:1.4rem">Who it is not for</h2>
+          <ul class="svc-list">
+            <li><span class="material-symbols-outlined" style="color:var(--muted)">remove_circle</span>Organisations not covered by the Privacy Act and with no plans to be (for many small businesses, coverage begins once annual turnover exceeds $3 million or an exception to the small-business exemption applies).</li>
+            <li><span class="material-symbols-outlined" style="color:var(--muted)">remove_circle</span>Organisations that make no automated or partially automated decisions about individuals. The free ADM self-check will tell you in five minutes.</li>
+            <li><span class="material-symbols-outlined" style="color:var(--muted)">remove_circle</span>Anyone seeking legal advice on a contested question of Privacy Act interpretation. Ethos provides governance consulting, not legal advice; where a genuinely contestable legal question surfaces, we will say so and recommend you put it to your lawyer.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- WHAT YOU RECEIVE -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <h2 class="svc-heading" data-aos="fade-up">What you receive</h2>
+      <ol style="font-size:1rem;line-height:1.8;color:var(--ink,#1a1a1a)" data-aos="fade-up" data-aos-delay="40">
+        <li><strong>ADM inventory workshop.</strong> A structured working session that walks your team through every point where a computer program makes, or substantially and directly contributes to, a decision about an individual. Output: a documented ADM inventory.</li>
+        <li><strong>In-scope analysis.</strong> Each inventoried decision assessed against the APP 1.7 to 1.9 criteria: is personal information used in the operation of the program, and could the decision reasonably be expected to significantly affect an individual's rights or interests. Output: a decision-by-decision assessment with reasoning recorded.</li>
+        <li><strong>Drafted privacy-policy disclosure wording.</strong> The specified information for your in-scope decisions, drafted in plain language and ready for your privacy policy, structured so your lawyer can review and adopt it efficiently.</li>
+        <li><strong>Compliance memo.</strong> A short written memo recording the methodology, the inventory, the in-scope conclusions and the recommended next steps, so the analysis survives staff turnover and stands up when a client, board or regulator asks how you reached your position.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <h2 class="svc-heading" data-aos="fade-up">How it works</h2>
+      <ol style="font-size:1rem;line-height:1.8;color:var(--ink,#1a1a1a)" data-aos="fade-up" data-aos-delay="40">
+        <li><strong>Day 1 to 2: intake.</strong> You complete a short intake questionnaire and supply your current privacy policy and a description of your systems. No document preparation beyond what already exists.</li>
+        <li><strong>Day 3 to 5: inventory workshop.</strong> One facilitated session (remote, approximately 90 minutes) with the people who know your systems.</li>
+        <li><strong>Day 6 to 9: analysis and drafting.</strong> Ethos completes the in-scope analysis, drafts the disclosure wording and prepares the memo.</li>
+        <li><strong>Day 10: delivery and walkthrough.</strong> All deliverables handed over with a 30-minute walkthrough call and a clear list of what to do next.</li>
+      </ol>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- PRICE & GUARANTEE -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <div class="guarantee-card" data-aos="fade-up">
+        <h4>Price and guarantee</h4>
+        <p><strong>$1,490 [PRICE TBC], fixed.</strong> No hourly billing, no scope surprises.</p>
+        <p>If we do not deliver the complete set of deliverables within 10 business days of your intake being finalised, we refund the purchase price in full. The guarantee is a refund of the fee paid; it is not a promise of compliance or of any legal or regulatory outcome, which no consultant can properly give.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHERE THIS SITS -->
+  <section class="services-section">
+    <div class="container" style="max-width:820px">
+      <h2 class="svc-heading" data-aos="fade-up">Where this sits</h2>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="40">The sprint is the done-with-you middle rung of the Ethos ladder for the December 2026 obligation. Below it sits the ETH-RDY-015 APP 1.7 Readiness Pack ($499 to $799 [PRICE TBC]), a self-serve document pack for teams comfortable running the scoping and drafting themselves; the pack price is credited toward the sprint fee if you later want the work done with you. Above it, the Full Responsible AI Toolkit ($1,699) addresses your governance documentation as a whole rather than this single obligation.</p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container">
+      <div class="section-label" style="text-align:center" data-aos="fade-up">Questions</div>
+      <h2 class="svc-heading" style="text-align:center" data-aos="fade-up" data-aos-delay="40">Frequently Asked Questions</h2>
+      <div class="faq-list" id="faqList" style="margin-top:2rem">
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="40">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+            <span>Does APP 1.7 give individuals a right to human review of automated decisions?</span>
+            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+          </button>
+          <div class="faq-answer">
+            <p>No. This is the most common misreading. The obligation commencing 10 December 2026 is a transparency requirement: specified information must appear in your privacy policy where the criteria are met. It is not a GDPR-style right to human review or to an explanation of a specific decision. The sprint deals with the obligation as it is actually drafted.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="60">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+            <span>We only use AI in one small workflow. Is this still relevant?</span>
+            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+          </button>
+          <div class="faq-answer">
+            <p>Possibly, and possibly not because of the AI. APPs 1.7 to 1.9 apply to decisions made or substantially shaped by computer programs generally, including conventional rules-based software. The inventory workshop covers your automated decision-making as a whole, not just the AI.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="80">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+            <span>What if the sprint concludes that nothing we do is in scope?</span>
+            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+          </button>
+          <div class="faq-answer">
+            <p>Then you receive exactly that conclusion, documented in the compliance memo with the reasoning recorded. A written, methodical "out of scope" position is a valuable artefact in itself: it is the difference between an answer and a shrug when someone asks.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="100">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+            <span>Is the disclosure wording legal advice?</span>
+            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Ethos provides governance consulting, not legal advice. The wording is drafted to be review-ready for your legal adviser, and the memo is structured so that review is quick. Many clients find the combination materially cheaper than starting the exercise from a blank page with their lawyers.</p>
+          </div>
+        </div>
+
+        <div class="faq-item" data-aos="fade-up" data-aos-delay="120">
+          <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+            <span>We are an AI vendor. Do our clients' obligations matter here too?</span>
+            <span class="material-symbols-outlined faq-arrow">expand_more</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, and it is worth understanding both sides. If your product makes or shapes decisions about individuals, your deployer clients may have their own APP 1.7 exposure and will increasingly ask you for the information they need to meet it. The sprint covers your own obligations; the compliance memo flags where client-facing documentation is the sensible next step.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CLOSING CTA -->
+  <section class="services-section" style="text-align:center">
+    <div class="container" style="max-width:760px">
+      <h2 class="svc-heading" data-aos="fade-up">The obligation commences 10 December 2026.</h2>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="40">The organisations that handle it well will be the ones that did the inventory work calmly and early, not the ones drafting policy wording in the final week.</p>
+      <p class="svc-body" data-aos="fade-up" data-aos-delay="60">There are three ways to proceed, depending on how much of the work you want to do yourself. If you are unsure whether the obligation applies at all, start with the free five-minute ADM self-check. If you are comfortable running the scoping and drafting in-house, the ETH-RDY-015 APP 1.7 Readiness Pack ($499 to $799 [PRICE TBC]) gives you the explainer, scoping worksheet, documentation records and model privacy-policy wording to do it self-serve. If you want the analysis done with you and the wording drafted for you, book the ADM Transparency Sprint. Pack buyers who later upgrade have the pack price credited toward the sprint fee, so starting small costs nothing extra.</p>
+      <div style="margin-top:1.5rem" data-aos="fade-up" data-aos-delay="80">
+        <a href="/contact" class="btn-primary btn-lg">Enquire About the ADM Transparency Sprint</a>
+        <p style="font-size:0.85rem;color:var(--muted);margin-top:0.75rem">Payment is not yet enabled for this offer. Enquiries go to the Ethos contact form.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="svc-disclaimer">
+    <div class="container">
+      <p>Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo-wrap">
+            <img src="assets/logo-icon-white.png" class="footer-logo-icon" alt="Ethos AI Governance logo" width="38" height="38"/>
+            <span class="footer-logo-wordmark">
+              <span class="footer-logo-brand">ETHOS</span>
+              <span class="footer-logo-tagline">AI Governance</span>
+            </span>
+          </div>
+          <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal counsel where required.</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="/">Home</a>
+          <a href="/services">Services</a>
+          <a href="/about">About</a>
+          <a href="/regulatory">Regulatory Landscape</a>
+          <a href="/resources">Resources</a>
+          <a href="/faq">FAQ</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Ethos AI Governance. All rights reserved.</p>
+        <p>ABN 49 548 860 916 &middot; <a href="mailto:hello@ethosaigovernance.com.au">hello@ethosaigovernance.com.au</a></p>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /page-adm-sprint -->
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
