@@ -118,33 +118,54 @@ module.exports = async function handler(req, res) {
       </div>
     `;
 
-    const emailRes = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
-        to:      [checkout.customer_email],
-        subject: 'Your AI governance documents are ready whenever you are',
-        html,
+    // Claim the row before sending, so an overlapping run (a cron retry or a
+    // manual trigger) cannot email the same checkout twice. Only the run whose
+    // conditional update changes the row sends; a failed send releases it.
+    const { data: claimed, error: claimError } = await supabase
+      .from('abandoned_checkouts')
+      .update({ recovery_email_sent_at: new Date().toISOString() })
+      .eq('id', checkout.id)
+      .is('recovery_email_sent_at', null)
+      .select('id');
+    if (claimError || !claimed?.length) {
+      if (claimError) console.error(`[recovery] Could not claim checkout ${checkout.id}:`, claimError.message);
+      continue;
+    }
+    const release = () => supabase
+      .from('abandoned_checkouts')
+      .update({ recovery_email_sent_at: null })
+      .eq('id', checkout.id);
+
+    let emailRes;
+    try {
+      emailRes = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
         headers: {
-          'List-Unsubscribe': `<${unsubscribeUrl}>`,
-          'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+          // Resend drops a repeat of the same key within 24 hours.
+          'Idempotency-Key': `recovery-${checkout.id}`,
         },
-      }),
-    });
+        body: JSON.stringify({
+          from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+          to:      [checkout.customer_email],
+          subject: 'Your AI governance documents are ready whenever you are',
+          html,
+          headers: {
+            'List-Unsubscribe': `<${unsubscribeUrl}>`,
+            'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+          },
+        }),
+      });
+    } catch {
+      emailRes = { ok: false, status: 'network error' };
+    }
 
     if (emailRes.ok) {
-      await supabase
-        .from('abandoned_checkouts')
-        .update({ recovery_email_sent_at: new Date().toISOString() })
-        .eq('id', checkout.id);
-
       sentCount++;
       console.log(`[recovery] Sent recovery email for checkout ${checkout.id}`);
     } else {
+      await release();
       console.error(`[recovery] Failed to send for checkout ${checkout.id}:`, emailRes.status);
     }
   }
