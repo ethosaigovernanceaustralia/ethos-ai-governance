@@ -4,6 +4,8 @@
   "app.js",
   "assets/Ethosemailsignature.png",
   "assets/favicon.svg",
+  "assets/logo-icon-120.png",
+  "assets/logo-icon-white-120.png",
   "assets/logo-icon-white.png",
   "assets/logo-icon-white.svg",
   "assets/logo-icon.png",
@@ -42,5 +44,6 @@
   "sitemap.xml",
   "styles.css",
   "success-page.js",
-  "success.html"
+  "success.html",
+  "vendor/aos-2.3.4.css"
 ]

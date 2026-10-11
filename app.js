@@ -305,6 +305,10 @@ function initBentoTilt() {
 // ─── GSAP Hero Animation (home only) ─────────────
 function initGSAPHero() {
   if (typeof gsap === 'undefined' || REDUCED_MOTION) return;
+  // GSAP is deferred, so on a slow connection the hero is already on screen
+  // before this runs. Replaying the entrance then would hide and re-show it;
+  // only animate when the page became ready quickly.
+  if (performance.now() > 1500) return;
 
   gsap.registerPlugin(ScrollTrigger);
 
