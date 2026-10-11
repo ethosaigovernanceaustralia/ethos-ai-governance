@@ -16,7 +16,8 @@
   <meta property="og:url" content="https://ethosaigovernance.com.au/resources"/>
   <meta property="og:title" content="AI Governance Reference Library | Ethos AI Governance"/>
   <meta property="og:description" content="Curated reference library of key Australian AI regulatory documents, government guidance, and external bodies relevant to AI governance for AI vendors."/>
-  <meta property="og:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta property="og:image" content="https://ethosaigovernance.com.au/assets/og-social-card.png"/>
+  <meta property="og:image:type" content="image/png"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:image:alt" content="Ethos AI Governance: AI Governance for Australian AI Vendors"/>
@@ -26,7 +27,7 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="AI Governance Reference Library | Ethos AI Governance"/>
   <meta name="twitter:description" content="Curated reference library of key Australian AI regulatory documents, government guidance, and external bodies relevant to AI governance for AI vendors."/>
-  <meta name="twitter:image" content="https://ethosaigovernance.com.au/assets/og-social-card.svg"/>
+  <meta name="twitter:image" content="https://ethosaigovernance.com.au/assets/og-social-card.png"/>
   <meta name="twitter:image:alt" content="Ethos AI Governance: AI Governance for Australian AI Vendors"/>
 
   <link rel="stylesheet" href="styles.css"/>
@@ -70,14 +71,14 @@
       </a></li>
     </ul>
     <a href="/services" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu">
+    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
 <!-- Mobile Nav -->
-<div class="mobile-nav" id="mobileNav">
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-label="Site menu">
   <button class="mobile-nav-close" data-on-click="closeMobileNav" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
@@ -192,19 +193,19 @@
       <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Key External Bodies</h2>
       <div class="bodies-grid">
         <div class="body-card" data-aos="fade-up" data-aos-delay="60">
-          <h4>OAIC</h4>
+          <h3>OAIC</h3>
           <p>Office of the Australian Information Commissioner - the primary privacy regulator in Australia.</p>
         </div>
         <div class="body-card" data-aos="fade-up" data-aos-delay="100">
-          <h4>Australian AI Safety Institute</h4>
+          <h3>Australian AI Safety Institute</h3>
           <p>AISI - provides risk assessments and guidance on AI safety for high-risk AI systems. Operational from early 2026.</p>
         </div>
         <div class="body-card" data-aos="fade-up" data-aos-delay="140">
-          <h4>ISO</h4>
+          <h3>ISO</h3>
           <p>International Organization for Standardization - publisher of ISO/IEC 42001:2023 and ISO/IEC 27001.</p>
         </div>
         <div class="body-card" data-aos="fade-up" data-aos-delay="180">
-          <h4>Standards Australia</h4>
+          <h3>Standards Australia</h3>
           <p>The peak non-government standards body in Australia. Adopted AS ISO/IEC 42001:2023 in February 2024.</p>
         </div>
       </div>

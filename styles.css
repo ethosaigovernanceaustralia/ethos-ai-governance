@@ -37,6 +37,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
+  overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,7 +48,10 @@ body {
   background-color: var(--paper);
   color: var(--navy);
   line-height: 1.65;
-  overflow-x: hidden;
+  /* Clip sideways overflow (e.g. AOS fade-left elements before they animate)
+     at the body edge so phones do not widen the page. clip, unlike hidden,
+     does not make body a scroll container, so sticky elements still work. */
+  overflow-x: clip;
 }
 
 /* ===== TYPOGRAPHY ===== */
@@ -258,10 +262,11 @@ img { display: block; max-width: 100%; }
   flex-direction: column;
   padding: 2rem;
   transform: translateX(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.4s;
 }
 
-.mobile-nav.open { transform: translateX(0); }
+.mobile-nav.open { transform: translateX(0); visibility: visible; transition-delay: 0s; }
 
 .mobile-nav-close {
   align-self: flex-end;
@@ -2918,7 +2923,7 @@ img { display: block; max-width: 100%; }
   border-color: rgba(168,131,58,0.2);
 }
 
-.body-card h4 {
+.body-card h3 {
   font-weight: 700;
   color: var(--navy);
   margin-bottom: 0.625rem;
@@ -3826,7 +3831,7 @@ img { display: block; max-width: 100%; }
   background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 100%);
 }
 
-.contact-path-featured .contact-path-header h3 {
+.contact-path-featured .contact-path-header h2 {
   color: var(--white);
 }
 
@@ -3845,7 +3850,7 @@ img { display: block; max-width: 100%; }
   margin-bottom: 0.875rem;
 }
 
-.contact-path-header h3 {
+.contact-path-header h2 {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--navy);
