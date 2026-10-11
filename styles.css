@@ -5792,6 +5792,8 @@ img { display: block; max-width: 100%; }
   overflow-y: auto;
 }
 .booking-overlay.open { opacity: 1; }
+/* display:flex above overrides the hidden attribute; without this the closed overlay blocks every click */
+.booking-overlay[hidden] { display: none; }
 
 .booking-modal {
   position: relative;

@@ -1,26 +1,76 @@
 {
   "rewrites": [
-    { "source": "/free-audit",            "destination": "/free-audit.html" },
-    { "source": "/legal/terms",           "destination": "/legal-terms.html" },
-    { "source": "/legal/privacy",         "destination": "/legal-privacy.html" },
-    { "source": "/privacy",               "destination": "/legal-privacy.html" },
-    { "source": "/terms",                 "destination": "/legal-terms.html" },
-    { "source": "/services",              "destination": "/services.html" },
-    { "source": "/about",                 "destination": "/about.html" },
-    { "source": "/regulatory",            "destination": "/regulatory.html" },
-    { "source": "/resources",             "destination": "/resources.html" },
-    { "source": "/faq",                   "destination": "/faq.html" },
-    { "source": "/contact",               "destination": "/contact.html" },
-    { "source": "/portal/login",          "destination": "/portal/login.html" },
-    { "source": "/portal/dashboard",      "destination": "/portal/dashboard.html" },
-    { "source": "/portal/admin",          "destination": "/portal/admin.html" },
-    { "source": "/portal/reset-password", "destination": "/portal/reset-password.html" },
-    { "source": "/success",               "destination": "/success.html" }
+    {
+      "source": "/free-audit",
+      "destination": "/free-audit.html"
+    },
+    {
+      "source": "/legal/terms",
+      "destination": "/portal/terms.html"
+    },
+    {
+      "source": "/legal/privacy",
+      "destination": "/portal/privacy.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/portal/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/portal/terms.html"
+    },
+    {
+      "source": "/services",
+      "destination": "/services.html"
+    },
+    {
+      "source": "/about",
+      "destination": "/about.html"
+    },
+    {
+      "source": "/regulatory",
+      "destination": "/regulatory.html"
+    },
+    {
+      "source": "/resources",
+      "destination": "/resources.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/portal/login",
+      "destination": "/portal/login.html"
+    },
+    {
+      "source": "/portal/dashboard",
+      "destination": "/portal/dashboard.html"
+    },
+    {
+      "source": "/portal/admin",
+      "destination": "/portal/admin.html"
+    },
+    {
+      "source": "/portal/reset-password",
+      "destination": "/portal/reset-password.html"
+    },
+    {
+      "source": "/success",
+      "destination": "/success.html"
+    }
   ],
   "crons": [
     {
       "path": "/api/send-recovery-emails",
       "schedule": "0 1 * * *"
     }
-  ]
+  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist"
 }

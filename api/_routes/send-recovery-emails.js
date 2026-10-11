@@ -9,26 +9,26 @@
 
 const { createClient } = require('@supabase/supabase-js');
 const { unsubscribeToken } = require('./unsubscribe');
+const { escapeHtml } = require('../../lib/html');
+const { missingEnvironment } = require('../../lib/environment');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Verify the Vercel cron secret (set CRON_SECRET in Vercel env vars)
+  // Deny before constructing clients or reading any data if configuration is absent.
   const cronSecret = process.env.CRON_SECRET;
-  if (cronSecret) {
-    const authHeader = req.headers['authorization'] || '';
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
+  if (missingEnvironment(['CRON_SECRET']).length) {
+    return res.status(503).json({ error: 'Recovery service not configured' });
   }
-
+  if (req.headers.authorization !== `Bearer ${cronSecret}`) {
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+  if (missingEnvironment(['SUPABASE_URL', 'SUPABASE_SECRET_KEY', 'RESEND_API_KEY']).length) {
+    return res.status(503).json({ error: 'Recovery service not configured' });
+  }
   const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  if (!RESEND_API_KEY) {
-    console.error('[recovery] RESEND_API_KEY not configured');
-    return res.status(500).json({ error: 'RESEND_API_KEY not configured' });
-  }
 
   const supabase = createClient(
     process.env.SUPABASE_URL,
@@ -95,7 +95,7 @@ module.exports = async function handler(req, res) {
           <p style="font-size:15px;color:#111827;margin-top:0">Hi,</p>
           <p style="font-size:15px;color:#111827">
             You started setting up your AI governance framework with our
-            <strong>${productName}</strong> but didn't complete checkout.
+            <strong>${escapeHtml(productName)}</strong> but didn't complete checkout.
           </p>
           <p style="font-size:14px;color:#374151">
             Your governance documents are ready whenever you are.
@@ -113,7 +113,7 @@ module.exports = async function handler(req, res) {
         </div>
         <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:16px">
           Ethos AI Governance · ethosaigovernance.com.au<br/>
-          <a href="${unsubscribeUrl}" style="color:#9ca3af">Unsubscribe from checkout reminders</a>
+          <a href="${escapeHtml(unsubscribeUrl)}" style="color:#9ca3af">Unsubscribe from checkout reminders</a>
         </p>
       </div>
     `;

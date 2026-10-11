@@ -406,7 +406,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="portal.js"></script>
+<script src="actions.js"></script>
 <script>
+registerPortalActions({ downloadDocument, downloadTemplate, handleDeleteDoc });
 let _currentSession  = null;
 let _currentProfile  = null;
 let _currentEngagement = null;
@@ -693,7 +695,7 @@ async function handleClientCompleteAction(id) {
   updateActionItemsBadge(_actionItems);
   showToast('Marked as complete.', 'success');
   // Notify admin
-  sendNotification('action_item_completed', _currentProfile.id, { title: item?.title });
+  sendNotification('action_item_completed', _currentProfile.id, id);
 }
 
 // ─── Progress Tracker ──────────────────────────────────────────
@@ -889,9 +891,9 @@ function renderDocList(containerId, docs, showDelete) {
   el.innerHTML = docs.map(doc => {
     const ext = (doc.file_name || '').split('.').pop().toLowerCase();
     const fileTypeLabel = (ext === 'doc' || ext === 'docx') ? 'DOC' : 'PDF';
-    const downloadOnclick = doc._isTemplate
-      ? `downloadTemplate('${doc._templateId}','${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`
-      : `downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`;
+    const downloadAction = doc._isTemplate
+      ? portalAction('downloadTemplate', doc._templateId, doc.file_path, doc.file_name)
+      : portalAction('downloadDocument', doc.file_path, doc.file_name);
     return `
     <div class="file-item">
       <div class="file-icon">${fileTypeLabel}</div>
@@ -907,10 +909,10 @@ function renderDocList(containerId, docs, showDelete) {
         ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
       </div>
       <div class="file-actions">
-        <button class="file-action-btn" onclick="${downloadOnclick}" title="Download">
+        <button class="file-action-btn" ${downloadAction} title="Download">
           <span class="material-symbols-outlined">download</span>
         </button>
-        ${showDelete ? `<button class="file-action-btn delete" onclick="handleDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+        ${showDelete ? `<button class="file-action-btn delete" ${portalAction('handleDeleteDoc', doc.id, doc.file_path)} title="Delete">
           <span class="material-symbols-outlined">delete</span>
         </button>` : ''}
       </div>
@@ -981,7 +983,7 @@ async function handleUpload() {
   document.getElementById('uploadProgress').classList.add('visible');
 
   try {
-    await uploadDocument(
+    const uploadedDoc = await uploadDocument(
       _selectedFile,
       _currentEngagement.id,
       _currentProfile.id,
@@ -1000,7 +1002,7 @@ async function handleUpload() {
     const key = DOC_NOTIF_KEY();
     const last = parseInt(localStorage.getItem(key) || '0', 10);
     if (Date.now() - last > 30 * 60 * 1000) {
-      sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+      sendNotification('document_uploaded_by_client', _currentProfile.id, uploadedDoc?.id);
       localStorage.setItem(key, String(Date.now()));
     }
   } catch (err) {
@@ -1132,7 +1134,7 @@ function renderMessageBubble(msg) {
   }
   if (msg.document_id && msg._doc_file_name) {
     bodyHtml += `
-      <div class="chat-file-attachment" onclick="downloadDocument('${escHtml(msg._doc_file_path || '')}', '${escHtml(msg._doc_file_name || '')}')">
+      <div class="chat-file-attachment" ${portalAction('downloadDocument', msg._doc_file_path || '', msg._doc_file_name || '')}>
         <span class="material-symbols-outlined">picture_as_pdf</span>
         <span class="chat-file-name">${escHtml(msg._doc_file_name)}</span>
         <span class="material-symbols-outlined" style="font-size:0.9rem;opacity:0.6">download</span>
@@ -1235,7 +1237,7 @@ async function handleSendMessage() {
       const key = DOC_NOTIF_KEY();
       const last = parseInt(localStorage.getItem(key) || '0', 10);
       if (Date.now() - last > 30 * 60 * 1000) {
-        sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+        sendNotification('document_uploaded_by_client', _currentProfile.id, documentId);
         localStorage.setItem(key, String(Date.now()));
       }
 
@@ -1252,9 +1254,7 @@ async function handleSendMessage() {
     if (!msg) throw new Error('Failed to send message. Please try again.');
 
     // Notify admin
-    sendNotification('new_message_from_client', _currentProfile.id, {
-      preview: body ? body.slice(0, 120) : null,
-    });
+    sendNotification('new_message_from_client', _currentProfile.id, msg.id);
 
     input.value = '';
     input.style.height = 'auto';

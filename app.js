@@ -133,36 +133,43 @@ async function handleFormSubmit(e) {
     additional_notes: (document.getElementById('contactMessage')?.value || '').trim() || null,
   };
 
-  try {
-    await submitEnquiryToSupabase(data);
-  } catch (err) {
-    console.error('Form submission error:', err);
-  }
-
-  fetch('/api/notify-enquiry', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).catch(() => {});
+  const sent = await submitEnquiry(data, e.target);
 
   btn.innerHTML = originalBtnHTML;
   btn.disabled = false;
+  if (!sent) return;
   if (successEl) successEl.style.display = 'flex';
   e.target.reset();
   const counter = document.getElementById('charCountNum');
   if (counter) counter.textContent = '0';
 }
 
-// ─── Supabase Enquiry Submit ──────────────────────
-async function submitEnquiryToSupabase(data) {
-  const cfg = window.SUPABASE_CONFIG;
-  if (!cfg || cfg.url.includes('YOUR_PROJECT_REF')) {
-    return new Promise(resolve => setTimeout(resolve, 1200));
+// ─── Enquiry Submit ───────────────────────────────
+// Saves through /api/submit-enquiry, which validates, stores and then notifies.
+// Returns true only once the enquiry is saved; otherwise shows an inline error.
+async function submitEnquiry(data, form) {
+  const previous = form.querySelector('.form-error-inline');
+  if (previous) previous.remove();
+  let message = 'Sorry, your message could not be sent. Please try again, or email hello@ethosaigovernance.com.au.';
+  try {
+    const response = await fetch('/api/submit-enquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) return true;
+    if (response.status === 400) message = 'Please check your name, email and message, then try again.';
+    if (response.status === 429) message = 'We have received several enquiries from you already. Please try again later.';
+  } catch (err) {
+    console.error('Form submission error:', err);
   }
-
-  const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
-  const { error } = await sb.from('enquiries').insert(data);
-  if (error) throw error;
+  const error = document.createElement('p');
+  error.className = 'form-error-inline';
+  error.setAttribute('role', 'alert');
+  error.style.cssText = 'color:#b42318;font-size:0.9rem;margin-top:0.75rem';
+  error.textContent = message;
+  form.appendChild(error);
+  return false;
 }
 
 // ─── Custom Cursor ───────────────────────────────
@@ -515,20 +522,11 @@ async function handlePathFormSubmit(e, pathType) {
   fd.forEach((val, key) => { data[key] = val; });
   data.enquiry_type = pathType;
 
-  try {
-    await submitEnquiryToSupabase(data);
-  } catch (err) {
-    console.error('Form submission error:', err);
-  }
-
-  fetch('/api/notify-enquiry', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).catch(() => {});
+  const sent = await submitEnquiry(data, form);
 
   submitBtn.innerHTML = originalHTML;
   submitBtn.disabled = false;
+  if (!sent) return;
   form.reset();
   if (successEl) successEl.style.display = 'flex';
 }

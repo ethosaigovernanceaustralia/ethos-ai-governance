@@ -1,9 +1,10 @@
 // ─── Ethos — Resend Invite ────────────────────────────────────────────────────
 // Vercel serverless function. Admin-only.
-// Sends a fresh Supabase invite email to a client whose original link expired.
+// Sends a fresh set-password link (through Resend) to a client whose original link expired.
 // ─────────────────────────────────────────────────────────────────────────────
 
 const { createClient } = require('@supabase/supabase-js');
+const { createSetPasswordLink, sendSetPasswordEmail } = require('../../lib/auth-links');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -34,14 +35,19 @@ module.exports = async function handler(req, res) {
     return res.status(403).json({ error: 'Admin access required' });
   }
 
-  // Send a fresh invite — Supabase handles the email
-  const { error } = await supabase.auth.admin.inviteUserByEmail(email, {
-    redirectTo: 'https://ethosaigovernance.com.au/portal/reset-password',
-  });
-
+  // Fresh set-password link for the existing login, sent as Ethos-branded email.
+  const emailNorm = String(email).trim().toLowerCase();
+  const { data: client } = await supabase.from('profiles').select('full_name').eq('email', emailNorm).maybeSingle();
+  const { link, error } = await createSetPasswordLink(supabase, { type: 'recovery', email: emailNorm });
   if (error) {
-    console.error('Resend invite error:', error);
+    console.error('Resend invite error:', error.code || error.message);
     return res.status(500).json({ error: error.message });
+  }
+  try {
+    await sendSetPasswordEmail({ email: emailNorm, name: client?.full_name, purpose: 'portal_invite', link });
+  } catch (err) {
+    console.error('Resend invite email error:', err.message);
+    return res.status(500).json({ error: 'Failed to send email' });
   }
 
   return res.status(200).json({ success: true, message: `Invite resent to ${email}` });

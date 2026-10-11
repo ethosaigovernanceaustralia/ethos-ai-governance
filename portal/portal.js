@@ -395,11 +395,14 @@ function showToast(message, type = 'default', duration = 4000) {
 
   const toast = document.createElement('div');
   const icons = { success: 'check_circle', error: 'error', warning: 'warning', default: 'info' };
-  toast.className = `toast toast-${type}`;
-  toast.innerHTML = `
-    <span class="material-symbols-outlined toast-icon">${icons[type] || icons.default}</span>
-    <span>${message}</span>
-  `;
+  const safeType = Object.hasOwn(icons, type) ? type : 'default';
+  toast.className = `toast toast-${safeType}`;
+  const icon = document.createElement('span');
+  icon.className = 'material-symbols-outlined toast-icon';
+  icon.textContent = icons[safeType];
+  const text = document.createElement('span');
+  text.textContent = String(message ?? '');
+  toast.append(icon, text);
 
   container.appendChild(toast);
   requestAnimationFrame(() => { requestAnimationFrame(() => toast.classList.add('show')); });
@@ -985,10 +988,12 @@ async function updateNotificationPrefs(prefs) {
 }
 
 // ─── Portal Notifications (fire-and-forget) ───────────────────
-// Calls the send-notification API. Silently swallows errors so
-// a failed notification never blocks the user action.
+// Calls the send-notification API with the persisted record (`ref`) the
+// event concerns; the server reads the email content from that record.
+// Silently swallows errors so a failed notification never blocks the user action.
 
-async function sendNotification(event, clientId, metadata = {}) {
+async function sendNotification(event, clientId, ref) {
+  if (!ref) return;
   const session = await getSession();
   if (!session) return;
   try {
@@ -998,7 +1003,7 @@ async function sendNotification(event, clientId, metadata = {}) {
         'Content-Type':  'application/json',
         'Authorization': `Bearer ${session.access_token}`,
       },
-      body: JSON.stringify({ event, clientId, metadata }),
+      body: JSON.stringify({ event, clientId, ref }),
     }).catch(err => console.error('Notification send error:', err));
   } catch (err) {
     console.error('Notification send error:', err);
