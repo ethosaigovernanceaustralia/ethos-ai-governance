@@ -583,20 +583,30 @@ async function getDeletedEnquiries() {
   return data || [];
 }
 
+// Server route removes the client's files and login together (P10).
+// Returns { ok, error } so the admin sees why a deletion was refused.
 async function permanentlyDeleteClient(clientId) {
-  const sb = getSupabase();
-  if (!sb) return false;
-  const { error } = await sb.from('profiles').delete().eq('id', clientId);
-  if (error) { console.error('Permanent delete client error:', error); return false; }
-  return true;
+  const session = await getSession();
+  if (!session) return { ok: false, error: 'Your session has expired. Please sign in again.' };
+  try {
+    const res = await fetch('/api/delete-client', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+      body: JSON.stringify({ clientId }),
+    });
+    const json = await res.json().catch(() => ({}));
+    return res.ok ? { ok: true } : { ok: false, error: json.error || 'The client could not be deleted.' };
+  } catch {
+    return { ok: false, error: 'The client could not be deleted. Please try again.' };
+  }
 }
 
 async function permanentlyDeleteEnquiry(enquiryId) {
   const sb = getSupabase();
   if (!sb) return false;
-  const { error } = await sb.from('enquiries').delete().eq('id', enquiryId);
+  const { error, count } = await sb.from('enquiries').delete({ count: 'exact' }).eq('id', enquiryId);
   if (error) { console.error('Permanent delete enquiry error:', error); return false; }
-  return true;
+  return count === 1;  // zero rows means nothing was deleted; never report success
 }
 
 function hideLoader() {
