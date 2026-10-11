@@ -10,10 +10,15 @@
 // Slots are computed server-side from availability_rules − overrides −
 // confirmed bookings, inside the min-notice/max-days window, in the host
 // timezone (booking_settings.timezone), returned as UTC instants. The
-// unique index on bookings makes double booking impossible under a race.
+// bookings_no_overlap exclusion constraint makes overlapping confirmed
+// bookings impossible under a race, and configuration-read errors fail
+// closed (no slots) rather than ignoring rules or blocked dates (P14).
 // ─────────────────────────────────────────────────────────────────────────────
 
 const { createClient } = require('@supabase/supabase-js');
+
+const MAX_UPCOMING_PER_EMAIL = 2;
+const MAX_BOOKINGS_PER_HOUR = 10;
 
 function db() {
   return createClient(
@@ -62,11 +67,14 @@ async function loadConfig(supabase) {
     supabase.from('availability_rules').select('*').eq('active', true),
     supabase.from('availability_overrides').select('*'),
   ]);
+  // Fail closed: a missing rule or override set must never widen availability.
   if (settings.error) throw new Error('booking_settings missing: ' + settings.error.message);
+  if (rules.error) throw new Error('availability_rules unreadable: ' + rules.error.message);
+  if (overrides.error) throw new Error('availability_overrides unreadable: ' + overrides.error.message);
   return {
     settings: settings.data,
-    rules: rules.data || [],
-    overrides: overrides.data || [],
+    rules: rules.data,
+    overrides: overrides.data,
   };
 }
 
@@ -107,7 +115,9 @@ function slotsForDate(y, m, d, cfg, bookedRanges) {
       slots.push(start);
     }
   }
-  return slots.sort((a, b) => a - b);
+  // Overlapping windows can produce the same start twice; keep one.
+  const unique = [...new Map(slots.map(s => [s.getTime(), s])).values()];
+  return unique.sort((a, b) => a - b);
 }
 
 async function bookedRangesBetween(supabase, fromIso, toIso) {
@@ -244,7 +254,7 @@ async function handleBook(req, res) {
   const { starts_at, name, email, company, notes, tz } = req.body || {};
 
   const cleanName = String(name || '').trim().slice(0, 200);
-  const cleanEmail = String(email || '').trim().slice(0, 320);
+  const cleanEmail = String(email || '').trim().toLowerCase().slice(0, 320);
   if (!cleanName || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cleanEmail)) {
     return res.status(400).json({ error: 'Please provide your name and a valid email address.' });
   }
@@ -254,6 +264,23 @@ async function handleBook(req, res) {
   }
 
   const supabase = db();
+
+  // Volume limits (anonymous endpoint that emails the given address).
+  const nowIso = new Date().toISOString();
+  const hourAgo = new Date(Date.now() - 3600 * 1000).toISOString();
+  const [mine, recent] = await Promise.all([
+    supabase.from('bookings').select('id', { count: 'exact', head: true })
+      .eq('email', cleanEmail).eq('status', 'confirmed').gte('starts_at', nowIso),
+    supabase.from('bookings').select('id', { count: 'exact', head: true }).gte('created_at', hourAgo),
+  ]);
+  if (mine.error || recent.error) throw new Error('booking limit check failed');
+  if (mine.count >= MAX_UPCOMING_PER_EMAIL) {
+    return res.status(429).json({ error: 'You already have upcoming calls booked. Reply to your confirmation email if you need to change them.' });
+  }
+  if (recent.count >= MAX_BOOKINGS_PER_HOUR) {
+    return res.status(429).json({ error: 'We are receiving a lot of bookings right now. Please try again later, or use the contact form.' });
+  }
+
   const cfg = await loadConfig(supabase);
 
   // Re-validate server-side: the requested instant must be one of the
@@ -280,7 +307,8 @@ async function handleBook(req, res) {
 
   const { data, error } = await supabase.from('bookings').insert(row).select().single();
   if (error) {
-    if (error.code === '23505') return res.status(409).json({ error: 'slot_taken' }); // unique index race
+    // 23505 unique start / 23P01 overlap: another booking won the race.
+    if (error.code === '23505' || error.code === '23P01') return res.status(409).json({ error: 'slot_taken' });
     console.error('[booking] Insert failed:', error.message);
     return res.status(500).json({ error: 'Could not save the booking. Please try again.' });
   }
@@ -348,12 +376,9 @@ async function handleAdmin(req, res) {
         .filter(r => Number.isInteger(r.day_of_week) && r.day_of_week >= 0 && r.day_of_week <= 6
           && timeRe.test(r.start_time) && timeRe.test(r.end_time) && r.start_time < r.end_time)
         .map(r => ({ day_of_week: r.day_of_week, start_time: r.start_time, end_time: r.end_time, active: true }));
-      const del = await supabase.from('availability_rules').delete().gte('day_of_week', 0);
-      if (del.error) return res.status(500).json({ error: del.error.message });
-      if (clean.length) {
-        const ins = await supabase.from('availability_rules').insert(clean);
-        if (ins.error) return res.status(500).json({ error: ins.error.message });
-      }
+      // One transaction: a failure leaves the previous schedule in place.
+      const { error } = await supabase.rpc('replace_availability_rules', { new_rules: clean });
+      if (error) return res.status(500).json({ error: 'Could not save the schedule. The previous schedule is unchanged.' });
       return res.status(200).json({ ok: true });
     }
 
@@ -363,7 +388,13 @@ async function handleAdmin(req, res) {
         return res.status(400).json({ error: 'Invalid override' });
       }
       const row = { date, type };
-      if (type === 'custom') { row.start_time = start_time; row.end_time = end_time; }
+      if (type === 'custom') {
+        const timeRe = /^([01]\d|2[0-3]):[0-5]\d$/;
+        if (!timeRe.test(start_time || '') || !timeRe.test(end_time || '') || start_time >= end_time) {
+          return res.status(400).json({ error: 'Custom hours need a valid start and end time, start before end.' });
+        }
+        row.start_time = start_time; row.end_time = end_time;
+      }
       const { error } = await supabase.from('availability_overrides').insert(row);
       if (error) return res.status(500).json({ error: error.message });
       return res.status(200).json({ ok: true });
