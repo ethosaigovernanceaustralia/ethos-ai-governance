@@ -1438,14 +1438,16 @@ async function handleRestoreDeletedEnquiry(enquiryId) {
 
 async function handlePermanentDeleteClient(clientId, name) {
   if (!confirm(`Permanently delete "${name}"? This cannot be undone.`)) return;
-  const ok = await permanentlyDeleteClient(clientId);
-  if (ok) { showToast('Client permanently deleted.', 'success'); await loadBinClients(); }
+  const result = await permanentlyDeleteClient(clientId);
+  if (result.ok) { showToast('Client permanently deleted.', 'success'); await loadBinClients(); }
+  else showToast(result.error, 'error');
 }
 
 async function handlePermanentDeleteEnquiry(enquiryId, name) {
   if (!confirm(`Permanently delete enquiry from "${name}"? This cannot be undone.`)) return;
   const ok = await permanentlyDeleteEnquiry(enquiryId);
   if (ok) { showToast('Enquiry permanently deleted.', 'success'); await loadBinEnquiries(); }
+  else showToast('The enquiry could not be deleted. Please try again.', 'error');
 }
 
 // ─── Resend Invite ─────────────────────────────────────────────

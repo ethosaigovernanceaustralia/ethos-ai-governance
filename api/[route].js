@@ -9,6 +9,7 @@
 const routes = {
   'booking': () => require('./_routes/booking.js'),
   'create-checkout-session': () => require('./_routes/create-checkout-session.js'),
+  'delete-client': () => require('./_routes/delete-client.js'),
   'free-audit-signup': () => require('./_routes/free-audit-signup.js'),
   'get-client-status': () => require('./_routes/get-client-status.js'),
   'invite-client': () => require('./_routes/invite-client.js'),
