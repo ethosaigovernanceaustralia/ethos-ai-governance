@@ -62,18 +62,48 @@ test('unsubscribe rejects array, object, long and non-ASCII token input without 
     const res = response(); await handler({ method: 'GET', query }, res); assert.equal(res.code, 400);
   }
 });
-test('signed unsubscribe saves normalised email and encodes reflected markup', async () => {
-  let saved;
-  const email = `${payload}@example.invalid`;
-  const key = 'dummy-signing-key';
-  const token = crypto.createHmac('sha256', key).update(email.toLowerCase()).digest('hex').slice(0, 32);
-  const handler = loadHandler('unsubscribe.js', {
-    env: { SUPABASE_URL: 'https://example.invalid', SUPABASE_SECRET_KEY: key },
-    mocks: { '@supabase/supabase-js': { createClient: () => ({ from: () => ({ upsert: async row => { saved = row; return { error: null }; } }) }) } },
+const unsubEnv = extra => ({ SUPABASE_URL: 'https://example.invalid', SUPABASE_SECRET_KEY: 'legacy-key', ...extra });
+const hmac = (key, email) => crypto.createHmac('sha256', key).update(email.toLowerCase()).digest('hex').slice(0, 32);
+function unsubHandler(env, saved) {
+  return loadHandler('unsubscribe.js', {
+    env,
+    mocks: { '@supabase/supabase-js': { createClient: () => ({ from: () => ({ upsert: async row => { saved.push(row); return { error: null }; } }) }) } },
   });
-  const res = response(); await handler({ method: 'GET', query: { email, token } }, res);
-  assert.equal(res.code, 200); assert.equal(saved.email, email.toLowerCase());
-  assert.ok(!res.body.includes(payload)); assert.ok(res.body.includes('&lt;img'));
+}
+
+test('unsubscribe GET only asks for confirmation; POST saves the normalised email with a generic reply', async () => {
+  const saved = [];
+  const email = `${payload}@example.invalid`;
+  const handler = unsubHandler(unsubEnv({ UNSUBSCRIBE_SECRET: 'dedicated-key' }), saved);
+  const query = { email, token: hmac('dedicated-key', email) };
+  const get = response(); await handler({ method: 'GET', query }, get);
+  assert.equal(get.code, 200); assert.equal(saved.length, 0);
+  assert.match(get.body, /<form method="post" action="\/api\/unsubscribe\?email=/);
+  assert.ok(!get.body.includes(payload));
+  const post = response(); await handler({ method: 'POST', query, body: 'List-Unsubscribe=One-Click' }, post);
+  assert.equal(post.code, 200); assert.equal(saved[0].email, email.toLowerCase());
+  assert.ok(!post.body.includes(payload)); assert.ok(!post.body.includes('example.invalid'));
+  for (const r of [get, post]) {
+    assert.equal(r.headers['cache-control'], 'no-store');
+    assert.equal(r.headers['referrer-policy'], 'no-referrer');
+  }
+});
+
+test('unsubscribe signs new links with UNSUBSCRIBE_SECRET and still accepts links signed with the old key', async () => {
+  const email = 'Reader@Example.invalid';
+  const handler = unsubHandler(unsubEnv({ UNSUBSCRIBE_SECRET: 'dedicated-key' }), []);
+  assert.equal(handler.unsubscribeToken(email), hmac('dedicated-key', email));
+  for (const [key, code] of [['dedicated-key', 200], ['legacy-key', 200], ['some-other-key', 400]]) {
+    const res = response(); await handler({ method: 'POST', query: { email, token: hmac(key, email) } }, res);
+    assert.equal(res.code, code, key);
+  }
+  const fallback = unsubHandler(unsubEnv({}), []);
+  assert.equal(fallback.unsubscribeToken(email), hmac('legacy-key', email));
+});
+
+test('unsubscribe refuses other methods', async () => {
+  const res = response(); await unsubHandler(unsubEnv({}), [])({ method: 'PUT', query: {} }, res);
+  assert.equal(res.code, 405);
 });
 
 test('admin enquiry list and detail encode unknown prompt, interest and status markup', async () => {
