@@ -58,8 +58,8 @@ async function handler(req, res) {
     }
   } catch (err) {
     // Critical step failed — return 500 so Stripe retries
-    console.error(`[webhook] Critical error handling ${event.type}:`, err);
-    return res.status(500).json({ error: err.message });
+    console.error(`[webhook] Critical error handling ${event.type}:`, err.message);
+    return res.status(500).json({ error: 'Processing failed; Stripe will retry' });
   }
 
   return res.status(200).json({ received: true });
@@ -116,7 +116,7 @@ async function handleCheckoutCompleted(session) {
         .eq('id', aucAccess.id);
       if (revokeError) throw revokeError;
 
-      console.log(`[webhook] Revoked au_compliance_core access for ${email} (upgrade)`);
+      console.log(`[webhook] Revoked au_compliance_core access for client ${clientId} (upgrade)`);
 
       // Mark old engagement as upgraded (non-critical — cosmetic change)
       await tryStep('upgrade-old-engagement', () =>
@@ -145,7 +145,7 @@ async function handleCheckoutCompleted(session) {
   });
   if (accessError) throw accessError;
 
-  console.log(`[webhook] Access granted: ${email} → ${productTier}`);
+  console.log(`[webhook] Access granted: client ${clientId} → ${productTier}`);
 
   // ── Non-critical steps (log on failure — still return 200) ────────────────
 
@@ -516,10 +516,31 @@ function getRawBody(req) {
   });
 }
 
+// Non-critical steps never fail the webhook (the purchase is already recorded),
+// so a failure would otherwise sit unseen in the logs. Email the admin (F19).
 async function tryStep(name, fn) {
   try {
     await fn();
   } catch (err) {
     console.error(`[webhook] Non-critical step "${name}" failed:`, err.message);
+    await alertAdmin(`Purchase follow-up step failed: ${name}`,
+      `<p>A paid checkout was recorded, but the follow-up step <strong>${escapeHtml(name)}</strong> failed and needs checking.</p>` +
+      `<p>Error: ${escapeHtml(err.code || err.message || 'unknown')}</p>` +
+      '<p>Check the client in the admin portal and the Stripe dashboard. No card details are involved.</p>');
+  }
+}
+
+async function alertAdmin(subject, html) {
+  const key = process.env.RESEND_API_KEY, to = process.env.NOTIFY_EMAIL;
+  if (!key || !to) return;
+  try {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ from: 'Ethos Portal <noreply@ethosaigovernance.com.au>', to: [to], subject, html }),
+    });
+    if (!response.ok) console.error('[webhook] Admin alert failed:', response.status);
+  } catch {
+    console.error('[webhook] Admin alert failed');
   }
 }

@@ -4,7 +4,9 @@
 // that were created without the signup form (e.g. invited after a Stripe
 // purchase) and therefore never ticked the three consent checkboxes.
 //
-//   GET  /api/record-consents  → { consents: ['terms_of_service', ...] }
+//   GET  /api/record-consents  → { consents: ['terms_of_service', ...], version }
+//                              (only consents given for the CURRENT version count;
+//                              bumping CONSENT_VERSION asks everyone again, F14)
 //   POST /api/record-consents  { consents: { terms, privacy, app8 } }
 //                              → records the three consent rows (idempotent)
 //
@@ -41,17 +43,18 @@ module.exports = async function handler(req, res) {
   const { data: existing, error: fetchError } = await supabase
     .from('consents')
     .select('consent_type')
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .eq('version', CONSENT_VERSION);
 
   if (fetchError) {
-    console.error('[record-consents] fetch error:', fetchError);
+    console.error('[record-consents] fetch error:', fetchError.code || 'unknown');
     return res.status(500).json({ error: 'Could not read consents' });
   }
 
   const held = (existing || []).map((row) => row.consent_type);
 
   if (req.method === 'GET') {
-    return res.status(200).json({ consents: held });
+    return res.status(200).json({ consents: held, version: CONSENT_VERSION });
   }
 
   // POST — all three boxes must be ticked
@@ -83,8 +86,9 @@ module.exports = async function handler(req, res) {
   }));
 
   const { error: insertError } = await supabase.from('consents').insert(rows);
-  if (insertError) {
-    console.error('[record-consents] insert error:', insertError);
+  // 23505: a concurrent request already recorded this version (unique per user, type, version).
+  if (insertError && insertError.code !== '23505') {
+    console.error('[record-consents] insert error:', insertError.code || 'unknown');
     return res.status(500).json({ error: 'Could not record consents' });
   }
 

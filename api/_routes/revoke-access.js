@@ -46,7 +46,7 @@ module.exports = async function handler(req, res) {
 
   if (revokeError) {
     console.error('[revoke-access] Product access update failed:', revokeError.message);
-    return res.status(500).json({ error: revokeError.message });
+    return res.status(500).json({ error: 'Access could not be revoked. Please try again.' });
   }
 
   // Update engagement status to 'refunded'

@@ -83,6 +83,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="/dom-actions.js" defer></script>
 </head>
 <body>
 
@@ -116,7 +117,7 @@
       </a></li>
     </ul>
     <a href="/free-audit" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -124,20 +125,20 @@
 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+  <button class="mobile-nav-close" data-on-click="closeMobileNav" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
   <ul>
-    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
-    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
-    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
-    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
-    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
-    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
-    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/" data-on-click="closeMobileNav">Home</a></li>
+    <li><a href="/services" data-on-click="closeMobileNav">Services</a></li>
+    <li><a href="/about" data-on-click="closeMobileNav">About</a></li>
+    <li><a href="/regulatory" data-on-click="closeMobileNav">Regulatory Landscape</a></li>
+    <li><a href="/resources" data-on-click="closeMobileNav">Resources</a></li>
+    <li><a href="/faq" data-on-click="closeMobileNav">FAQ</a></li>
+    <li><a href="/contact" data-on-click="closeMobileNav">Contact</a></li>
     <li><a href="/portal/login">Client Portal</a></li>
   </ul>
-  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" data-on-click="closeMobileNav">Get Free Audit</a>
 </div>
 
 <main>
@@ -156,9 +157,9 @@
   <div class="services-subnav" id="servicesSubnav">
     <div class="container">
       <div class="subnav-links">
-        <a href="#free-audit" onclick="scrollToSection('free-audit'); return false;" class="subnav-link active-sub" data-section="free-audit">Free Audit</a>
-        <a href="#compare-tiers" onclick="scrollToSection('compare-tiers'); return false;" class="subnav-link" data-section="compare-tiers">Compare Tiers</a>
-        <a href="#iso-42001" onclick="scrollToSection('iso-42001'); return false;" class="subnav-link" data-section="iso-42001">ISO 42001 Pathway</a>
+        <a href="#free-audit" data-on-click="scrollToSection" data-args='["free-audit"]' data-prevent class="subnav-link active-sub" data-section="free-audit">Free Audit</a>
+        <a href="#compare-tiers" data-on-click="scrollToSection" data-args='["compare-tiers"]' data-prevent class="subnav-link" data-section="compare-tiers">Compare Tiers</a>
+        <a href="#iso-42001" data-on-click="scrollToSection" data-args='["iso-42001"]' data-prevent class="subnav-link" data-section="iso-42001">ISO 42001 Pathway</a>
       </div>
     </div>
   </div>
@@ -255,8 +256,8 @@
               <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">verified</span>
               30-Day Relevance Guarantee
             </div>
-            <button class="btn-outline" style="width:100%;margin-top:1.5rem" onclick="startCheckout('au_compliance_core', this)">Get AU Compliance Core</button>
-            <p class="pricing-upgrade-nudge">Need it branded, delivered and kept current? <a href="#" onclick="document.getElementById('fullkit').scrollIntoView({behavior:'smooth'}); return false;">See Full Toolkit →</a></p>
+            <button class="btn-outline" style="width:100%;margin-top:1.5rem" data-on-click="startCheckout" data-args='["au_compliance_core", "$this"]'>Get AU Compliance Core</button>
+            <p class="pricing-upgrade-nudge">Need it branded, delivered and kept current? <a href="#" data-on-click="domScrollToId" data-args='["fullkit"]' data-prevent>See Full Toolkit →</a></p>
           </div>
         </div>
 
@@ -355,7 +356,7 @@
 
             <div class="bonus-secondary-grid">
               <div class="bonus-secondary-card">
-                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                <div class="bonus-secondary-summary" data-on-click="toggleBonusSecondary" data-args='["$this"]'>
                   <span class="material-symbols-outlined bonus-sec-icon">summarize</span>
                   <div>
                     <strong>Board &amp; Investor Governance Summary</strong>
@@ -371,7 +372,7 @@
               </div>
 
               <div class="bonus-secondary-card">
-                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                <div class="bonus-secondary-summary" data-on-click="toggleBonusSecondary" data-args='["$this"]'>
                   <span class="material-symbols-outlined bonus-sec-icon">emergency_home</span>
                   <div>
                     <strong>AI Incident Response Tabletop Exercise</strong>
@@ -386,7 +387,7 @@
               </div>
 
               <div class="bonus-secondary-card">
-                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                <div class="bonus-secondary-summary" data-on-click="toggleBonusSecondary" data-args='["$this"]'>
                   <span class="material-symbols-outlined bonus-sec-icon">leaderboard</span>
                   <div>
                     <strong>Peer Benchmarking Snapshot</strong>
@@ -402,7 +403,7 @@
               </div>
 
               <div class="bonus-secondary-card">
-                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                <div class="bonus-secondary-summary" data-on-click="toggleBonusSecondary" data-args='["$this"]'>
                   <span class="material-symbols-outlined bonus-sec-icon">verified_user</span>
                   <div>
                     <strong>Governance-Verified Digital Badge</strong>
@@ -418,7 +419,7 @@
               </div>
 
               <div class="bonus-secondary-card">
-                <div class="bonus-secondary-summary" onclick="toggleBonusSecondary(this)">
+                <div class="bonus-secondary-summary" data-on-click="toggleBonusSecondary" data-args='["$this"]'>
                   <span class="material-symbols-outlined bonus-sec-icon">hub</span>
                   <div>
                     <strong>AI Governance Intelligence App: Premium Access</strong>
@@ -449,7 +450,7 @@
             </div>
 
             <div class="svc-cta-row" style="margin-top:1.5rem">
-              <button class="btn-primary btn-lg" style="width:100%;display:block;text-align:center" onclick="startCheckout('full_toolkit', this)">Get the Full Toolkit ($1,699)</button>
+              <button class="btn-primary btn-lg" style="width:100%;display:block;text-align:center" data-on-click="startCheckout" data-args='["full_toolkit", "$this"]'>Get the Full Toolkit ($1,699)</button>
               <p class="pricing-guarantee-line" style="justify-content:center;margin-top:0.875rem"><span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">verified</span> 30-Day Relevance Guarantee: full refund, no questions</p>
               <p style="font-size:0.85rem;color:var(--muted);text-align:center;margin-top:0.75rem">Prefer to talk it through first? <a href="#" data-cal-link="ethos-ai-governance-qigmlt/discovery-call-ethos-ai-governance" data-cal-namespace="discovery-call-ethos-ai-governance" data-cal-config='{"layout":"month_view","useSlotsViewOnSmallScreen":"true"}' style="color:var(--brass)">Book a discovery call &rarr;</a></p>
             </div>
@@ -478,7 +479,7 @@
               <span class="material-symbols-outlined" style="font-size:1rem;color:var(--brass)">verified</span>
               30-Day Relevance Guarantee
             </div>
-            <button class="btn-outline" style="width:100%;margin-top:1rem" onclick="startCheckout('au_compliance_core', this)">Get AU Compliance Core</button>
+            <button class="btn-outline" style="width:100%;margin-top:1rem" data-on-click="startCheckout" data-args='["au_compliance_core", "$this"]'>Get AU Compliance Core</button>
           </div>
         </details>
       </div>

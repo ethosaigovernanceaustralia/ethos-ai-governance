@@ -77,7 +77,7 @@ test('signed unsubscribe saves normalised email and encodes reflected markup', a
 });
 
 test('admin enquiry list and detail encode unknown prompt, interest and status markup', async () => {
-  const source = fs.readFileSync(path.join(root, 'portal/admin.html'), 'utf8');
+  const source = fs.readFileSync(path.join(root, 'portal/admin-page.js'), 'utf8');
   const functions = source.slice(source.indexOf('async function loadEnquiries()'), source.indexOf('async function handleEnquiryStatusChange('));
   const nodes = new Map();
   const context = {

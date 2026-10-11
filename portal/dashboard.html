@@ -6,6 +6,7 @@
   <title>My Portal - Ethos AI Governance</title>
   <link rel="stylesheet" href="portal.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <script src="/dom-actions.js" defer></script>
 </head>
 <body>
 
@@ -26,7 +27,7 @@
   <span class="portal-nav-badge">Client Portal</span>
   <div class="portal-nav-user">
     <span class="portal-nav-user-name" id="navUserName"></span>
-    <button class="portal-nav-signout" onclick="signOut()">Sign out</button>
+    <button class="portal-nav-signout" data-on-click="signOut">Sign out</button>
   </div>
 </nav>
 
@@ -39,21 +40,21 @@
     <div class="admin-sidebar-section">
       <span class="admin-sidebar-label">Menu</span>
       <div class="client-list" style="padding:0">
-        <button class="admin-nav-item active" id="navDashboard" onclick="showClientView('dashboard')">
+        <button class="admin-nav-item active" id="navDashboard" data-on-click="showClientView" data-args='["dashboard"]'>
           <span class="material-symbols-outlined">grid_view</span>
           Dashboard
           <span id="actionItemsBadge" class="status-badge status-new" style="margin-left:auto;display:none;font-size:0.625rem;padding:2px 7px"></span>
         </button>
-        <button class="admin-nav-item" id="navDocuments" onclick="showClientView('documents')">
+        <button class="admin-nav-item" id="navDocuments" data-on-click="showClientView" data-args='["documents"]'>
           <span class="material-symbols-outlined">description</span>
           Documents
         </button>
-        <button class="admin-nav-item" id="navMessages" onclick="showClientView('messages')">
+        <button class="admin-nav-item" id="navMessages" data-on-click="showClientView" data-args='["messages"]'>
           <span class="material-symbols-outlined">chat</span>
           Messages
           <span id="messagesBadge" class="status-badge status-new" style="margin-left:auto;display:none;font-size:0.625rem;padding:2px 7px"></span>
         </button>
-        <button class="admin-nav-item" id="navSettings" onclick="showClientView('settings')">
+        <button class="admin-nav-item" id="navSettings" data-on-click="showClientView" data-args='["settings"]'>
           <span class="material-symbols-outlined">settings</span>
           Settings
         </button>
@@ -167,7 +168,7 @@
     <div id="viewDocuments" style="display:none">
       <div class="client-section-title">
         <span>Documents</span>
-        <button class="btn-navy" onclick="openUploadModal()" id="uploadBtnHeader" style="display:none;font-size:0.8125rem;padding:0.5rem 1rem">
+        <button class="btn-navy" data-on-click="openUploadModal" id="uploadBtnHeader" style="display:none;font-size:0.8125rem;padding:0.5rem 1rem">
           <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
           Upload
         </button>
@@ -240,17 +241,17 @@
           <div class="chat-file-preview" id="chatFilePreview" style="display:none">
             <span class="material-symbols-outlined">attach_file</span>
             <span id="chatFileName"></span>
-            <button onclick="clearChatFile()" aria-label="Remove file">
+            <button data-on-click="clearChatFile" aria-label="Remove file">
               <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
             </button>
           </div>
           <div class="chat-input-row">
-            <button class="chat-attach-btn" onclick="document.getElementById('chatFileInput').click()" title="Attach a PDF">
+            <button class="chat-attach-btn" data-on-click="domClickById" data-args='["chatFileInput"]' title="Attach a PDF">
               <span class="material-symbols-outlined">attach_file</span>
             </button>
             <input type="file" id="chatFileInput" accept=".pdf,application/pdf" style="display:none"/>
-            <textarea class="chat-textarea" id="chatInput" placeholder="Message your Ethos advisor…" rows="1" onkeydown="handleChatKeydown(event)" oninput="autoGrowTextarea(this)"></textarea>
-            <button class="chat-send-btn" id="chatSendBtn" onclick="handleSendMessage()" title="Send">
+            <textarea class="chat-textarea" id="chatInput" placeholder="Message your Ethos advisor…" rows="1" data-on-keydown="handleChatKeydown" data-args-keydown='["$event"]' data-on-input="autoGrowTextarea" data-args-input='["$this"]'></textarea>
+            <button class="chat-send-btn" id="chatSendBtn" data-on-click="handleSendMessage" title="Send">
               <span class="material-symbols-outlined">send</span>
             </button>
           </div>
@@ -282,7 +283,7 @@
             <div class="settings-email-display" id="settingsEmail"></div>
             <div style="font-size:0.75rem;color:var(--muted);margin-top:0.375rem">To change your email address, contact us at hello@ethosaigovernance.com.au</div>
           </div>
-          <button class="btn-gold" id="saveSettingsBtn" onclick="handleSaveSettings()">
+          <button class="btn-gold" id="saveSettingsBtn" data-on-click="handleSaveSettings">
             <span class="material-symbols-outlined" style="font-size:1rem">save</span>
             Save Changes
           </button>
@@ -302,7 +303,7 @@
           <div class="notif-prefs-list" id="notifPrefsList">
             <div style="padding:1rem;font-size:0.8125rem;color:var(--muted)">Loading preferences…</div>
           </div>
-          <button class="btn-gold" id="saveNotifsBtn" onclick="handleSaveNotifPrefs()">
+          <button class="btn-gold" id="saveNotifsBtn" data-on-click="handleSaveNotifPrefs">
             <span class="material-symbols-outlined" style="font-size:1rem">save</span>
             Save Preferences
           </button>
@@ -319,12 +320,12 @@
   <div class="modal">
     <div class="modal-header">
       <h2 class="modal-title">Upload a Document</h2>
-      <button class="modal-close" onclick="closeUploadModal()">
+      <button class="modal-close" data-on-click="closeUploadModal">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
 
-    <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <div class="drop-zone" id="dropZone" data-on-click="domClickById" data-args='["fileInput"]'>
       <span class="material-symbols-outlined drop-zone-icon">cloud_upload</span>
       <div class="drop-zone-text">Drop your PDF here, or click to browse</div>
       <div class="drop-zone-sub">PDF files only. Maximum 25MB.</div>
@@ -335,7 +336,7 @@
       <span class="material-symbols-outlined" style="color:#dc2626;font-size:1.25rem">picture_as_pdf</span>
       <span class="selected-file-name" id="selectedFileName"></span>
       <span class="selected-file-size" id="selectedFileSize"></span>
-      <button class="btn-danger-ghost" onclick="clearSelectedFile()">
+      <button class="btn-danger-ghost" data-on-click="clearSelectedFile">
         <span class="material-symbols-outlined" style="font-size:0.9rem">close</span>
       </button>
     </div>
@@ -353,8 +354,8 @@
     </div>
 
     <div style="display:flex;gap:0.75rem;margin-top:1rem">
-      <button class="btn-outline" onclick="closeUploadModal()" style="flex:1">Cancel</button>
-      <button class="btn-gold" id="uploadBtn" onclick="handleUpload()" style="flex:2" disabled>
+      <button class="btn-outline" data-on-click="closeUploadModal" style="flex:1">Cancel</button>
+      <button class="btn-gold" id="uploadBtn" data-on-click="handleUpload" style="flex:2" disabled>
         <span class="material-symbols-outlined" style="font-size:1rem">upload</span>
         Upload Document
       </button>
@@ -394,8 +395,8 @@
     </div>
 
     <div style="display:flex;gap:0.75rem;align-items:center">
-      <button class="btn-outline" onclick="signOut()" style="flex:1">Sign out</button>
-      <button class="btn-gold" id="gateConsentBtn" onclick="handleConsentContinue()" style="flex:2" disabled>
+      <button class="btn-outline" data-on-click="signOut" style="flex:1">Sign out</button>
+      <button class="btn-gold" id="gateConsentBtn" data-on-click="handleConsentContinue" style="flex:2" disabled>
         Agree and continue
         <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
       </button>
@@ -407,948 +408,6 @@
 <script src="config.js"></script>
 <script src="portal.js"></script>
 <script src="actions.js"></script>
-<script>
-registerPortalActions({ downloadDocument, downloadTemplate, handleDeleteDoc });
-let _currentSession  = null;
-let _currentProfile  = null;
-let _currentEngagement = null;
-let _allClientEngagements = [];
-let _actionItems     = [];
-let _productAccess   = [];
-let _downloadActivity = { templates: [], downloads: [] };
-let _selectedFile    = null;
-
-// ─── Init ──────────────────────────────────────────────────────
-(async () => {
-  _currentSession = await requireAuth();
-  if (!_currentSession) return;
-
-  _currentProfile = await getProfile(_currentSession.user.id);
-  if (!_currentProfile) { window.location.href = '/portal/login'; return; }
-
-  // Redirect admins
-  if (_currentProfile.role === 'admin') {
-    window.location.href = '/portal/admin'; return;
-  }
-
-  // First-login consent gate — accounts created without the signup form
-  // (e.g. invited after a Stripe purchase) have no consent records yet
-  if (await needsConsentGate()) {
-    hideLoader();
-    showConsentModal();
-    return;
-  }
-
-  await initDashboard();
-})();
-
-// ─── Consent Gate ──────────────────────────────────────────────
-const GATED_CONSENT_TYPES = ['terms_of_service', 'privacy_policy', 'app8_overseas_disclosure'];
-
-async function needsConsentGate() {
-  try {
-    const res = await fetch('/api/record-consents', {
-      headers: { 'Authorization': `Bearer ${_currentSession.access_token}` },
-    });
-    if (!res.ok) { console.error('Consent check failed:', res.status); return false; }
-    const { consents } = await res.json();
-    return GATED_CONSENT_TYPES.some(type => !consents.includes(type));
-  } catch (err) {
-    // Fail open: an API outage should not lock clients out of the portal
-    console.error('Consent check error:', err);
-    return false;
-  }
-}
-
-function showConsentModal() {
-  const boxes = ['gateConsentTerms', 'gateConsentPrivacy', 'gateConsentApp8']
-    .map(id => document.getElementById(id));
-  const btn = document.getElementById('gateConsentBtn');
-  boxes.forEach(box => box.addEventListener('change', () => {
-    btn.disabled = !boxes.every(b => b.checked);
-  }));
-  document.getElementById('consentModalOverlay').classList.add('open');
-}
-
-async function handleConsentContinue() {
-  const btn = document.getElementById('gateConsentBtn');
-  const errorEl = document.getElementById('gateConsentError');
-  btn.disabled = true;
-  errorEl.style.display = 'none';
-
-  try {
-    const res = await fetch('/api/record-consents', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${_currentSession.access_token}`,
-      },
-      body: JSON.stringify({ consents: { terms: true, privacy: true, app8: true } }),
-    });
-    if (!res.ok) throw new Error(`Consent record failed: ${res.status}`);
-
-    document.getElementById('consentModalOverlay').classList.remove('open');
-    await initDashboard();
-  } catch (err) {
-    console.error('Consent record error:', err);
-    errorEl.style.display = 'block';
-    btn.disabled = false;
-  }
-}
-
-// ─── Dashboard Init ────────────────────────────────────────────
-async function initDashboard() {
-  // Populate nav
-  document.getElementById('navUserName').textContent = _currentProfile.full_name;
-
-  // Load engagements + templates + product access in parallel
-  const [engagements, templates, productAccess] = await Promise.all([
-    getEngagements(_currentProfile.id),
-    getProductTemplates(),
-    getMyProductAccess(),
-  ]);
-
-  _allClientEngagements = engagements;
-  _productAccess = productAccess;
-
-  // Determine active engagement (most recent active, else first)
-  _currentEngagement = engagements.find(e => e.status === 'active') || engagements[0] || null;
-
-  // Show no-engagement state if truly nothing exists
-  if (!engagements.length && !templates.length) {
-    document.getElementById('noEngagementState').style.display = 'block';
-    renderSidebarEngagement(null);
-    hideLoader();
-    return;
-  }
-
-  // Load action items + documents + download activity in parallel
-  const [actionItems, , downloadActivity] = await Promise.all([
-    _currentEngagement ? getClientActionItems(_currentEngagement.id) : Promise.resolve([]),
-    refreshDocuments(engagements, templates),
-    getMyDownloadActivity(),
-  ]);
-
-  _actionItems = actionItems;
-  _downloadActivity = downloadActivity;
-
-  // Render dashboard
-  renderDashboard();
-  renderSidebarEngagement(_currentEngagement);
-
-  // Check for unread messages (shows badge on Messages nav)
-  checkMessagesUnread();
-
-  hideLoader();
-}
-
-// ─── View Switcher ─────────────────────────────────────────────
-function showClientView(view) {
-  const views = ['dashboard', 'documents', 'messages', 'settings'];
-  views.forEach(v => {
-    document.getElementById(`view${v.charAt(0).toUpperCase() + v.slice(1)}`).style.display =
-      v === view ? 'block' : 'none';
-    document.getElementById(`nav${v.charAt(0).toUpperCase() + v.slice(1)}`).className =
-      'admin-nav-item' + (v === view ? ' active' : '');
-  });
-  if (view === 'settings') {
-    loadSettingsForm();
-    loadNotifPrefs();
-  }
-  if (view === 'messages') {
-    initChat();
-  } else {
-    stopChatPolling();
-  }
-}
-
-// ─── Sidebar ───────────────────────────────────────────────────
-function renderSidebarEngagement(engagement) {
-  const el = document.getElementById('sidebarEngagementInfo');
-  if (!engagement) {
-    el.innerHTML = `<div style="font-size:0.8125rem;color:var(--muted);font-style:italic;padding:0 0.25rem">No active engagement</div>`;
-    return;
-  }
-  const label = engagementLabel(engagement.engagement_type);
-  el.innerHTML = `
-    <div class="sidebar-engagement-card">
-      <div class="sidebar-engagement-name">${escHtml(label)}</div>
-      <span class="status-badge status-${engagement.status}" style="font-size:0.65rem;padding:2px 8px">
-        ${engagement.status.charAt(0).toUpperCase() + engagement.status.slice(1)}
-      </span>
-    </div>`;
-}
-
-function updateActionItemsBadge(items) {
-  const pending = items.filter(i => i.status !== 'complete');
-  const badge = document.getElementById('actionItemsBadge');
-  if (pending.length) {
-    badge.textContent = pending.length;
-    badge.style.display = 'inline-flex';
-  } else {
-    badge.style.display = 'none';
-  }
-}
-
-// ─── Dashboard Render ──────────────────────────────────────────
-function renderDashboard() {
-  const ws = document.getElementById('workspaceContent');
-  ws.style.display = 'block';
-
-  const firstName = _currentProfile.full_name.split(' ')[0];
-  document.getElementById('dashWelcome').textContent = `Welcome back, ${escHtml(firstName)}`;
-
-  // Engagement card
-  if (_currentEngagement) {
-    document.getElementById('engagementName').textContent = engagementLabel(_currentEngagement.engagement_type);
-    const notes = _currentEngagement.notes || '';
-    const notesEl = document.getElementById('engagementNotes');
-    if (notes) {
-      notesEl.textContent = notes;
-    } else {
-      notesEl.parentElement.style.display = 'none';
-    }
-    const badge = document.getElementById('engagementStatusBadge');
-    badge.textContent = _currentEngagement.status.charAt(0).toUpperCase() + _currentEngagement.status.slice(1);
-    badge.className = `status-badge status-${_currentEngagement.status}`;
-  } else {
-    document.getElementById('engagementCard').style.display = 'none';
-  }
-
-  // Pending review banner
-  const pendingBanner = document.getElementById('pendingReviewBanner');
-  if (pendingBanner) {
-    pendingBanner.style.display = _currentEngagement?.status === 'pending' ? 'block' : 'none';
-  }
-
-  // Action items
-  renderActionItems(_actionItems);
-  updateActionItemsBadge(_actionItems);
-
-  // Progress tracker
-  if (_currentEngagement) {
-    renderProgressTracker(_currentEngagement, _productAccess, _downloadActivity);
-  }
-}
-
-// ─── Action Items ──────────────────────────────────────────────
-function renderActionItems(items) {
-  const pendingItems = items.filter(i => i.status !== 'complete');
-  const completedItems = items.filter(i => i.status === 'complete');
-
-  // Action Required Banner
-  const banner = document.getElementById('actionRequiredBanner');
-  const bannerList = document.getElementById('dashActionItemsList');
-  if (pendingItems.length) {
-    document.getElementById('actionRequiredSub').textContent =
-      `You have ${pendingItems.length} item${pendingItems.length !== 1 ? 's' : ''} waiting for your attention`;
-    bannerList.innerHTML = pendingItems.map(item => renderActionItemRow(item)).join('');
-    banner.style.display = 'block';
-  } else {
-    banner.style.display = 'none';
-  }
-
-  // All action items card (shows pending + complete)
-  const allCard = document.getElementById('allActionItemsCard');
-  if (items.length) {
-    document.getElementById('allActionItemsList').innerHTML = items.map(item => renderActionItemRow(item)).join('');
-    allCard.style.display = 'block';
-  } else {
-    allCard.style.display = 'none';
-  }
-}
-
-function renderActionItemRow(item) {
-  const isComplete = item.status === 'complete';
-  let dueMeta = '';
-  if (item.due_date && !isComplete) {
-    const due = new Date(item.due_date);
-    const today = new Date(); today.setHours(0,0,0,0);
-    const overdue = due < today;
-    dueMeta = `<span class="${overdue ? 'action-item-due-overdue' : ''}">Due ${formatDate(item.due_date)}${overdue ? ' — overdue' : ''}</span>`;
-  }
-  const notesMeta = item.notes ? `<span>${escHtml(item.notes)}</span>` : '';
-
-  return `
-  <div class="action-item-row">
-    <div class="action-item-dot ${item.status}"></div>
-    <div class="action-item-body">
-      <div class="action-item-title${isComplete ? ' complete' : ''}">${escHtml(item.title)}</div>
-      ${(dueMeta || notesMeta) ? `<div class="action-item-meta">${dueMeta}${dueMeta && notesMeta ? '<span style="opacity:0.35">·</span>' : ''}${notesMeta}</div>` : ''}
-    </div>
-    ${!isComplete ? `
-    <button class="btn-outline" onclick="handleClientCompleteAction('${item.id}')"
-      style="font-size:0.75rem;padding:0.3rem 0.75rem;white-space:nowrap;display:inline-flex;align-items:center;gap:4px">
-      <span class="material-symbols-outlined" style="font-size:0.875rem">check</span>
-      Done
-    </button>` : `
-    <span class="status-badge status-active" style="font-size:0.65rem;padding:2px 8px">Complete</span>`}
-  </div>`;
-}
-
-async function handleClientCompleteAction(id) {
-  const item = _actionItems.find(i => i.id === id);
-  const ok = await completeActionItem(id);
-  if (!ok) { showToast('Could not update. Please try again.', 'error'); return; }
-  if (item) item.status = 'complete';
-  renderActionItems(_actionItems);
-  updateActionItemsBadge(_actionItems);
-  showToast('Marked as complete.', 'success');
-  // Notify admin
-  sendNotification('action_item_completed', _currentProfile.id, id);
-}
-
-// ─── Progress Tracker ──────────────────────────────────────────
-function renderProgressTracker(engagement, productAccess, downloadActivity) {
-  const card = document.getElementById('progressCard');
-  const body = document.getElementById('progressCardBody');
-  const type = engagement.engagement_type;
-  const stage = engagement.progress_stage;
-
-  // Retainer — show active status and dates
-  if (type === 'retainer') {
-    const access = productAccess.find(a => a.product_tier === 'full_toolkit');
-    let html = `<div class="retainer-status-display">
-      <div class="retainer-active-pulse"></div>
-      <div>
-        <div style="font-weight:600;font-size:0.9375rem;color:var(--navy)">Governance Retainer — Active</div>`;
-    if (access && access.retainer_start_date) {
-      html += `<div style="font-size:0.8125rem;color:var(--muted);margin-top:4px">
-        ${formatDate(access.retainer_start_date)} – ${formatDate(access.retainer_end_date)}
-      </div>`;
-    }
-    html += `</div></div>`;
-    body.innerHTML = html;
-    card.style.display = 'block';
-    return;
-  }
-
-  // AU Compliance Core — template delivery checklist
-  if (type === 'au_compliance_core') {
-    const { templates, downloads } = downloadActivity;
-    if (!templates.length) {
-      body.innerHTML = `<div style="font-size:0.875rem;color:var(--muted);padding:0.5rem 0">Your documents are being prepared.</div>`;
-      card.style.display = 'block';
-      return;
-    }
-    const downloadMap = {};
-    downloads.forEach(d => { if (!downloadMap[d.template_id]) downloadMap[d.template_id] = d.downloaded_at; });
-    const accessed = templates.filter(t => downloadMap[t.id]).length;
-    body.innerHTML = `
-      <div style="font-size:0.8125rem;color:var(--muted);margin-bottom:1rem">${accessed} of ${templates.length} document${templates.length !== 1 ? 's' : ''} accessed</div>
-      <div class="progress-checklist">
-        ${templates.map(t => {
-          const downloaded = downloadMap[t.id];
-          return `
-          <div class="progress-checklist-item ${downloaded ? 'complete' : 'upcoming'}">
-            <div class="progress-check-icon">
-              <span class="material-symbols-outlined" style="font-size:0.875rem">${downloaded ? 'check' : 'description'}</span>
-            </div>
-            <div class="progress-checklist-label">${escHtml(t.display_name)}</div>
-            ${downloaded ? `<div style="font-size:0.7rem;color:var(--muted);white-space:nowrap">${formatDate(downloaded)}</div>` : ''}
-          </div>`;
-        }).join('')}
-      </div>`;
-    card.style.display = 'block';
-    return;
-  }
-
-  // Full Toolkit — vertical 8-step checklist
-  if (type === 'full_toolkit') {
-    const milestones = PROGRESS_MILESTONES.full_toolkit;
-    const { templates, downloads } = downloadActivity;
-    const downloadMap = {};
-    downloads.forEach(d => { if (!downloadMap[d.template_id]) downloadMap[d.template_id] = d.downloaded_at; });
-    const stageIdx = stage ? milestones.findIndex(m => m.id === stage) : -1;
-
-    body.innerHTML = `
-      <div style="font-size:0.8125rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.75rem">Implementation Progress</div>
-      <div class="progress-checklist" style="margin-bottom:${templates.length ? '1.5rem' : '0'}">
-        ${milestones.map((m, i) => {
-          let stateClass = 'upcoming';
-          if (stageIdx >= 0) {
-            if (i < stageIdx) stateClass = 'complete';
-            else if (i === stageIdx) stateClass = 'current';
-          }
-          return `
-          <div class="progress-checklist-item ${stateClass}">
-            <div class="progress-check-icon">
-              <span class="material-symbols-outlined" style="font-size:0.875rem">${stateClass === 'complete' ? 'check' : stateClass === 'current' ? 'pending' : 'circle'}</span>
-            </div>
-            <div class="progress-checklist-label">${escHtml(m.label)}</div>
-            ${stateClass === 'complete' ? `<span class="action-status-badge action-status-complete">Done</span>` : ''}
-            ${stateClass === 'current'  ? `<span class="action-status-badge action-status-in_progress">In Progress</span>` : ''}
-          </div>`;
-        }).join('')}
-      </div>
-      ${templates.length ? `
-        <div style="font-size:0.8125rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:0.75rem">Document Access</div>
-        <div class="progress-checklist">
-          ${templates.map(t => {
-            const downloaded = downloadMap[t.id];
-            return `
-            <div class="progress-checklist-item ${downloaded ? 'complete' : 'upcoming'}">
-              <div class="progress-check-icon">
-                <span class="material-symbols-outlined" style="font-size:0.875rem">${downloaded ? 'check' : 'description'}</span>
-              </div>
-              <div class="progress-checklist-label">${escHtml(t.display_name)}</div>
-              ${downloaded ? `<div style="font-size:0.7rem;color:var(--muted);white-space:nowrap">${formatDate(downloaded)}</div>` : ''}
-            </div>`;
-          }).join('')}
-        </div>` : ''}`;
-    card.style.display = 'block';
-    return;
-  }
-
-  // ISO Pathway & Free Audit — horizontal step bar
-  const milestones = PROGRESS_MILESTONES[type];
-  if (!milestones) { card.style.display = 'none'; return; }
-
-  const stageIdx = stage ? milestones.findIndex(m => m.id === stage) : -1;
-  body.innerHTML = buildHorizontalSteps(milestones, stageIdx);
-  card.style.display = 'block';
-}
-
-function buildHorizontalSteps(milestones, currentIdx) {
-  return `
-  <div class="progress-track">
-    ${milestones.map((m, i) => {
-      let stateClass = 'upcoming';
-      if (currentIdx >= 0) {
-        if (i < currentIdx) stateClass = 'complete';
-        else if (i === currentIdx) stateClass = 'current';
-      }
-      return `
-      <div class="progress-track-step ${stateClass}">
-        <div class="progress-track-node">
-          ${stateClass === 'complete'
-            ? `<span class="material-symbols-outlined" style="font-size:0.875rem">check</span>`
-            : `<span style="font-size:0.75rem;font-weight:700">${i + 1}</span>`}
-        </div>
-        <div class="progress-track-label">${escHtml(m.label)}</div>
-        ${m.sublabel ? `<div class="progress-track-sublabel">${escHtml(m.sublabel)}</div>` : ''}
-      </div>`;
-    }).join('')}
-  </div>`;
-}
-
-// ─── Documents ─────────────────────────────────────────────────
-async function refreshDocuments(engagements, templates) {
-  const hasEngagement = engagements && engagements.length > 0;
-  const hasTemplates  = templates  && templates.length  > 0;
-
-  document.getElementById('uploadBtnHeader').style.display = (hasEngagement && _currentEngagement?.status !== 'pending') ? 'inline-flex' : 'none';
-  document.getElementById('docsNoEngagement').style.display = (!hasEngagement && !hasTemplates) ? 'block' : 'none';
-  document.getElementById('docPanels').style.display = (hasEngagement || hasTemplates) ? 'grid' : 'none';
-
-  if (!hasEngagement && !hasTemplates) return;
-
-  let clientDocs = [];
-  let manualEthosDocs = [];
-
-  if (_currentEngagement) {
-    const docs = await getDocuments(_currentEngagement.id);
-    clientDocs      = docs.filter(d => d.document_type === 'client_upload');
-    manualEthosDocs = docs.filter(d => d.document_type === 'ethos_deliverable' || d.document_type === 'shared_working');
-  }
-
-  const templateItems = (templates || []).map(t => ({
-    _isTemplate:     true,
-    _templateId:     t.id,
-    file_name:       t.display_name,
-    file_path:       t.file_path,
-    file_size_bytes: null,
-    created_at:      t.created_at,
-    description:     null,
-    scan_status:     'reviewed',
-  }));
-
-  renderDocList('clientDocList', clientDocs, true);
-  renderDocList('ethosDocList', [...templateItems, ...manualEthosDocs], false);
-}
-
-async function reloadDocuments() {
-  const templates = await getProductTemplates();
-  await refreshDocuments(_allClientEngagements, templates);
-}
-
-function renderDocList(containerId, docs, showDelete) {
-  const el = document.getElementById(containerId);
-
-  if (!docs.length) {
-    el.innerHTML = `
-      <div class="empty-state">
-        <span class="material-symbols-outlined empty-state-icon">${showDelete ? 'folder_open' : 'inbox'}</span>
-        <div class="empty-state-title">${showDelete ? 'No documents yet' : 'No deliverables yet'}</div>
-        <p class="empty-state-text">${showDelete
-          ? 'Upload your existing policies and governance documentation using the button above.'
-          : "We'll upload your audit reports, toolkit documents and deliverables here as they're ready."
-        }</p>
-      </div>`;
-    return;
-  }
-
-  el.innerHTML = docs.map(doc => {
-    const ext = (doc.file_name || '').split('.').pop().toLowerCase();
-    const fileTypeLabel = (ext === 'doc' || ext === 'docx') ? 'DOC' : 'PDF';
-    const downloadAction = doc._isTemplate
-      ? portalAction('downloadTemplate', doc._templateId, doc.file_path, doc.file_name)
-      : portalAction('downloadDocument', doc.file_path, doc.file_name);
-    return `
-    <div class="file-item">
-      <div class="file-icon">${fileTypeLabel}</div>
-      <div class="file-info">
-        <div class="file-name" title="${escHtml(doc.file_name)}">${escHtml(doc.file_name)}</div>
-        <div class="file-meta">
-          <span>${formatFileSize(doc.file_size_bytes)}</span>
-          <span style="opacity:0.4">·</span>
-          <span>${formatDate(doc.created_at)}</span>
-          ${doc.scan_status === 'pending_review' ? '<span class="status-badge scan-pending" style="font-size:0.65rem;padding:2px 7px">Processing</span>' : ''}
-          ${doc.scan_status === 'flagged' ? '<span class="status-badge scan-flagged" style="font-size:0.65rem;padding:2px 7px">Flagged</span>' : ''}
-        </div>
-        ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
-      </div>
-      <div class="file-actions">
-        <button class="file-action-btn" ${downloadAction} title="Download">
-          <span class="material-symbols-outlined">download</span>
-        </button>
-        ${showDelete ? `<button class="file-action-btn delete" ${portalAction('handleDeleteDoc', doc.id, doc.file_path)} title="Delete">
-          <span class="material-symbols-outlined">delete</span>
-        </button>` : ''}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-async function handleDeleteDoc(docId, filePath) {
-  if (!confirm('Delete this document? This cannot be undone.')) return;
-  const ok = await deleteDocument(docId, filePath);
-  if (ok) {
-    showToast('Document deleted.', 'success');
-    await reloadDocuments();
-  }
-}
-
-// ─── Upload Modal ──────────────────────────────────────────────
-function openUploadModal() {
-  document.getElementById('uploadModalOverlay').classList.add('open');
-}
-
-function closeUploadModal() {
-  document.getElementById('uploadModalOverlay').classList.remove('open');
-  clearSelectedFile();
-  document.getElementById('uploadDescription').value = '';
-  document.getElementById('uploadProgress').classList.remove('visible');
-  document.getElementById('uploadProgressFill').style.width = '0%';
-}
-
-document.getElementById('fileInput').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) setSelectedFile(file);
-});
-
-const dropZone = document.getElementById('dropZone');
-dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', (e) => {
-  e.preventDefault();
-  dropZone.classList.remove('drag-over');
-  const file = e.dataTransfer.files[0];
-  if (file) setSelectedFile(file);
-});
-
-function setSelectedFile(file) {
-  _selectedFile = file;
-  document.getElementById('selectedFileName').textContent = file.name;
-  document.getElementById('selectedFileSize').textContent = formatFileSize(file.size);
-  document.getElementById('selectedFile').classList.add('visible');
-  document.getElementById('uploadBtn').disabled = false;
-}
-
-function clearSelectedFile() {
-  _selectedFile = null;
-  document.getElementById('fileInput').value = '';
-  document.getElementById('selectedFile').classList.remove('visible');
-  document.getElementById('uploadBtn').disabled = true;
-}
-
-async function handleUpload() {
-  if (!_selectedFile || !_currentEngagement) return;
-
-  const btn = document.getElementById('uploadBtn');
-  const description = document.getElementById('uploadDescription').value.trim();
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Uploading...';
-  document.getElementById('uploadProgress').classList.add('visible');
-
-  try {
-    const uploadedDoc = await uploadDocument(
-      _selectedFile,
-      _currentEngagement.id,
-      _currentProfile.id,
-      description,
-      'client_upload',
-      (pct) => {
-        document.getElementById('uploadProgressFill').style.width = `${pct}%`;
-        document.getElementById('uploadProgressText').textContent = `Uploading... ${pct}%`;
-      }
-    );
-    showToast('Document uploaded successfully.', 'success');
-    closeUploadModal();
-    await reloadDocuments();
-
-    // 30-min debounce: notify admin of new document
-    const key = DOC_NOTIF_KEY();
-    const last = parseInt(localStorage.getItem(key) || '0', 10);
-    if (Date.now() - last > 30 * 60 * 1000) {
-      sendNotification('document_uploaded_by_client', _currentProfile.id, uploadedDoc?.id);
-      localStorage.setItem(key, String(Date.now()));
-    }
-  } catch (err) {
-    showToast(err.message, 'error');
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">upload</span> Upload Document';
-  }
-}
-
-// ─── Settings ──────────────────────────────────────────────────
-function loadSettingsForm() {
-  document.getElementById('settingsFullName').value = _currentProfile.full_name || '';
-  document.getElementById('settingsCompany').value  = _currentProfile.company_name || '';
-  document.getElementById('settingsEmail').textContent = _currentProfile.email;
-}
-
-async function handleSaveSettings() {
-  const fullName = document.getElementById('settingsFullName').value.trim();
-  const company  = document.getElementById('settingsCompany').value.trim();
-
-  if (!fullName) { showToast('Please enter your name.', 'error'); return; }
-
-  const sb = getSupabase();
-  if (!sb) return;
-
-  const btn = document.getElementById('saveSettingsBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Saving...';
-
-  try {
-    const { error } = await sb
-      .from('profiles')
-      .update({ full_name: fullName, company_name: company || null, updated_at: new Date().toISOString() })
-      .eq('id', _currentProfile.id);
-    if (error) throw error;
-
-    _currentProfile.full_name    = fullName;
-    _currentProfile.company_name = company || null;
-    document.getElementById('navUserName').textContent = fullName;
-    showToast('Settings saved.', 'success');
-  } catch (err) {
-    showToast('Failed to save. Please try again.', 'error');
-    console.error('Save settings error:', err);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">save</span> Save Changes';
-  }
-}
-
-// ─── Messaging ─────────────────────────────────────────────────
-let _messages          = [];
-let _chatPollTimer     = null;
-let _chatFile          = null;
-let _chatSending       = false;
-// 30-min debounce key for doc-upload notifications
-const DOC_NOTIF_KEY    = () => `doc_notif_${_currentProfile?.id}`;
-
-async function initChat() {
-  if (!_currentEngagement) {
-    document.getElementById('chatMessages').innerHTML = `
-      <div class="chat-empty">
-        <span class="material-symbols-outlined">chat</span>
-        <p>Your workspace is being set up. You'll be able to message your advisor here shortly.</p>
-      </div>`;
-    return;
-  }
-  await loadMessages();
-  startChatPolling();
-}
-
-async function loadMessages(scrollToBottom = true) {
-  const clientId = _currentProfile.id;
-  const msgs = await getMessages(clientId);
-  _messages = msgs;
-
-  // Mark any unread admin messages as read
-  const unread = msgs.filter(m => m.sender_role === 'admin' && !m.is_read);
-  if (unread.length) {
-    markThreadRead(clientId, 'client');
-    // Clear badge
-    const badge = document.getElementById('messagesBadge');
-    if (badge) badge.style.display = 'none';
-  }
-
-  renderMessages(msgs, scrollToBottom);
-}
-
-function renderMessages(msgs, scrollToBottom = true) {
-  const el = document.getElementById('chatMessages');
-
-  if (!msgs.length) {
-    el.innerHTML = `
-      <div class="chat-empty">
-        <span class="material-symbols-outlined">chat</span>
-        <p>No messages yet. Send a message to start the conversation with your Ethos advisor.</p>
-      </div>`;
-    return;
-  }
-
-  let html = '';
-  let lastDate = null;
-  msgs.forEach(msg => {
-    const msgDate = new Date(msg.created_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
-    if (msgDate !== lastDate) {
-      html += `<div class="chat-date-divider"><span>${msgDate}</span></div>`;
-      lastDate = msgDate;
-    }
-    html += renderMessageBubble(msg);
-  });
-
-  el.innerHTML = html;
-
-  if (scrollToBottom) {
-    setTimeout(() => { el.scrollTop = el.scrollHeight; }, 0);
-  }
-}
-
-function renderMessageBubble(msg) {
-  const isClient = msg.sender_role === 'client';
-  const time = new Date(msg.created_at).toLocaleTimeString('en-AU', { hour: '2-digit', minute: '2-digit' });
-  const initials = isClient
-    ? getInitials(_currentProfile.full_name)
-    : 'EA'; // Ethos Admin
-
-  let bodyHtml = '';
-  if (msg.body) {
-    bodyHtml = `<div>${escHtml(msg.body).replace(/\n/g, '<br>')}</div>`;
-  }
-  if (msg.document_id && msg._doc_file_name) {
-    bodyHtml += `
-      <div class="chat-file-attachment" ${portalAction('downloadDocument', msg._doc_file_path || '', msg._doc_file_name || '')}>
-        <span class="material-symbols-outlined">picture_as_pdf</span>
-        <span class="chat-file-name">${escHtml(msg._doc_file_name)}</span>
-        <span class="material-symbols-outlined" style="font-size:0.9rem;opacity:0.6">download</span>
-      </div>`;
-  } else if (msg.document_id) {
-    bodyHtml += `
-      <div class="chat-file-attachment">
-        <span class="material-symbols-outlined">picture_as_pdf</span>
-        <span class="chat-file-name">Attachment</span>
-      </div>`;
-  }
-
-  return `
-  <div class="chat-message ${isClient ? 'from-client' : 'from-admin'}">
-    <div class="chat-avatar">${initials}</div>
-    <div>
-      <div class="chat-bubble">${bodyHtml}</div>
-      <span class="chat-time">${time}</span>
-    </div>
-  </div>`;
-}
-
-function startChatPolling() {
-  stopChatPolling();
-  _chatPollTimer = setInterval(async () => {
-    const clientId = _currentProfile?.id;
-    if (!clientId) return;
-    const msgs = await getMessages(clientId);
-    if (msgs.length !== _messages.length) {
-      _messages = msgs;
-      // Mark new admin messages as read
-      const unread = msgs.filter(m => m.sender_role === 'admin' && !m.is_read);
-      if (unread.length) markThreadRead(clientId, 'client');
-      renderMessages(msgs, true);
-    }
-  }, 15000);
-}
-
-function stopChatPolling() {
-  if (_chatPollTimer) { clearInterval(_chatPollTimer); _chatPollTimer = null; }
-}
-
-function autoGrowTextarea(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-function handleChatKeydown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    handleSendMessage();
-  }
-}
-
-document.getElementById('chatFileInput').addEventListener('change', (e) => {
-  const file = e.target.files[0];
-  if (file) setChatFile(file);
-});
-
-function setChatFile(file) {
-  _chatFile = file;
-  document.getElementById('chatFileName').textContent = file.name;
-  document.getElementById('chatFilePreview').style.display = 'flex';
-}
-
-function clearChatFile() {
-  _chatFile = null;
-  document.getElementById('chatFileInput').value = '';
-  document.getElementById('chatFilePreview').style.display = 'none';
-}
-
-async function handleSendMessage() {
-  if (_chatSending) return;
-  const input = document.getElementById('chatInput');
-  const body  = input.value.trim();
-  if (!body && !_chatFile) return;
-  if (!_currentEngagement || !_currentProfile) return;
-
-  _chatSending = true;
-  const sendBtn = document.getElementById('chatSendBtn');
-  sendBtn.disabled = true;
-
-  try {
-    let documentId = null;
-
-    // Upload file attachment first if any
-    if (_chatFile) {
-      const doc = await uploadDocument(
-        _chatFile,
-        _currentEngagement.id,
-        _currentProfile.id,
-        null,
-        'client_upload',
-        null
-      );
-      if (!doc) throw new Error('File upload failed. Please try again.');
-      documentId = doc.id;
-
-      // 30-min debounce for doc-upload admin notification
-      const key = DOC_NOTIF_KEY();
-      const last = parseInt(localStorage.getItem(key) || '0', 10);
-      if (Date.now() - last > 30 * 60 * 1000) {
-        sendNotification('document_uploaded_by_client', _currentProfile.id, documentId);
-        localStorage.setItem(key, String(Date.now()));
-      }
-
-      clearChatFile();
-    }
-
-    const msg = await sendMessage({
-      clientId:   _currentProfile.id,
-      body:       body || null,
-      documentId,
-      senderRole: 'client',
-    });
-
-    if (!msg) throw new Error('Failed to send message. Please try again.');
-
-    // Notify admin
-    sendNotification('new_message_from_client', _currentProfile.id, msg.id);
-
-    input.value = '';
-    input.style.height = 'auto';
-
-    // Reload so the new message (with any doc info) appears
-    await loadMessages(true);
-
-    // Also refresh Documents panel if a file was uploaded
-    if (documentId) reloadDocuments();
-
-  } catch (err) {
-    showToast(err.message, 'error');
-  } finally {
-    _chatSending = false;
-    sendBtn.disabled = false;
-  }
-}
-
-// Check for unread admin messages on load and show badge
-async function checkMessagesUnread() {
-  if (!_currentProfile) return;
-  const clientId = _currentProfile.id;
-  const sb = getSupabase();
-  if (!sb) return;
-  const { count } = await sb
-    .from('messages')
-    .select('id', { count: 'exact', head: true })
-    .eq('client_id', clientId)
-    .eq('sender_role', 'admin')
-    .eq('is_read', false);
-  if (count > 0) {
-    const badge = document.getElementById('messagesBadge');
-    badge.textContent = count;
-    badge.style.display = 'inline-flex';
-  }
-}
-
-// ─── Notification Preferences ──────────────────────────────────
-let _notifPrefs = {};
-const NOTIF_DEFS = [
-  { key: 'new_message',         label: 'New messages',        sub: 'When your Ethos advisor sends you a message' },
-  { key: 'new_action_item',     label: 'New action items',    sub: 'When a task is added to your workspace' },
-  { key: 'progress_update',     label: 'Progress updates',    sub: 'When your engagement moves to a new stage' },
-  { key: 'new_document',        label: 'New documents',       sub: 'When a document is shared with you' },
-];
-
-async function loadNotifPrefs() {
-  _notifPrefs = await getMyNotificationPrefs();
-  renderNotifPrefs();
-}
-
-function renderNotifPrefs() {
-  const el = document.getElementById('notifPrefsList');
-  el.innerHTML = NOTIF_DEFS.map(def => {
-    const checked = _notifPrefs[def.key] !== false; // default true
-    return `
-    <div class="notif-pref-row">
-      <div>
-        <div class="notif-pref-label">${def.label}</div>
-        <div class="notif-pref-sub">${def.sub}</div>
-      </div>
-      <label class="notif-toggle" aria-label="${def.label}">
-        <input type="checkbox" id="notif_${def.key}" ${checked ? 'checked' : ''}/>
-        <span class="notif-toggle-slider"></span>
-      </label>
-    </div>`;
-  }).join('');
-}
-
-async function handleSaveNotifPrefs() {
-  const prefs = {};
-  NOTIF_DEFS.forEach(def => {
-    prefs[def.key] = document.getElementById(`notif_${def.key}`).checked;
-  });
-
-  const btn = document.getElementById('saveNotifsBtn');
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span> Saving...';
-
-  const ok = await updateNotificationPrefs(prefs);
-  if (ok) {
-    _notifPrefs = prefs;
-    showToast('Notification preferences saved.', 'success');
-  } else {
-    showToast('Failed to save. Please try again.', 'error');
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:1rem">save</span> Save Preferences';
-}
-
-function escHtml(str) {
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-</script>
+<script src="dashboard-page.js"></script>
 </body>
 </html>

@@ -324,6 +324,7 @@
       }
     }
   </style>
+  <script src="/dom-actions.js" defer></script>
 </head>
 <body>
 
@@ -357,7 +358,7 @@
       </a></li>
     </ul>
     <a href="/free-audit" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -365,20 +366,20 @@
 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+  <button class="mobile-nav-close" data-on-click="closeMobileNav" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
   <ul>
-    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
-    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
-    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
-    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
-    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
-    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
-    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/" data-on-click="closeMobileNav">Home</a></li>
+    <li><a href="/services" data-on-click="closeMobileNav">Services</a></li>
+    <li><a href="/about" data-on-click="closeMobileNav">About</a></li>
+    <li><a href="/regulatory" data-on-click="closeMobileNav">Regulatory Landscape</a></li>
+    <li><a href="/resources" data-on-click="closeMobileNav">Resources</a></li>
+    <li><a href="/faq" data-on-click="closeMobileNav">FAQ</a></li>
+    <li><a href="/contact" data-on-click="closeMobileNav">Contact</a></li>
     <li><a href="/portal/login">Client Portal</a></li>
   </ul>
-  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" data-on-click="closeMobileNav">Get Free Audit</a>
 </div>
 
 <main>

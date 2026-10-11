@@ -138,6 +138,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.8.0/countUp.umd.min.js"></script>
   <!-- AOS JS -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="/dom-actions.js" defer></script>
 </head>
 <body>
 
@@ -171,7 +172,7 @@
       </a></li>
     </ul>
     <a href="/free-audit" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -179,20 +180,20 @@
 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+  <button class="mobile-nav-close" data-on-click="closeMobileNav" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
   <ul>
-    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
-    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
-    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
-    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
-    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
-    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
-    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/" data-on-click="closeMobileNav">Home</a></li>
+    <li><a href="/services" data-on-click="closeMobileNav">Services</a></li>
+    <li><a href="/about" data-on-click="closeMobileNav">About</a></li>
+    <li><a href="/regulatory" data-on-click="closeMobileNav">Regulatory Landscape</a></li>
+    <li><a href="/resources" data-on-click="closeMobileNav">Resources</a></li>
+    <li><a href="/faq" data-on-click="closeMobileNav">FAQ</a></li>
+    <li><a href="/contact" data-on-click="closeMobileNav">Contact</a></li>
     <li><a href="/portal/login">Client Portal</a></li>
   </ul>
-  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" data-on-click="closeMobileNav">Get Free Audit</a>
 </div>
 
 <main>
@@ -218,7 +219,7 @@
       <div class="cards-stage">
 
         <!-- CARD 0: AUDIT REPORT -->
-        <div class="product-card pos-left" id="pcard0" onclick="focusPCard(0)">
+        <div class="product-card pos-left" id="pcard0" data-on-click="focusPCard" data-args='[0]'>
           <div class="pc-header">
             <span class="pc-title">Governance Audit Report</span>
             <span class="pc-badge badge-red">&#9888; 3 Gaps</span>
@@ -247,7 +248,7 @@
         </div>
 
         <!-- CARD 1: ISO CLAUSE TRACKER -->
-        <div class="product-card pos-center" id="pcard1" onclick="focusPCard(1)">
+        <div class="product-card pos-center" id="pcard1" data-on-click="focusPCard" data-args='[1]'>
           <div class="pc-header">
             <span class="pc-title">ISO 42001 Clause Tracker</span>
             <span class="pc-badge badge-green">&#10003; On Track</span>
@@ -288,7 +289,7 @@
         </div>
 
         <!-- CARD 2: RISK REGISTER -->
-        <div class="product-card pos-right" id="pcard2" onclick="focusPCard(2)">
+        <div class="product-card pos-right" id="pcard2" data-on-click="focusPCard" data-args='[2]'>
           <div class="pc-header">
             <span class="pc-title">AI Risk Register</span>
             <span class="pc-badge badge-gold">4 Systems</span>
@@ -326,9 +327,9 @@
       </div>
 
       <div class="card-dots">
-        <div class="card-dot" id="pdot0" onclick="focusPCard(0)"></div>
-        <div class="card-dot active" id="pdot1" onclick="focusPCard(1)"></div>
-        <div class="card-dot" id="pdot2" onclick="focusPCard(2)"></div>
+        <div class="card-dot" id="pdot0" data-on-click="focusPCard" data-args='[0]'></div>
+        <div class="card-dot active" id="pdot1" data-on-click="focusPCard" data-args='[1]'></div>
+        <div class="card-dot" id="pdot2" data-on-click="focusPCard" data-args='[2]'></div>
       </div>
     </div>
 
@@ -651,21 +652,6 @@
 <script src="app.js"></script>
 <script src="booking.js"></script>
 <!-- Hash-based URL backward compatibility redirect -->
-<script>
-  (function() {
-    var hash = window.location.hash;
-    var map = {
-      '#services': '/services',
-      '#about': '/about',
-      '#regulatory': '/regulatory',
-      '#resources': '/resources',
-      '#faq': '/faq',
-      '#contact': '/contact'
-    };
-    if (map[hash]) {
-      window.location.replace(map[hash]);
-    }
-  })();
-</script>
+<script src="index-page.js"></script>
 </body>
 </html>
