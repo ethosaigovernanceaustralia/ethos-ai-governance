@@ -362,10 +362,53 @@
   </div>
 </div>
 
+<!-- Consent Modal (first-login gate for accounts created without the signup form) -->
+<div class="modal-overlay" id="consentModalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Before you continue</h2>
+    </div>
+
+    <p style="font-size:0.875rem;color:var(--muted);line-height:1.5;margin:0 0 1rem">
+      Your account was set up for you, so we need your agreement to our terms and
+      your consent before you use the portal.
+    </p>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentTerms" style="margin-top:2px;flex-shrink:0"/>
+        <span>I agree to the <a href="/legal/terms" target="_blank" rel="noopener" style="color:var(--brass)">Portal Terms of Service</a></span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentPrivacy" style="margin-top:2px;flex-shrink:0"/>
+        <span>I agree to the <a href="/legal/privacy" target="_blank" rel="noopener" style="color:var(--brass)">Privacy Policy</a></span>
+      </label>
+      <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
+        <input type="checkbox" id="gateConsentApp8" style="margin-top:2px;flex-shrink:0"/>
+        <span>I expressly consent to my information being disclosed to overseas service providers (Supabase, USA; Resend, USA), and I acknowledge that APP 8.1 (reasonable steps) will not apply and that I may not be able to seek redress under the Privacy Act if an overseas recipient mishandles my information.</span>
+      </label>
+    </div>
+
+    <div id="gateConsentError" style="display:none;font-size:0.8125rem;color:#dc2626;margin-bottom:0.75rem">
+      Something went wrong recording your agreement. Please try again.
+    </div>
+
+    <div style="display:flex;gap:0.75rem;align-items:center">
+      <button class="btn-outline" onclick="signOut()" style="flex:1">Sign out</button>
+      <button class="btn-gold" id="gateConsentBtn" onclick="handleConsentContinue()" style="flex:2" disabled>
+        Agree and continue
+        <span class="material-symbols-outlined" style="font-size:1rem">arrow_forward</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="portal.js"></script>
+<script src="actions.js"></script>
 <script>
+registerPortalActions({ downloadDocument, downloadTemplate, handleDeleteDoc });
 let _currentSession  = null;
 let _currentProfile  = null;
 let _currentEngagement = null;
@@ -388,6 +431,73 @@ let _selectedFile    = null;
     window.location.href = '/portal/admin'; return;
   }
 
+  // First-login consent gate — accounts created without the signup form
+  // (e.g. invited after a Stripe purchase) have no consent records yet
+  if (await needsConsentGate()) {
+    hideLoader();
+    showConsentModal();
+    return;
+  }
+
+  await initDashboard();
+})();
+
+// ─── Consent Gate ──────────────────────────────────────────────
+const GATED_CONSENT_TYPES = ['terms_of_service', 'privacy_policy', 'app8_overseas_disclosure'];
+
+async function needsConsentGate() {
+  try {
+    const res = await fetch('/api/record-consents', {
+      headers: { 'Authorization': `Bearer ${_currentSession.access_token}` },
+    });
+    if (!res.ok) { console.error('Consent check failed:', res.status); return false; }
+    const { consents } = await res.json();
+    return GATED_CONSENT_TYPES.some(type => !consents.includes(type));
+  } catch (err) {
+    // Fail open: an API outage should not lock clients out of the portal
+    console.error('Consent check error:', err);
+    return false;
+  }
+}
+
+function showConsentModal() {
+  const boxes = ['gateConsentTerms', 'gateConsentPrivacy', 'gateConsentApp8']
+    .map(id => document.getElementById(id));
+  const btn = document.getElementById('gateConsentBtn');
+  boxes.forEach(box => box.addEventListener('change', () => {
+    btn.disabled = !boxes.every(b => b.checked);
+  }));
+  document.getElementById('consentModalOverlay').classList.add('open');
+}
+
+async function handleConsentContinue() {
+  const btn = document.getElementById('gateConsentBtn');
+  const errorEl = document.getElementById('gateConsentError');
+  btn.disabled = true;
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/record-consents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_currentSession.access_token}`,
+      },
+      body: JSON.stringify({ consents: { terms: true, privacy: true, app8: true } }),
+    });
+    if (!res.ok) throw new Error(`Consent record failed: ${res.status}`);
+
+    document.getElementById('consentModalOverlay').classList.remove('open');
+    await initDashboard();
+  } catch (err) {
+    console.error('Consent record error:', err);
+    errorEl.style.display = 'block';
+    btn.disabled = false;
+  }
+}
+
+// ─── Dashboard Init ────────────────────────────────────────────
+async function initDashboard() {
   // Populate nav
   document.getElementById('navUserName').textContent = _currentProfile.full_name;
 
@@ -430,7 +540,7 @@ let _selectedFile    = null;
   checkMessagesUnread();
 
   hideLoader();
-})();
+}
 
 // ─── View Switcher ─────────────────────────────────────────────
 function showClientView(view) {
@@ -585,7 +695,7 @@ async function handleClientCompleteAction(id) {
   updateActionItemsBadge(_actionItems);
   showToast('Marked as complete.', 'success');
   // Notify admin
-  sendNotification('action_item_completed', _currentProfile.id, { title: item?.title });
+  sendNotification('action_item_completed', _currentProfile.id, id);
 }
 
 // ─── Progress Tracker ──────────────────────────────────────────
@@ -781,9 +891,9 @@ function renderDocList(containerId, docs, showDelete) {
   el.innerHTML = docs.map(doc => {
     const ext = (doc.file_name || '').split('.').pop().toLowerCase();
     const fileTypeLabel = (ext === 'doc' || ext === 'docx') ? 'DOC' : 'PDF';
-    const downloadOnclick = doc._isTemplate
-      ? `downloadTemplate('${doc._templateId}','${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`
-      : `downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')`;
+    const downloadAction = doc._isTemplate
+      ? portalAction('downloadTemplate', doc._templateId, doc.file_path, doc.file_name)
+      : portalAction('downloadDocument', doc.file_path, doc.file_name);
     return `
     <div class="file-item">
       <div class="file-icon">${fileTypeLabel}</div>
@@ -799,10 +909,10 @@ function renderDocList(containerId, docs, showDelete) {
         ${doc.description ? `<div style="font-size:0.75rem;color:var(--muted);margin-top:3px">${escHtml(doc.description)}</div>` : ''}
       </div>
       <div class="file-actions">
-        <button class="file-action-btn" onclick="${downloadOnclick}" title="Download">
+        <button class="file-action-btn" ${downloadAction} title="Download">
           <span class="material-symbols-outlined">download</span>
         </button>
-        ${showDelete ? `<button class="file-action-btn delete" onclick="handleDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+        ${showDelete ? `<button class="file-action-btn delete" ${portalAction('handleDeleteDoc', doc.id, doc.file_path)} title="Delete">
           <span class="material-symbols-outlined">delete</span>
         </button>` : ''}
       </div>
@@ -873,7 +983,7 @@ async function handleUpload() {
   document.getElementById('uploadProgress').classList.add('visible');
 
   try {
-    await uploadDocument(
+    const uploadedDoc = await uploadDocument(
       _selectedFile,
       _currentEngagement.id,
       _currentProfile.id,
@@ -892,7 +1002,7 @@ async function handleUpload() {
     const key = DOC_NOTIF_KEY();
     const last = parseInt(localStorage.getItem(key) || '0', 10);
     if (Date.now() - last > 30 * 60 * 1000) {
-      sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+      sendNotification('document_uploaded_by_client', _currentProfile.id, uploadedDoc?.id);
       localStorage.setItem(key, String(Date.now()));
     }
   } catch (err) {
@@ -1024,7 +1134,7 @@ function renderMessageBubble(msg) {
   }
   if (msg.document_id && msg._doc_file_name) {
     bodyHtml += `
-      <div class="chat-file-attachment" onclick="downloadDocument('${escHtml(msg._doc_file_path || '')}', '${escHtml(msg._doc_file_name || '')}')">
+      <div class="chat-file-attachment" ${portalAction('downloadDocument', msg._doc_file_path || '', msg._doc_file_name || '')}>
         <span class="material-symbols-outlined">picture_as_pdf</span>
         <span class="chat-file-name">${escHtml(msg._doc_file_name)}</span>
         <span class="material-symbols-outlined" style="font-size:0.9rem;opacity:0.6">download</span>
@@ -1127,7 +1237,7 @@ async function handleSendMessage() {
       const key = DOC_NOTIF_KEY();
       const last = parseInt(localStorage.getItem(key) || '0', 10);
       if (Date.now() - last > 30 * 60 * 1000) {
-        sendNotification('document_uploaded_by_client', _currentProfile.id, { count: 1 });
+        sendNotification('document_uploaded_by_client', _currentProfile.id, documentId);
         localStorage.setItem(key, String(Date.now()));
       }
 
@@ -1144,9 +1254,7 @@ async function handleSendMessage() {
     if (!msg) throw new Error('Failed to send message. Please try again.');
 
     // Notify admin
-    sendNotification('new_message_from_client', _currentProfile.id, {
-      preview: body ? body.slice(0, 120) : null,
-    });
+    sendNotification('new_message_from_client', _currentProfile.id, msg.id);
 
     input.value = '';
     input.style.height = 'auto';

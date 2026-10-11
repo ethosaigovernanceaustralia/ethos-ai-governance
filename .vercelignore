@@ -1,0 +1,16 @@
+# Build inputs remain available; only dist is public output.
+.git/
+.claude/
+.codex/
+.agents/
+.env
+.env.*
+node_modules/
+dist/
+graphify-out/
+**/.DS_Store
+**/*.sql
+**/*.md
+**/*analysis.txt
+tests/
+coverage/

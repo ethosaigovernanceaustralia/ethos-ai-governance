@@ -133,36 +133,43 @@ async function handleFormSubmit(e) {
     additional_notes: (document.getElementById('contactMessage')?.value || '').trim() || null,
   };
 
-  try {
-    await submitEnquiryToSupabase(data);
-  } catch (err) {
-    console.error('Form submission error:', err);
-  }
-
-  fetch('/api/notify-enquiry', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).catch(() => {});
+  const sent = await submitEnquiry(data, e.target);
 
   btn.innerHTML = originalBtnHTML;
   btn.disabled = false;
+  if (!sent) return;
   if (successEl) successEl.style.display = 'flex';
   e.target.reset();
   const counter = document.getElementById('charCountNum');
   if (counter) counter.textContent = '0';
 }
 
-// ─── Supabase Enquiry Submit ──────────────────────
-async function submitEnquiryToSupabase(data) {
-  const cfg = window.SUPABASE_CONFIG;
-  if (!cfg || cfg.url.includes('YOUR_PROJECT_REF')) {
-    return new Promise(resolve => setTimeout(resolve, 1200));
+// ─── Enquiry Submit ───────────────────────────────
+// Saves through /api/submit-enquiry, which validates, stores and then notifies.
+// Returns true only once the enquiry is saved; otherwise shows an inline error.
+async function submitEnquiry(data, form) {
+  const previous = form.querySelector('.form-error-inline');
+  if (previous) previous.remove();
+  let message = 'Sorry, your message could not be sent. Please try again, or email hello@ethosaigovernance.com.au.';
+  try {
+    const response = await fetch('/api/submit-enquiry', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (response.ok) return true;
+    if (response.status === 400) message = 'Please check your name, email and message, then try again.';
+    if (response.status === 429) message = 'We have received several enquiries from you already. Please try again later.';
+  } catch (err) {
+    console.error('Form submission error:', err);
   }
-
-  const sb = window.supabase.createClient(cfg.url, cfg.anonKey);
-  const { error } = await sb.from('enquiries').insert(data);
-  if (error) throw error;
+  const error = document.createElement('p');
+  error.className = 'form-error-inline';
+  error.setAttribute('role', 'alert');
+  error.style.cssText = 'color:#b42318;font-size:0.9rem;margin-top:0.75rem';
+  error.textContent = message;
+  form.appendChild(error);
+  return false;
 }
 
 // ─── Custom Cursor ───────────────────────────────
@@ -515,20 +522,11 @@ async function handlePathFormSubmit(e, pathType) {
   fd.forEach((val, key) => { data[key] = val; });
   data.enquiry_type = pathType;
 
-  try {
-    await submitEnquiryToSupabase(data);
-  } catch (err) {
-    console.error('Form submission error:', err);
-  }
-
-  fetch('/api/notify-enquiry', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  }).catch(() => {});
+  const sent = await submitEnquiry(data, form);
 
   submitBtn.innerHTML = originalHTML;
   submitBtn.disabled = false;
+  if (!sent) return;
   form.reset();
   if (successEl) successEl.style.display = 'flex';
 }
@@ -541,7 +539,95 @@ function toggleBonusSecondary(summaryEl) {
 }
 
 // ─── Stripe Checkout ─────────────────────────────
-async function startCheckout(productTier, btn) {
+
+// Product display names for the Engagement Terms modal.
+const CHECKOUT_PRODUCT_NAMES = {
+  au_compliance_core: 'AU Compliance Core',
+  full_toolkit:       'Full Responsible AI Toolkit',
+};
+
+// Entry point wired to the pricing buttons. Instead of going straight to
+// Stripe, we first show an in-app Engagement Terms acceptance step. The
+// customer must tick the box before checkout begins. Once accepted we call
+// proceedToCheckout() with the original button so its loading/error UI still
+// works exactly as before.
+function startCheckout(productTier, btn) {
+  if (!CHECKOUT_PRODUCT_NAMES[productTier]) return;
+  openEngagementTerms(productTier, btn);
+}
+
+// ─── Engagement Terms acceptance modal ───────────
+// STUB — the acceptance capture point is real, but the terms copy below is a
+// placeholder. TODO-LEGAL: replace the placeholder body with the final
+// Engagement Terms once the legal document is signed off. Keep the checkbox
+// gate and the proceedToCheckout() call intact when swapping the copy in.
+function openEngagementTerms(productTier, btn) {
+  // Reuse a single overlay instance across opens.
+  let overlay = document.getElementById('engagementTermsOverlay');
+  if (overlay) overlay.remove();
+
+  const productName = CHECKOUT_PRODUCT_NAMES[productTier];
+
+  overlay = document.createElement('div');
+  overlay.className = 'booking-overlay';
+  overlay.id = 'engagementTermsOverlay';
+  overlay.innerHTML = `
+    <div class="booking-modal terms-modal" role="dialog" aria-modal="true" aria-labelledby="engagementTermsTitle">
+      <button type="button" class="booking-close" id="engagementTermsClose" aria-label="Close">&times;</button>
+      <p class="booking-eyebrow">Before you pay</p>
+      <h2 class="booking-title" id="engagementTermsTitle">Engagement Terms</h2>
+      <p class="terms-lede">You are purchasing <strong>${productName}</strong>. Please review and accept the Engagement Terms to continue to secure payment.</p>
+
+      <div class="terms-body" id="engagementTermsBody">
+        <!-- TODO-LEGAL: PLACEHOLDER TERMS. Replace this entire block with the
+             final, legally reviewed Engagement Terms before go-live. -->
+        <p><strong>[PLACEHOLDER — NOT FINAL LEGAL TEXT]</strong></p>
+        <p>These Engagement Terms govern the supply of the selected Ethos AI Governance deliverables. By accepting, you acknowledge that the deliverables are templates and informational materials, not legal advice, and that the 30-Day Relevance Guarantee applies as described on the services page.</p>
+        <p>Full terms — scope, licence, payment, refund conditions, liability and governing law — will appear here in the final version. This placeholder exists so the acceptance step can be tested end-to-end.</p>
+      </div>
+
+      <label class="terms-check">
+        <input type="checkbox" id="engagementTermsAccept"/>
+        <span>I have read and agree to the Engagement Terms.</span>
+      </label>
+
+      <p class="checkout-error terms-error" id="engagementTermsError" style="display:none">Please accept the Engagement Terms to continue.</p>
+
+      <div class="terms-actions">
+        <button type="button" class="btn-outline" id="engagementTermsCancel">Cancel</button>
+        <button type="button" class="btn-primary" id="engagementTermsContinue">Continue to payment</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+  requestAnimationFrame(() => overlay.classList.add('open'));
+
+  const close = () => {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => overlay.remove(), 250);
+  };
+
+  overlay.querySelector('#engagementTermsClose').addEventListener('click', close);
+  overlay.querySelector('#engagementTermsCancel').addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+
+  const checkbox = overlay.querySelector('#engagementTermsAccept');
+  const errEl    = overlay.querySelector('#engagementTermsError');
+  checkbox.addEventListener('change', () => { if (checkbox.checked) errEl.style.display = 'none'; });
+
+  overlay.querySelector('#engagementTermsContinue').addEventListener('click', () => {
+    if (!checkbox.checked) {
+      errEl.style.display = 'block';
+      return;
+    }
+    close();
+    proceedToCheckout(productTier, btn);
+  });
+}
+
+async function proceedToCheckout(productTier, btn) {
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
   btn.textContent = 'Loading...';

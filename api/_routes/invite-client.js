@@ -5,6 +5,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 const { createClient } = require('@supabase/supabase-js');
+const { createSetPasswordLink, sendSetPasswordEmail } = require('../../lib/auth-links');
 
 module.exports = async function handler(req, res) {
   // Only allow POST
@@ -39,25 +40,25 @@ module.exports = async function handler(req, res) {
     return res.status(403).json({ error: 'Admin access required' });
   }
 
-  // Invite user — Supabase sends the invitation email automatically
-  const { data: userData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: fullName, company_name: companyName },
-    redirectTo: 'https://ethosaigovernance.com.au/portal/reset-password',
+  // Create the login and its set-password link; the email is sent once the profile exists.
+  const emailNorm = String(email).trim().toLowerCase();
+  const { user: invitedUser, link, error: inviteError } = await createSetPasswordLink(supabase, {
+    type: 'invite', email: emailNorm, data: { full_name: fullName, company_name: companyName },
   });
 
   if (inviteError) {
-    console.error('Invite error:', inviteError);
+    console.error('Invite error:', inviteError.code || inviteError.message);
     return res.status(500).json({ error: inviteError.message });
   }
 
-  const userId = userData.user.id;
+  const userId = invitedUser.id;
 
   // Create the profile row
   const { error: profileError } = await supabase.from('profiles').insert({
     id: userId,
     full_name: fullName,
     company_name: companyName,
-    email: email,
+    email: emailNorm,
     role: 'client'
   });
 
@@ -80,9 +81,16 @@ module.exports = async function handler(req, res) {
     }
   }
 
+  try {
+    await sendSetPasswordEmail({ email: emailNorm, name: fullName, purpose: 'portal_invite', link });
+  } catch (err) {
+    console.error('Invite email error:', err.message);
+    return res.status(200).json({ success: true, userId, message: `Client created, but the invitation email failed. Use Resend invite for ${emailNorm}.` });
+  }
+
   return res.status(200).json({
     success: true,
     userId,
-    message: `Invitation sent to ${email}`
+    message: `Invitation sent to ${emailNorm}`
   });
 };

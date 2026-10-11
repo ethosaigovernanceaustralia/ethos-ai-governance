@@ -634,7 +634,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="portal.js"></script>
+<script src="actions.js"></script>
 <script>
+registerPortalActions({ downloadDocument, handleAdminDeleteDoc, openRevokeModal, handlePermanentDeleteClient, handlePermanentDeleteEnquiry, adminDownloadInvoice });
 let _adminProfile = null;
 let _allClients = [];
 let _selectedClientId = null;
@@ -943,17 +945,17 @@ function renderAdminDocList(containerId, docs, showDelete) {
         ${doc.profiles ? `<div style="font-size:0.7rem;color:var(--muted);margin-top:2px">Uploaded by: ${escHtml(doc.profiles.full_name)}</div>` : ''}
       </div>
       <div class="file-actions">
-        <button class="file-action-btn" onclick="downloadDocument('${escHtml(doc.file_path)}','${escHtml(doc.file_name)}')" title="Download">
+        <button class="file-action-btn" ${portalAction('downloadDocument', doc.file_path, doc.file_name)} title="Download">
           <span class="material-symbols-outlined">download</span>
         </button>
         ${showDelete ? `
         <button class="file-action-btn" onclick="markReviewed('${doc.id}')" title="Mark reviewed">
           <span class="material-symbols-outlined">check_circle</span>
         </button>
-        <button class="file-action-btn delete" onclick="handleAdminDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+        <button class="file-action-btn delete" ${portalAction('handleAdminDeleteDoc', doc.id, doc.file_path)} title="Delete">
           <span class="material-symbols-outlined">delete</span>
         </button>` : `
-        <button class="file-action-btn delete" onclick="handleAdminDeleteDoc('${doc.id}','${escHtml(doc.file_path)}')" title="Delete">
+        <button class="file-action-btn delete" ${portalAction('handleAdminDeleteDoc', doc.id, doc.file_path)} title="Delete">
           <span class="material-symbols-outlined">delete</span>
         </button>`}
       </div>
@@ -1021,7 +1023,7 @@ function renderEngagements(engagements) {
         </div>
         <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap">
           ${activeAccess ? `
-          <button class="btn-ghost" onclick="openRevokeModal('${activeAccess.id}','${eng.id}','${escHtml(clientName)}','${escHtml(productName)}')"
+          <button class="btn-ghost" ${portalAction('openRevokeModal', activeAccess.id, eng.id, clientName, productName)}
             style="color:#dc2626;font-size:0.8rem;padding:0.3rem 0.6rem;display:inline-flex;align-items:center;gap:4px" title="Revoke access">
             <span class="material-symbols-outlined" style="font-size:0.875rem">lock</span>
             Revoke Access
@@ -1138,7 +1140,7 @@ async function handleAdminUpload() {
   document.getElementById('adminUploadProgress').classList.add('visible');
 
   try {
-    await uploadDocument(
+    const sharedDoc = await uploadDocument(
       _adminSelectedFile,
       _selectedEngagementId,
       _selectedClientId,
@@ -1152,9 +1154,7 @@ async function handleAdminUpload() {
     );
     showToast('Deliverable uploaded to client workspace.', 'success');
     // Notify client of new document
-    sendNotification('document_shared', _selectedClientId, {
-      doc_name: _adminSelectedFile.name,
-    });
+    sendNotification('document_shared', _selectedClientId, sharedDoc?.id);
     closeAdminUploadModal();
     await refreshWorkspaceDocs();
   } catch (err) {
@@ -1241,8 +1241,8 @@ async function loadEnquiries() {
     <tr class="enquiry-row" onclick="selectEnquiry('${enq.id}')">
       <td style="font-weight:500">${escHtml(enq.name)}</td>
       <td style="color:var(--muted)">${escHtml(enq.company)}</td>
-      <td style="color:var(--muted)">${promptLabels[enq.enquiry_prompt] || enq.enquiry_prompt}</td>
-      <td><span class="status-badge status-${enq.status}">${enq.status.charAt(0).toUpperCase()+enq.status.slice(1)}</span></td>
+      <td style="color:var(--muted)">${escHtml(Object.hasOwn(promptLabels, enq.enquiry_prompt) ? promptLabels[enq.enquiry_prompt] : enq.enquiry_prompt)}</td>
+      <td><span class="status-badge status-${escHtml(enq.status)}">${escHtml(String(enq.status || '').charAt(0).toUpperCase()+String(enq.status || '').slice(1))}</span></td>
       <td style="color:var(--muted)">${formatDate(enq.created_at)}</td>
       <td onclick="event.stopPropagation()" style="display:flex;gap:0.4rem">
         <button class="btn-ghost" onclick="handleArchiveEnquiry('${enq.id}')" title="Archive" style="color:var(--muted)">
@@ -1298,7 +1298,7 @@ function selectEnquiry(enquiryId) {
 
     <div class="enquiry-field-label">Interested in</div>
     <div class="enquiry-field-value" style="display:flex;flex-wrap:wrap;gap:6px">
-      ${(enq.interested_in || []).map(i => `<span class="status-badge status-new">${interestLabels[i]||i}</span>`).join('')}
+      ${(Array.isArray(enq.interested_in) ? enq.interested_in : []).map(i => `<span class="status-badge status-new">${escHtml(Object.hasOwn(interestLabels, i) ? interestLabels[i] : i)}</span>`).join('')}
     </div>
 
     ${enq.existing_governance ? `<div class="enquiry-field-label">Existing governance</div><div class="enquiry-field-value">${escHtml(enq.existing_governance)}</div>` : ''}
@@ -1367,7 +1367,7 @@ async function loadBinClients() {
           <button class="btn-ghost" onclick="handleRestoreDeletedClient('${c.id}')">
             <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">restore</span> Restore
           </button>
-          <button class="btn-ghost" onclick="handlePermanentDeleteClient('${c.id}','${escHtml(c.full_name)}')" style="color:#dc2626" title="Delete forever">
+          <button class="btn-ghost" ${portalAction('handlePermanentDeleteClient', c.id, c.full_name)} style="color:#dc2626" title="Delete forever">
             <span class="material-symbols-outlined" style="font-size:0.9rem">delete_forever</span>
           </button>
         </td>
@@ -1399,7 +1399,7 @@ async function loadBinEnquiries() {
           <button class="btn-ghost" onclick="handleRestoreDeletedEnquiry('${e.id}')">
             <span class="material-symbols-outlined" style="font-size:0.9rem;vertical-align:middle">restore</span> Restore
           </button>
-          <button class="btn-ghost" onclick="handlePermanentDeleteEnquiry('${e.id}','${escHtml(e.name)}')" style="color:#dc2626" title="Delete forever">
+          <button class="btn-ghost" ${portalAction('handlePermanentDeleteEnquiry', e.id, e.name)} style="color:#dc2626" title="Delete forever">
             <span class="material-symbols-outlined" style="font-size:0.9rem">delete_forever</span>
           </button>
         </td>
@@ -1519,7 +1519,7 @@ async function handleSendPasswordReset() {
 }
 
 function escHtml(str) {
-  return (str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ─── Action Items ──────────────────────────────────────────────
@@ -1631,10 +1631,7 @@ async function handleSaveActionItem() {
       if (!item) throw new Error('Create failed');
       // Notify client if assigned to them
       if (assignedTo === 'client') {
-        sendNotification('action_item_created', _selectedClientId, {
-          title,
-          due_date: dueDate || null,
-        });
+        sendNotification('action_item_created', _selectedClientId, item.id);
       }
       showToast('Action item added.', 'success');
     }
@@ -1668,11 +1665,7 @@ async function handleUpdateProgressStage(engId, stage) {
     showToast('Progress stage updated.', 'success');
     // Notify client if a stage was set (not cleared)
     if (stage && _selectedClientId) {
-      const stages = getProgressStagesForType(eng?.engagement_type);
-      const stageObj = stages.find(s => s.id === stage);
-      sendNotification('progress_updated', _selectedClientId, {
-        stage_label: stageObj?.label || stage,
-      });
+      sendNotification('progress_updated', _selectedClientId, engId);
     }
   } else {
     showToast('Failed to update progress stage.', 'error');
@@ -1732,7 +1725,7 @@ function renderInvoiceTable(tbodyId, invoices, showClient) {
       <button class="btn-ghost" onclick="handleResendInvoice('${inv.id}', this)" title="Resend invoice email" style="font-size:0.8rem;padding:0.25rem 0.5rem">
         <span class="material-symbols-outlined" style="font-size:0.9rem">send</span>
       </button>
-      <button class="btn-ghost" onclick="adminDownloadInvoice('${escHtml(inv.file_path)}','${escHtml(inv.invoice_number)}.pdf')" title="Download PDF" style="font-size:0.8rem;padding:0.25rem 0.5rem">
+      <button class="btn-ghost" ${portalAction('adminDownloadInvoice', inv.file_path, inv.invoice_number + '.pdf')} title="Download PDF" style="font-size:0.8rem;padding:0.25rem 0.5rem">
         <span class="material-symbols-outlined" style="font-size:0.9rem">download</span>
       </button>`
       : `<span style="font-size:0.75rem;color:var(--muted)">No PDF</span>`;
@@ -2073,7 +2066,7 @@ async function handleAdminSendMessage(clientId) {
       documentId = doc.id;
 
       // Notify client of new document
-      sendNotification('document_shared', clientId, { doc_name: _adminMsgFile.name });
+      sendNotification('document_shared', clientId, documentId);
       clearAdminMsgFile();
     }
 
@@ -2087,9 +2080,7 @@ async function handleAdminSendMessage(clientId) {
     if (!msg) throw new Error('Failed to send message.');
 
     // Notify client of new admin message
-    sendNotification('new_message_from_admin', clientId, {
-      preview: body ? body.slice(0, 120) : null,
-    });
+    sendNotification('new_message_from_admin', clientId, msg.id);
 
     if (input) { input.value = ''; input.style.height = 'auto'; }
 

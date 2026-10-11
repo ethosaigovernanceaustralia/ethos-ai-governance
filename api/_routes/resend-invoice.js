@@ -1,3 +1,4 @@
+const { escapeHtml } = require('../../lib/html');
 // ─── Ethos — Resend Invoice ───────────────────────────────────────────────────
 // Vercel serverless function. Admin-only.
 // Re-sends an existing invoice PDF to the client's email.
@@ -84,9 +85,9 @@ module.exports = async function handler(req, res) {
         <div style="font-size:11px;color:#C9A84C;margin-top:3px">AI Governance</div>
       </div>
       <div style="background:#ffffff;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
-        <p style="font-size:15px;color:#111827;margin-top:0">Hi ${firstName},</p>
+        <p style="font-size:15px;color:#111827;margin-top:0">Hi ${escapeHtml(firstName)},</p>
         <p style="font-size:15px;color:#111827">
-          Please find attached your invoice for <strong>${productName}</strong>.
+          Please find attached your invoice for <strong>${escapeHtml(productName)}</strong>.
         </p>
         <p style="font-size:14px;color:#374151">
           If you have any questions, contact us at

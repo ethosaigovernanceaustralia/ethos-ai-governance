@@ -1,0 +1,13 @@
+# Credentials and machine-local state
+.env
+.env.*
+!.env.example
+node_modules/
+.vercel/
+.DS_Store
+.claude/settings.local.json
+.claude/launch.json
+graphify-out/
+# Generated public artifact and test output
+dist/
+coverage/

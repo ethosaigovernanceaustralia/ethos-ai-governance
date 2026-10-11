@@ -77,10 +77,7 @@
           <label class="p-label" for="signupEmail">Work Email <span style="color:#dc2626">*</span></label>
           <input class="p-input" type="email" id="signupEmail" required autocomplete="email" placeholder="you@company.com"/>
         </div>
-        <div class="p-form-group">
-          <label class="p-label" for="signupPassword">Password <span style="color:#dc2626">*</span></label>
-          <input class="p-input" type="password" id="signupPassword" required minlength="8" autocomplete="new-password" placeholder="Minimum 8 characters"/>
-        </div>
+        <p style="font-size:0.8125rem;color:var(--muted, #6b7280);margin:0 0 1rem;line-height:1.45">We will email you a secure link to set your password. This confirms the email address is yours.</p>
         <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.25rem">
           <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;color:var(--navy);cursor:pointer;line-height:1.45">
             <input type="checkbox" id="consentTerms" style="margin-top:2px;flex-shrink:0"/>
@@ -212,7 +209,6 @@
     const name     = document.getElementById('signupName').value.trim();
     const company  = document.getElementById('signupCompany').value.trim();
     const email    = document.getElementById('signupEmail').value.trim();
-    const password = document.getElementById('signupPassword').value;
     const hp       = document.getElementById('signupHp').value;
 
     const terms   = document.getElementById('consentTerms').checked;
@@ -240,30 +236,29 @@
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name, company, email, password,
+          name, company, email,
           consents: { terms, privacy, app8 },
           consentVersion: '1.0',
           _hp: hp,
         }),
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
 
-      if (data.error === 'duplicate') {
-        document.getElementById('authErrorMsg').innerHTML =
-          'An account with this email already exists. <a href="/portal/login" style="color:var(--brass)">Sign in</a>';
+      if (!res.ok || !data.success) {
+        document.getElementById('authErrorMsg').textContent = res.status === 429
+          ? 'We are receiving a lot of sign-ups right now. Please try again in an hour.'
+          : res.status === 400
+            ? 'Please check your name, company and email, then try again.'
+            : 'Something went wrong. Please try again.';
         errEl.style.display = 'flex';
         return;
       }
 
-      if (!data.success) {
-        document.getElementById('authErrorMsg').textContent = 'Something went wrong. Please try again.';
-        errEl.style.display = 'flex';
-        return;
-      }
-
-      // Success — switch to login view with pre-filled email
-      document.getElementById('authSuccessMsg').textContent = 'Your account has been created. Sign in below.';
+      // Same message whether or not the email already has an account, so the form
+      // never reveals who is registered. The set-password link proves ownership.
+      document.getElementById('authSuccessMsg').textContent =
+        'Check your email for a link to set your password and open your portal. If you already have an account, sign in or use Forgot your password.';
       succEl.style.display = 'flex';
       document.getElementById('loginEmail').value = email;
       document.getElementById('signupView').style.display = 'none';

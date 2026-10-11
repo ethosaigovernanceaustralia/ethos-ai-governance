@@ -1,3 +1,4 @@
+const { escapeHtml } = require('../../lib/html');
 // ─── Ethos — Stripe Webhook Handler ──────────────────────────────────────────
 // Vercel serverless function. Handles post-payment automation.
 //
@@ -11,14 +12,18 @@
 //   7. Insert invoice record      (non-critical)
 //   8. Send invoice email         (non-critical)
 //   9. Mark abandoned checkout recovered (non-critical)
+//  10. Record Engagement Terms consent  (non-critical)
 //
 // checkout.session.expired:
 //   Records the abandoned checkout for Stage 3 recovery emails.
 // ─────────────────────────────────────────────────────────────────────────────
 
+const crypto = require('crypto');
 const Stripe = require('stripe');
 const { createClient } = require('@supabase/supabase-js');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const { CONSENT_VERSION, CONSENT_TEXT } = require('./_consent-constants');
+const { createSetPasswordLink, sendSetPasswordEmail, isEmailExists } = require('../../lib/auth-links');
 
 // Disable Vercel's body parser — Stripe needs the raw body to verify the signature
 async function handler(req, res) {
@@ -165,6 +170,21 @@ async function handleCheckoutCompleted(session) {
       .is('completed_at', null)
       .then(({ error }) => { if (error) throw error; })
   );
+
+  // 10. Record Engagement Terms acceptance collected by Stripe checkout
+  //     (consent_collection in create-checkout-session.js)
+  if (session.consent?.terms_of_service === 'accepted') {
+    await tryStep('record-engagement-terms-consent', () =>
+      supabase.from('consents').insert({
+        user_id:      clientId,
+        consent_type: 'engagement_terms',
+        consent_text: CONSENT_TEXT.engagement_terms,
+        consented_at: new Date().toISOString(),
+        user_agent:   `stripe-checkout:${sessionId}`,
+        version:      CONSENT_VERSION,
+      }).then(({ error }) => { if (error) throw error; })
+    );
+  }
 }
 
 
@@ -192,40 +212,83 @@ async function handleCheckoutExpired(session) {
 
 // ─── Find or create client ────────────────────────────────────────────────────
 
+// Binds a paid purchase to the account that controls the buyer's email (P3).
+// Fails safe (throws, so Stripe retries and the error is visible) when the
+// match is ambiguous; never grants to an account whose owner has not proved
+// control of the address without first removing any password set by others.
 async function findOrCreateClient(supabase, email, name) {
-  // Check for existing profile by email
-  const { data: existing } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('email', email)
-    .maybeSingle();
+  const emailNorm = String(email).trim().toLowerCase();
 
-  if (existing) {
-    console.log(`[webhook] Existing client found: ${email}`);
-    return { clientId: existing.id, isNewClient: false };
+  const { data: matches, error: lookupError } = await supabase
+    .from('profiles')
+    .select('id, email')
+    .eq('email', emailNorm)
+    .limit(2);
+  if (lookupError) throw new Error('Profile lookup failed');
+  if (matches.length > 1) throw new Error('Ambiguous client email: more than one profile matches');
+
+  let clientId = matches[0]?.id;
+  let isNewClient = false;
+
+  let setPasswordLink = null;
+  if (!clientId) {
+    // New client: create the login and a set-password link (emailed below, once set up).
+    const { user: invited, link, created, error: inviteError } = await createSetPasswordLink(supabase, {
+      type: 'invite', email: emailNorm, data: { full_name: name },
+    });
+    if (!inviteError && created) {
+      clientId = invited.id;
+      setPasswordLink = link;
+      isNewClient = true;
+    } else if (!inviteError && invited?.id) {
+      // Existing unconfirmed login without a profile: it is secured below as unverified.
+      clientId = invited.id;
+    } else if (isEmailExists(inviteError)) {
+      // An earlier attempt created the login but not the profile: recover it.
+      const { data: linkData, error: linkError } = await supabase.auth.admin.generateLink({ type: 'magiclink', email: emailNorm });
+      if (linkError || !linkData?.user?.id) throw new Error('Existing account lookup failed');
+      clientId = linkData.user.id;
+    } else {
+      throw new Error('Client invite failed');
+    }
+
+    const { error: profileError } = await supabase.from('profiles').insert({
+      id:           clientId,
+      full_name:    name,
+      email:        emailNorm,
+      company_name: null,  // Stripe doesn't collect company name — fill in via admin portal
+      role:         'client',
+    });
+    if (profileError && profileError.code !== '23505') throw new Error('Profile creation failed');
   }
 
-  // New client — invite via Supabase Auth (same method as invite-client.js)
-  // Supabase sends the invite email automatically
-  const { data: userData, error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email, {
-    data: { full_name: name },
-    redirectTo: 'https://ethosaigovernance.com.au/portal/reset-password',
-  });
-  if (inviteError) throw inviteError;
+  // The login must be for the same address, and its owner must have proved control of it.
+  const { data: authData, error: authError } = await supabase.auth.admin.getUserById(clientId);
+  const authUser = authData?.user;
+  if (authError || !authUser) throw new Error('Client account lookup failed');
+  if (String(authUser.email || '').toLowerCase() !== emailNorm) throw new Error('Client account email mismatch');
 
-  const clientId = userData.user.id;
+  if (!isNewClient && !authUser.email_confirmed_at) {
+    // Unverified account (for example created by someone else with this address):
+    // replace any password they set, then send the buyer a link to set their own.
+    const { error: rotateError } = await supabase.auth.admin.updateUserById(clientId, {
+      password: crypto.randomBytes(32).toString('base64url'),
+    });
+    if (rotateError) throw new Error('Unverified account could not be secured');
+    const { link, error: linkError } = await createSetPasswordLink(supabase, { type: 'recovery', email: emailNorm });
+    if (linkError) console.error('[webhook] Set-password link failed for unverified account');
+    else await sendSetPasswordEmail({ email: emailNorm, name, purpose: 'reclaim', link })
+      .catch(() => console.error('[webhook] Set-password email failed for unverified account'));
+  }
 
-  const { error: profileError } = await supabase.from('profiles').insert({
-    id:           clientId,
-    full_name:    name,
-    email:        email,
-    company_name: null,  // Stripe doesn't collect company name — fill in via admin portal
-    role:         'client',
-  });
-  if (profileError) throw profileError;
+  if (setPasswordLink) {
+    // Non-fatal: the purchase is still recorded; the admin portal can resend an invite.
+    await sendSetPasswordEmail({ email: emailNorm, name, purpose: 'purchase', link: setPasswordLink })
+      .catch(() => console.error('[webhook] Set-password email failed for new client'));
+  }
 
-  console.log(`[webhook] New client created and invited: ${email}`);
-  return { clientId, isNewClient: true };
+  console.log(`[webhook] Client ${isNewClient ? 'created and invited' : 'matched'}: ${clientId}`);
+  return { clientId, isNewClient };
 }
 
 
@@ -388,14 +451,14 @@ async function sendInvoiceEmail({ email, name, invoiceNumber, productName, pdfBy
         <div style="font-size:11px;color:#C9A84C;margin-top:3px">AI Governance</div>
       </div>
       <div style="background:#ffffff;padding:32px;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 8px 8px">
-        <p style="font-size:15px;color:#111827;margin-top:0">Hi ${firstName},</p>
+        <p style="font-size:15px;color:#111827;margin-top:0">Hi ${escapeHtml(firstName)},</p>
         <p style="font-size:15px;color:#111827">
-          Thank you for purchasing <strong>${productName}</strong>.
+          Thank you for purchasing <strong>${escapeHtml(productName)}</strong>.
           Your invoice is attached to this email.
         </p>
         <p style="font-size:14px;color:#374151">
           You will receive a separate email shortly with a link to set up your Ethos client portal.
-          Once you log in, your ${productName} documents will be ready to download.
+          Once you log in, your ${escapeHtml(productName)} documents will be ready to download.
         </p>
         <p style="font-size:14px;color:#374151">
           If you have any questions, contact us at
