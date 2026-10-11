@@ -23,7 +23,8 @@ function loadHandler(file, { env = {}, mocks = {}, fetch, append = '' } = {}) {
 }
 
 function response() {
-  return { code: 200, body: undefined,
+  return { code: 200, body: undefined, headers: {},
+    setHeader(name, value) { this.headers[name.toLowerCase()] = value; return this; },
     status(code) { this.code = code; return this; },
     json(body) { this.body = body; return this; },
     send(body) { this.body = body; return this; },
