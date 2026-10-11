@@ -247,6 +247,22 @@ async function deleteDocument(documentId, filePath) {
   return true;
 }
 
+// ─── Stable paging (Stage 7) ─────────────────────────────────
+// A single query silently stops at the project's row cap (1000 rows), which
+// is not pagination. Fetch every row in pages with a deterministic order
+// (the caller's sort plus id as a tie-break) so nothing is skipped or repeated.
+async function fetchAllRows(buildQuery, pageSize = 500, maxRows = 10000) {
+  const rows = [];
+  for (let from = 0; from < maxRows; from += pageSize) {
+    const { data, error } = await buildQuery().range(from, from + pageSize - 1);
+    if (error) return { data: null, error };
+    rows.push(...data);
+    if (data.length < pageSize) return { data: rows, error: null };
+  }
+  console.warn('fetchAllRows: stopped at', maxRows, 'rows');
+  return { data: rows, error: null };
+}
+
 // ─── Enquiries ────────────────────────────────────────────────
 
 async function submitEnquiry(data) {
@@ -262,12 +278,13 @@ async function submitEnquiry(data) {
 async function getEnquiries() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('enquiries')
     .select('*')
     .is('archived_at', null)
     .is('deleted_at', null)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Enquiries error:', error); return []; }
   return data || [];
 }
@@ -285,13 +302,14 @@ async function updateEnquiryStatus(enquiryId, status) {
 async function getAllClients() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('profiles')
     .select('*, engagements(id, engagement_type, status)')
     .eq('role', 'client')
     .is('archived_at', null)
     .is('deleted_at', null)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Clients error:', error); return []; }
   return data || [];
 }
@@ -317,13 +335,14 @@ async function unarchiveClient(clientId) {
 async function getArchivedClients() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('profiles')
     .select('*, engagements(id, engagement_type, status)')
     .eq('role', 'client')
     .not('archived_at', 'is', null)
     .is('deleted_at', null)
-    .order('archived_at', { ascending: false });
+    .order('archived_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Archived clients error:', error); return []; }
   return data || [];
 }
@@ -347,12 +366,13 @@ async function unarchiveEnquiry(enquiryId) {
 async function getArchivedEnquiries() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('enquiries')
     .select('*')
     .not('archived_at', 'is', null)
     .is('deleted_at', null)
-    .order('archived_at', { ascending: false });
+    .order('archived_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Archived enquiries error:', error); return []; }
   return data || [];
 }
@@ -561,12 +581,13 @@ async function restoreDeletedEnquiry(enquiryId) {
 async function getDeletedClients() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('profiles')
     .select('*')
     .eq('role', 'client')
     .not('deleted_at', 'is', null)
-    .order('deleted_at', { ascending: false });
+    .order('deleted_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Deleted clients error:', error); return []; }
   return data || [];
 }
@@ -574,11 +595,12 @@ async function getDeletedClients() {
 async function getDeletedEnquiries() {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('enquiries')
     .select('*')
     .not('deleted_at', 'is', null)
-    .order('deleted_at', { ascending: false });
+    .order('deleted_at', { ascending: false })
+    .order('id', { ascending: false }));
   if (error) { console.error('Deleted enquiries error:', error); return []; }
   return data || [];
 }
@@ -910,11 +932,12 @@ function getProgressStagesForType(type) {
 async function getMessages(clientId) {
   const sb = getSupabase();
   if (!sb) return [];
-  const { data, error } = await sb
+  const { data, error } = await fetchAllRows(() => sb
     .from('messages')
     .select('*, profiles!sender_id(full_name)')
     .eq('client_id', clientId)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: true })
+    .order('id', { ascending: true }));
   if (error) { console.error('Messages error:', error); return []; }
   return data || [];
 }
@@ -953,20 +976,16 @@ async function markThreadRead(clientId, viewerRole) {
     .eq('is_read', false);
 }
 
-// Admin: get unread (from client) count per client as a map { clientId: count }
+// Admin: unread (from client) count per client as a map { clientId: count }.
+// Counted in the database (unread_counts_by_client), so it stays exact however
+// many messages exist; RLS still applies, so only an admin sees every client.
 async function getAllThreadUnreadCounts() {
   const sb = getSupabase();
   if (!sb) return {};
-  const { data, error } = await sb
-    .from('messages')
-    .select('client_id')
-    .eq('sender_role', 'client')
-    .eq('is_read', false);
+  const { data, error } = await sb.rpc('unread_counts_by_client');
   if (error) return {};
   const counts = {};
-  (data || []).forEach(m => {
-    counts[m.client_id] = (counts[m.client_id] || 0) + 1;
-  });
+  (data || []).forEach(row => { counts[row.client_id] = Number(row.unread); });
   return counts;
 }
 
