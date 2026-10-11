@@ -24,13 +24,35 @@ function updateNavActive() {
 }
 
 // ─── Mobile Nav ──────────────────────────────────
+// The overlay is hidden from keyboard and screen readers while closed (CSS
+// visibility); the menu button reports its state and Escape closes it.
+function setMobileNav(open) {
+  const nav = document.getElementById('mobileNav');
+  if (!nav) return;
+  nav.classList.toggle('open', open);
+  const btn = document.querySelector('.mobile-menu-btn');
+  if (btn) btn.setAttribute('aria-expanded', String(open));
+  if (open) {
+    const close = nav.querySelector('.mobile-nav-close');
+    if (close) setTimeout(() => close.focus(), 50);
+  } else if (btn && nav.contains(document.activeElement)) {
+    btn.focus();
+  }
+}
+
 function toggleMobileNav() {
-  document.getElementById('mobileNav').classList.toggle('open');
+  const nav = document.getElementById('mobileNav');
+  setMobileNav(!(nav && nav.classList.contains('open')));
 }
 
 function closeMobileNav() {
-  document.getElementById('mobileNav').classList.remove('open');
+  setMobileNav(false);
 }
+
+document.addEventListener('keydown', e => {
+  const nav = document.getElementById('mobileNav');
+  if (e.key === 'Escape' && nav && nav.classList.contains('open')) setMobileNav(false);
+});
 
 // ─── Services sub-nav smooth scroll ──────────────
 function scrollToSection(sectionId) {

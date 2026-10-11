@@ -53,6 +53,8 @@ function localChecks() {
     const og = meta(html, 'og:url')[0];
     if (og && og !== contract.origin + route) fail(where, `og:url ${og} does not match the canonical`);
     if (/noindex/.test(robots(html))) fail(where, 'public page is noindex');
+    const ogImage = meta(html, 'og:image')[0];
+    if (!ogImage || !/\.(png|jpe?g)$/i.test(ogImage)) fail(where, `og:image should be a PNG/JPEG social card, found ${ogImage || 'none'}`);
     if ((stripScripts(html).match(/<h1[\s>]/gi) || []).length !== 1) fail(where, 'expected exactly one <h1>');
     if (t[0]) { if (titles.has(t[0])) fail(where, `title duplicates ${titles.get(t[0])}`); titles.set(t[0], route); }
     if (d[0]) { if (descriptions.has(d[0])) fail(where, `description duplicates ${descriptions.get(d[0])}`); descriptions.set(d[0], route); }

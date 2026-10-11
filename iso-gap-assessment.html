@@ -55,14 +55,14 @@
       </a></li>
     </ul>
     <a href="/free-audit" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false" aria-controls="mobileNav">
       <span></span><span></span><span></span>
     </button>
   </div>
 </nav>
 
 <!-- Mobile Nav -->
-<div class="mobile-nav" id="mobileNav">
+<div class="mobile-nav" id="mobileNav" role="dialog" aria-label="Site menu">
   <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
