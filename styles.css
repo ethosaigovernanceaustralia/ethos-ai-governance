@@ -37,6 +37,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
+  overflow-x: hidden;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -47,7 +48,10 @@ body {
   background-color: var(--paper);
   color: var(--navy);
   line-height: 1.65;
-  overflow-x: hidden;
+  /* Clip sideways overflow (e.g. AOS fade-left elements before they animate)
+     at the body edge so phones do not widen the page. clip, unlike hidden,
+     does not make body a scroll container, so sticky elements still work. */
+  overflow-x: clip;
 }
 
 /* ===== TYPOGRAPHY ===== */
