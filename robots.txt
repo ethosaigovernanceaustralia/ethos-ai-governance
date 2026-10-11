@@ -1,18 +1,11 @@
 # robots.txt — Ethos AI Governance
 # https://ethosaigovernance.com.au
+#
+# Search engines use the wildcard group. Portal and utility pages are not
+# blocked here: they carry noindex (meta tag and X-Robots-Tag), which crawlers
+# can only read if they may fetch the page.
 
 User-agent: *
-Allow: /
-Disallow: /portal/
-
-# Traditional search engines
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
 Allow: /
 
 # AI crawlers — explicitly allowed

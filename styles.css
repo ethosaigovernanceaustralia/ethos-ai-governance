@@ -6156,3 +6156,13 @@ img { display: block; max-width: 100%; }
   padding: 2.5rem 1rem;
   line-height: 1.5;
 }
+
+/* SEO-06: animated content stays visible when JavaScript is off (no .js class,
+   set by js-ready.js before first paint) or when AOS is unavailable or switched
+   off for reduced motion (app.js adds .aos-off). Normal visits are unchanged. */
+html:not(.js) [data-aos],
+html.aos-off [data-aos] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}

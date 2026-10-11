@@ -1,0 +1,23 @@
+{
+  "origin": "https://ethosaigovernance.com.au",
+  "indexable": [
+    { "route": "/", "file": "index.html" },
+    { "route": "/services", "file": "services.html" },
+    { "route": "/free-audit", "file": "free-audit.html" },
+    { "route": "/about", "file": "about.html" },
+    { "route": "/regulatory", "file": "regulatory.html" },
+    { "route": "/resources", "file": "resources.html" },
+    { "route": "/faq", "file": "faq.html" },
+    { "route": "/contact", "file": "contact.html" }
+  ],
+  "noindex": [
+    { "route": "/portal/login", "file": "portal/login.html" },
+    { "route": "/portal/reset-password", "file": "portal/reset-password.html" },
+    { "route": "/portal/dashboard", "file": "portal/dashboard.html" },
+    { "route": "/portal/admin", "file": "portal/admin.html" },
+    { "route": "/success", "file": "success.html" },
+    { "route": "/legal/privacy", "file": "portal/privacy.html" },
+    { "route": "/legal/terms", "file": "portal/terms.html" }
+  ],
+  "drafts": ["adm-self-check.html", "adm-sprint.html", "deal-rescue.html", "iso-gap-assessment.html", "legal-privacy.html", "legal-terms.html"]
+}

@@ -13,6 +13,7 @@
   "scripts": {
     "build": "node scripts/build-public.js",
     "test": "node --test tests/*.test.js",
-    "check:imports": "node scripts/check-imports.js"
+    "check:imports": "node scripts/check-imports.js",
+    "check:seo": "node scripts/check-seo.js"
   }
 }

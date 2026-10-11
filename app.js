@@ -754,29 +754,36 @@ function initMobileCtaBar() {
 }
 
 // ─── Page Initialisation ─────────────────────────
+// Optional libraries (AOS, GSAP, CountUp) load from CDNs. If one is missing or
+// throws, the page must still work (SEO-06): each step runs on its own, and if
+// AOS cannot run, <html> gets .aos-off so styles.css shows animated content.
+function initAnimations() {
+  if (typeof AOS === 'undefined' || REDUCED_MOTION) {
+    document.documentElement.classList.add('aos-off');
+    return;
+  }
+  try {
+    AOS.init({
+      duration: 700,
+      easing: 'ease-out-cubic',
+      once: true,
+      offset: 60,
+    });
+  } catch (err) {
+    document.documentElement.classList.add('aos-off');
+    throw err;
+  }
+}
+
 function initPage() {
-  AOS.init({
-    duration: 700,
-    easing: 'ease-out-cubic',
-    once: true,
-    offset: 60,
-    disable: REDUCED_MOTION
-  });
-
-  updateNavActive();
-  initCursor();
-  initNavScroll();
-  initParticles();
-  initBentoTilt();
-  initSubnavHighlight();
-  initScrollFx();
-  initMagneticButtons();
-  initMobileCtaBar();
-
+  const steps = [
+    initAnimations, updateNavActive, initCursor, initNavScroll, initParticles,
+    initBentoTilt, initSubnavHighlight, initScrollFx, initMagneticButtons, initMobileCtaBar,
+  ];
   // GSAP and CountUp only on home page (scripts only loaded there)
-  if (document.getElementById('hero-h1')) {
-    initGSAPHero();
-    initCountUp();
+  if (document.getElementById('hero-h1')) steps.push(initGSAPHero, initCountUp);
+  for (const step of steps) {
+    try { step(); } catch (err) { console.error(`[init] ${step.name} failed:`, err); }
   }
 
   // On services page: if hash on load, scroll with nav offset
