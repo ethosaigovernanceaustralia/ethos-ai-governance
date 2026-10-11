@@ -45,8 +45,8 @@ module.exports = async function handler(req, res) {
   });
 
   if (linkError) {
-    console.error('[password-reset] Generate link error:', linkError);
-    return res.status(500).json({ error: linkError.message });
+    console.error('[password-reset] Generate link error:', linkError.code || 'unknown');
+    return res.status(500).json({ error: 'A reset link could not be created. Please try again.' });
   }
 
   const resetLink = linkData.properties?.action_link;
@@ -106,10 +106,10 @@ module.exports = async function handler(req, res) {
 
   if (!emailRes.ok) {
     const errText = await emailRes.text();
-    console.error('[password-reset] Resend error:', errText);
+    console.error('[password-reset] Resend error:', emailRes.status);
     return res.status(500).json({ error: 'Failed to send email' });
   }
 
-  console.log(`[password-reset] Sent password reset to: ${email}`);
+  console.log('[password-reset] Sent password reset');
   return res.status(200).json({ success: true });
 };

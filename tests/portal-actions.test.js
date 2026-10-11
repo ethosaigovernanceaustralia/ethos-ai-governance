@@ -32,12 +32,27 @@ test('delegated action invokes only the registered function with unchanged argum
   click(event); assert.equal(called, null); assert.equal(context.compromised, undefined);
 });
 
-test('portal scripts compile and no escaped filename/name remains in inline handlers', () => {
-  for (const file of ['admin.html', 'dashboard.html']) {
-    const html = fs.readFileSync(path.join(root, 'portal', file), 'utf8');
+test('portal page scripts compile and pages carry no inline script or handlers (CSP)', () => {
+  for (const [page, script] of [['admin.html', 'admin-page.js'], ['dashboard.html', 'dashboard-page.js']]) {
+    const html = fs.readFileSync(path.join(root, 'portal', page), 'utf8');
     assert.ok(html.includes('<script src="actions.js"></script>'));
-    assert.ok(!/on(?:click|change)="[^"\n]*escHtml/.test(html));
-    for (const [, script] of html.matchAll(/<script>([\s\S]*?)<\/script>/g)) new vm.Script(script);
+    assert.ok(html.includes(`<script src="${script}"></script>`));
+    assert.ok(!/\son[a-z]+="/.test(html), `${page} has an inline handler`);
+    assert.ok(!/<script>/.test(html), `${page} has an inline script`);
+    const source = fs.readFileSync(path.join(root, 'portal', script), 'utf8');
+    assert.ok(!/on(?:click|change)="[^"\n]*escHtml/.test(source));
+    new vm.Script(source);
+  }
+});
+
+test('every published page is free of inline script and inline handlers', () => {
+  const files = require('../scripts/public-files.json').filter(f => f.endswith ? f.endsWith('.html') : false);
+  for (const file of files) {
+    const html = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.ok(!/\son(?:click|change|input|keydown|submit|load|error|focus|blur|mouse\w+)="/.test(html), `${file}: inline handler`);
+    for (const [, attrs] of html.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>/g)) assert.ok(/ld\+json/.test(attrs), `${file}: inline script`);
+    assert.ok(!/href="javascript:/.test(html), `${file}: javascript: URL`);
+    assert.ok(html.includes('<script src="/dom-actions.js" defer></script>'), `${file}: missing dispatcher`);
   }
 });
 

@@ -41,7 +41,7 @@ module.exports = async function handler(req, res) {
   const { link, error } = await createSetPasswordLink(supabase, { type: 'recovery', email: emailNorm });
   if (error) {
     console.error('Resend invite error:', error.code || error.message);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: 'A new link could not be created. Please try again.' });
   }
   try {
     await sendSetPasswordEmail({ email: emailNorm, name: client?.full_name, purpose: 'portal_invite', link });

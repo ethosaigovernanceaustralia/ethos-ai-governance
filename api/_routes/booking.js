@@ -364,7 +364,7 @@ async function handleAdmin(req, res) {
       if (s.timezone && validTz(s.timezone)) patch.timezone = s.timezone;
       patch.updated_at = new Date().toISOString();
       const { error } = await supabase.from('booking_settings').update(patch).eq('id', 1);
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) { console.error('[booking] admin op failed:', error.code || 'unknown'); return res.status(500).json({ error: 'The change could not be saved. Please try again.' }); }
       return res.status(200).json({ ok: true });
     }
 
@@ -396,13 +396,13 @@ async function handleAdmin(req, res) {
         row.start_time = start_time; row.end_time = end_time;
       }
       const { error } = await supabase.from('availability_overrides').insert(row);
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) { console.error('[booking] admin op failed:', error.code || 'unknown'); return res.status(500).json({ error: 'The change could not be saved. Please try again.' }); }
       return res.status(200).json({ ok: true });
     }
 
     case 'delete_override': {
       const { error } = await supabase.from('availability_overrides').delete().eq('id', req.body.id);
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) { console.error('[booking] admin op failed:', error.code || 'unknown'); return res.status(500).json({ error: 'The change could not be saved. Please try again.' }); }
       return res.status(200).json({ ok: true });
     }
 
@@ -414,7 +414,7 @@ async function handleAdmin(req, res) {
         .eq('status', 'confirmed')
         .select()
         .single();
-      if (error) return res.status(500).json({ error: error.message });
+      if (error) { console.error('[booking] admin op failed:', error.code || 'unknown'); return res.status(500).json({ error: 'The change could not be saved. Please try again.' }); }
 
       if (req.body.notify && booking) {
         const cfg = await loadConfig(supabase);

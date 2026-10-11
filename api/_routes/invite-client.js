@@ -48,7 +48,7 @@ module.exports = async function handler(req, res) {
 
   if (inviteError) {
     console.error('Invite error:', inviteError.code || inviteError.message);
-    return res.status(500).json({ error: inviteError.message });
+    return res.status(500).json({ error: 'The client could not be invited. Please check the email address and try again.' });
   }
 
   const userId = invitedUser.id;
@@ -63,8 +63,8 @@ module.exports = async function handler(req, res) {
   });
 
   if (profileError) {
-    console.error('Profile error:', profileError);
-    return res.status(500).json({ error: profileError.message });
+    console.error('Profile error:', profileError.code || 'unknown');
+    return res.status(500).json({ error: 'The client profile could not be created. Please try again.' });
   }
 
   // Create the engagement if a type was specified
@@ -76,7 +76,7 @@ module.exports = async function handler(req, res) {
     });
 
     if (engError) {
-      console.error('Engagement error:', engError);
+      console.error('Engagement error:', engError.code || 'unknown');
       // Non-fatal — profile was created, engagement can be added manually
     }
   }

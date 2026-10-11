@@ -71,7 +71,7 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ url: session.url });
   } catch (err) {
-    console.error('[checkout] Session creation error:', err);
+    console.error('[checkout] Session creation error:', err.type || err.code || 'unknown');
     return res.status(500).json({ error: 'Failed to create checkout session. Please try again.' });
   }
 };

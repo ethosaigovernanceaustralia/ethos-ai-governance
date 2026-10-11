@@ -49,7 +49,7 @@ module.exports = async function handler(req, res) {
 
   if (error) {
     console.error('[recovery] Query failed:', error.message);
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: 'Recovery query failed' });
   }
 
   if (!checkouts?.length) {
@@ -65,7 +65,7 @@ module.exports = async function handler(req, res) {
 
   if (suppressionError) {
     console.error('[recovery] Suppression list query failed:', suppressionError.message);
-    return res.status(500).json({ error: suppressionError.message });
+    return res.status(500).json({ error: 'Suppression list query failed' });
   }
 
   const suppressed = new Set((suppressions || []).map((s) => s.email.toLowerCase()));
@@ -143,10 +143,9 @@ module.exports = async function handler(req, res) {
         .eq('id', checkout.id);
 
       sentCount++;
-      console.log(`[recovery] Sent recovery email to: ${checkout.customer_email}`);
+      console.log(`[recovery] Sent recovery email for checkout ${checkout.id}`);
     } else {
-      const errText = await emailRes.text();
-      console.error(`[recovery] Failed to send to ${checkout.customer_email}:`, errText);
+      console.error(`[recovery] Failed to send for checkout ${checkout.id}:`, emailRes.status);
     }
   }
 

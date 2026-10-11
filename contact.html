@@ -35,6 +35,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,300;1,6..72,400&display=swap" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="/dom-actions.js" defer></script>
 </head>
 <body>
 
@@ -68,7 +69,7 @@
       </a></li>
     </ul>
     <a href="/free-audit" class="btn-nav">Get Free Audit</a>
-    <button class="mobile-menu-btn" onclick="toggleMobileNav()" aria-label="Menu">
+    <button class="mobile-menu-btn" data-on-click="toggleMobileNav" aria-label="Menu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -76,20 +77,20 @@
 
 <!-- Mobile Nav -->
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" onclick="closeMobileNav()" aria-label="Close">
+  <button class="mobile-nav-close" data-on-click="closeMobileNav" aria-label="Close">
     <span class="material-symbols-outlined">close</span>
   </button>
   <ul>
-    <li><a href="/" onclick="closeMobileNav()">Home</a></li>
-    <li><a href="/services" onclick="closeMobileNav()">Services</a></li>
-    <li><a href="/about" onclick="closeMobileNav()">About</a></li>
-    <li><a href="/regulatory" onclick="closeMobileNav()">Regulatory Landscape</a></li>
-    <li><a href="/resources" onclick="closeMobileNav()">Resources</a></li>
-    <li><a href="/faq" onclick="closeMobileNav()">FAQ</a></li>
-    <li><a href="/contact" onclick="closeMobileNav()">Contact</a></li>
+    <li><a href="/" data-on-click="closeMobileNav">Home</a></li>
+    <li><a href="/services" data-on-click="closeMobileNav">Services</a></li>
+    <li><a href="/about" data-on-click="closeMobileNav">About</a></li>
+    <li><a href="/regulatory" data-on-click="closeMobileNav">Regulatory Landscape</a></li>
+    <li><a href="/resources" data-on-click="closeMobileNav">Resources</a></li>
+    <li><a href="/faq" data-on-click="closeMobileNav">FAQ</a></li>
+    <li><a href="/contact" data-on-click="closeMobileNav">Contact</a></li>
     <li><a href="/portal/login">Client Portal</a></li>
   </ul>
-  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" onclick="closeMobileNav()">Get Free Audit</a>
+  <a href="/free-audit" class="btn-primary" style="margin-top:2rem;width:100%;display:block;text-align:center;" data-on-click="closeMobileNav">Get Free Audit</a>
 </div>
 
 <main>
@@ -139,7 +140,7 @@
 
       <!-- General Enquiry Accordion -->
       <div class="general-enquiry-accordion" data-aos="fade-up">
-        <button class="general-enquiry-toggle" onclick="toggleGeneralEnquiry()" aria-expanded="false" aria-controls="generalEnquiryBody">
+        <button class="general-enquiry-toggle" data-on-click="toggleGeneralEnquiry" aria-expanded="false" aria-controls="generalEnquiryBody">
           <span class="general-enquiry-toggle-left">
             <span class="material-symbols-outlined">mail</span>
             Have a general enquiry?
@@ -147,7 +148,7 @@
           <span class="material-symbols-outlined general-enquiry-chevron">expand_more</span>
         </button>
         <div class="general-enquiry-body" id="generalEnquiryBody" hidden>
-          <form class="general-enquiry-form" id="generalForm" onsubmit="handlePathFormSubmit(event, 'general')" novalidate>
+          <form class="general-enquiry-form" id="generalForm" data-on-submit="handlePathFormSubmit" data-args='["$event", "general"]' novalidate>
             <input type="hidden" name="enquiry_type" value="general"/>
             <div class="general-enquiry-fields">
               <div class="form-group">
@@ -215,15 +216,6 @@
 <script src="portal/config.js"></script>
 <script src="app.js"></script>
 <script src="booking.js"></script>
-<script>
-  function toggleGeneralEnquiry() {
-    var accordion = document.querySelector('.general-enquiry-accordion');
-    var body = document.getElementById('generalEnquiryBody');
-    var btn = document.querySelector('.general-enquiry-toggle');
-    var isOpen = accordion.classList.toggle('open');
-    btn.setAttribute('aria-expanded', isOpen);
-    body.hidden = !isOpen;
-  }
-</script>
+<script src="contact-page.js"></script>
 </body>
 </html>
