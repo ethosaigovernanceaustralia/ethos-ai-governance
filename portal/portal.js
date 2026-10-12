@@ -153,7 +153,10 @@ async function uploadDocument(file, engagementId, clientUserId, description, doc
 
   // Build storage path: {client_id}/{uuid}_{sanitized_name}
   const fileId = crypto.randomUUID();
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  let safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  // Storage only accepts client uploads whose name ends in .pdf (release 7),
+  // so a PDF saved without the extension still uploads.
+  if (!adminMode && !/\.pdf$/i.test(safeName)) safeName += '.pdf';
   const storagePath = `${clientUserId}/${fileId}_${safeName}`;
 
   // Upload to storage
