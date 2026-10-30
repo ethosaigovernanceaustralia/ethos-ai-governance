@@ -473,10 +473,7 @@ function initCountUp() {
 
   window.focusPCard = function(cardIndex) {
     if (cardIndex === pCenter) return;
-    clearTimeout(pLoopTimer);
-    clearTimeout(pAnimTimer);
-    Object.values(animConfigs).forEach(c => c.reset());
-    void document.body.offsetWidth;
+    pStopLoop();
     if (cardIndex === pOrder[0]) {
       pOrder = [pOrder[2], pOrder[0], pOrder[1]];
     } else if (cardIndex === pOrder[2]) {
@@ -484,7 +481,8 @@ function initCountUp() {
     }
     pCenter = pOrder[1];
     setPanoPositions();
-    setTimeout(() => Object.values(animConfigs).forEach(c => c.run()), 400);
+    // Keep the sample documents readable while the cards change position.
+    Object.values(animConfigs).forEach(c => c.run());
     pStartLoop();
   };
 
@@ -496,6 +494,11 @@ function initCountUp() {
 
   const panoEl = document.getElementById('heroPanorama');
   if (panoEl) {
+    if (typeof window.attachCarouselGestures === 'function') {
+      window.attachCarouselGestures(panoEl, direction => {
+        window.focusPCard(pOrder[direction > 0 ? 2 : 0]);
+      });
+    }
     let panoStarted = false;
     let panoInView = false;
 

@@ -217,7 +217,7 @@
       </div>
     </div>
 
-    <div class="cards-section" id="heroPanorama">
+    <div class="cards-section" id="heroPanorama" role="region" aria-roledescription="carousel" aria-label="Governance document previews" tabindex="0">
       <div class="cards-stage">
 
         <!-- CARD 0: AUDIT REPORT -->
@@ -449,35 +449,6 @@
     </div>
   </section>
 
-  <!-- WHY ETHOS -->
-  <section class="section section-why">
-    <div class="container">
-      <h2 class="section-heading" data-aos="fade-up" data-aos-delay="60">Why Ethos</h2>
-      <div class="bento-grid">
-        <div class="bento-card" data-aos="fade-up" data-aos-delay="80">
-          <span class="material-symbols-outlined bento-icon">precision_manufacturing</span>
-          <h3>Built for AI Vendors</h3>
-          <p>We exclusively serve companies that build and sell AI products - not businesses that merely use AI tools internally. Every framework is purpose-built for your context.</p>
-        </div>
-        <div class="bento-card" data-aos="fade-up" data-aos-delay="130">
-          <span class="material-symbols-outlined bento-icon">flag</span>
-          <h3>Australian-First</h3>
-          <p>Governance frameworks built from Australian regulation outward. Not US or EU models adapted for Australia. The Privacy Act, ACL and OAIC guidance are our foundation.</p>
-        </div>
-        <div class="bento-card" data-aos="fade-up" data-aos-delay="180">
-          <span class="material-symbols-outlined bento-icon">my_location</span>
-          <h3>Deep Regulatory Precision</h3>
-          <p>Every template references specific Australian obligations: the Privacy Act, APPs, OAIC guidance, GfAA and the December 2026 automated decision-making requirements. No generic 'best practices.' No US or EU frameworks repackaged.</p>
-        </div>
-        <div class="bento-card" data-aos="fade-up" data-aos-delay="230">
-          <span class="material-symbols-outlined bento-icon">shield_with_heart</span>
-          <h3>30-Day Money-Back Guarantee</h3>
-          <p>If the toolkit isn't relevant to your AI product, you receive a full refund within 30 days. No questions, no conditions.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- WHO'S BEHIND ETHOS -->
   <section class="section section-dark">
     <div class="container">
@@ -539,34 +510,6 @@
     </div>
   </section>
 
-  <!-- SOCIAL -->
-  <section class="section section-social">
-    <div class="container">
-      <div class="social-tiles">
-        <a href="https://www.instagram.com/ethosaigovernance?igsh=Mng0NGM1ZzZtYXJ1&utm_source=qr" target="_blank" rel="noopener" class="social-tile" data-aos="fade-up">
-          <svg class="social-tile-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="1.75"/>
-            <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.75"/>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
-          </svg>
-          <span class="social-tile-name">Instagram</span>
-          <span class="social-tile-handle">@ethosaigovernance</span>
-        </a>
-        <a href="https://linkedin.com/company/ethos-ai-governance" target="_blank" rel="noopener" class="social-tile" data-aos="fade-up" data-aos-delay="80">
-          <svg class="social-tile-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.75"/>
-            <path d="M7 10v7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-            <path d="M7 7.5v.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M11 17v-3.5a2.5 2.5 0 0 1 5 0V17" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 10v7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
-          </svg>
-          <span class="social-tile-name">LinkedIn</span>
-          <span class="social-tile-handle">Ethos AI Governance</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- HOME FOOTER -->
   <footer class="site-footer">
     <div class="container">
@@ -580,6 +523,26 @@
             </span>
           </div>
           <p class="footer-disclaimer">Ethos provides AI governance consulting services, not legal advice. Clients should seek independent legal advice where required.</p>
+          <nav class="footer-social" aria-label="Follow Ethos">
+            <a href="https://www.instagram.com/ethosaigovernance?igsh=Mng0NGM1ZzZtYXJ1&utm_source=qr" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="currentColor" stroke-width="1.75"/>
+              <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.75"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+              </svg>
+              <span>Instagram</span>
+            </a>
+            <a href="https://linkedin.com/company/ethos-ai-governance" class="footer-social-link" target="_blank" rel="noopener noreferrer">
+              <svg class="footer-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M7 10v7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              <path d="M7 7.5v.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M11 17v-3.5a2.5 2.5 0 0 1 5 0V17" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M11 10v7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              </svg>
+              <span>LinkedIn</span>
+            </a>
+          </nav>
         </div>
         <nav class="footer-nav">
           <a href="/">Home</a>
@@ -601,6 +564,7 @@
 </div><!-- /page-home -->
 </main>
 
+<script src="carousel-gestures.js"></script>
 <script src="app.js"></script>
 <script src="booking.js"></script>
 <!-- Hash-based URL backward compatibility redirect -->
