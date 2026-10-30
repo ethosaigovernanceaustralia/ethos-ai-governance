@@ -230,7 +230,7 @@ module.exports = async function handler(req, res) {
     const resp = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: 'Ethos AI Governance <hello@ethosaigovernance.com.au>', to: [recipient], subject: email.subject, html: email.html }),
+      body: JSON.stringify({ from: 'Ethos AI Governance <mike@ethosaigovernance.com.au>', to: [recipient], subject: email.subject, html: email.html }),
     });
     if (!resp.ok) console.error('Notification email failed:', resp.status);
     return res.status(200).json({ ok: true, sent: resp.ok });

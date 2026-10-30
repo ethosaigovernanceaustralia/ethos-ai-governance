@@ -479,7 +479,7 @@ async function sendInvoiceEmail({ email, name, invoiceNumber, productName, pdfBy
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+      from:    'Ethos AI Governance <mike@ethosaigovernance.com.au>',
       to:      [email],
       subject: `Your invoice from Ethos AI Governance — ${invoiceNumber}`,
       html,

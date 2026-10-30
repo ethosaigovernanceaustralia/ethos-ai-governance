@@ -63,7 +63,7 @@ module.exports = async function handler(req, res) {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${RESEND_API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          from: 'Ethos Website <hello@ethosaigovernance.com.au>',
+          from: 'Ethos Website <mike@ethosaigovernance.com.au>',
           to: [NOTIFY_EMAIL],
           subject: `New enquiry from ${enquiry.name.replace(/[\r\n]+/g, ' ').slice(0, 100)}`,
           html: enquiryEmailHtml(enquiry),

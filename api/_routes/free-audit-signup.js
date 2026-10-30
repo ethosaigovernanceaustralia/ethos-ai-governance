@@ -164,7 +164,7 @@ module.exports = async function handler(req, res) {
   try {
     const firstName = fullName.split(/\s+/)[0];
     await sendEmail({
-      from: 'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+      from: 'Ethos AI Governance <mike@ethosaigovernance.com.au>',
       to: emailNorm,
       subject: 'Your free AI governance audit is booked in',
       html: `

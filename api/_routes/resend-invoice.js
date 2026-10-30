@@ -91,7 +91,7 @@ module.exports = async function handler(req, res) {
         </p>
         <p style="font-size:14px;color:#374151">
           If you have any questions, contact us at
-          <a href="mailto:hello@ethosaigovernance.com.au" style="color:#C9A84C">hello@ethosaigovernance.com.au</a>.
+          <a href="mailto:mike@ethosaigovernance.com.au" style="color:#C9A84C">mike@ethosaigovernance.com.au</a>.
         </p>
         <p style="font-size:14px;color:#374151;margin-bottom:0">— The Ethos Team</p>
       </div>
@@ -108,7 +108,7 @@ module.exports = async function handler(req, res) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+      from:    'Ethos AI Governance <mike@ethosaigovernance.com.au>',
       to:      [clientEmail],
       subject: `Your invoice from Ethos AI Governance — ${invoice.invoice_number}`,
       html,

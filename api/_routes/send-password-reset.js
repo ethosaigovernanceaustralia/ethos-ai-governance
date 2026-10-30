@@ -97,7 +97,7 @@ module.exports = async function handler(req, res) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+      from:    'Ethos AI Governance <mike@ethosaigovernance.com.au>',
       to:      [email],
       subject: 'Reset your Ethos portal password',
       html,

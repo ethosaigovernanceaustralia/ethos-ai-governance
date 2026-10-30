@@ -206,7 +206,7 @@ async function sendBookingEmails(booking, hostTz) {
     const row = (label, value) =>
       `<tr><td style="padding:8px 0;color:#6b7280;width:180px;vertical-align:top">${label}</td><td style="padding:8px 0;color:#111">${value}</td></tr>`;
     await sendEmail({
-      from: 'Ethos Website <hello@ethosaigovernance.com.au>',
+      from: 'Ethos Website <mike@ethosaigovernance.com.au>',
       to: [NOTIFY_EMAIL],
       subject: `New booking: ${booking.name}${booking.company ? ' (' + booking.company + ')' : ''} on ${fmtInTz(start, hostTz, { weekday: 'short', day: 'numeric', month: 'short' })}`,
       html: `
@@ -227,7 +227,7 @@ async function sendBookingEmails(booking, hostTz) {
   // 2. Invitee confirmation (times in their tz)
   const firstName = booking.name.trim().split(/\s+/)[0];
   await sendEmail({
-    from: 'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+    from: 'Ethos AI Governance <mike@ethosaigovernance.com.au>',
     to: [booking.email],
     reply_to: NOTIFY_EMAIL || undefined,
     subject: 'Your discovery call is booked',
@@ -421,7 +421,7 @@ async function handleAdmin(req, res) {
         const inviteeTz = booking.timezone && validTz(booking.timezone) ? booking.timezone : cfg.settings.timezone;
         const start = new Date(booking.starts_at);
         await sendEmail({
-          from: 'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+          from: 'Ethos AI Governance <mike@ethosaigovernance.com.au>',
           to: [booking.email],
           reply_to: process.env.NOTIFY_EMAIL || undefined,
           subject: 'Your discovery call has been cancelled',

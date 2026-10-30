@@ -280,7 +280,7 @@
       drawCalGrid(y, m);
     }).catch(function () {
       if (state.viewYear !== y || state.viewMonth !== m || !state.open) return;
-      grid.innerHTML = '<p class="booking-cal-loading">Availability is temporarily unavailable. Please email <a href="mailto:hello@ethosaigovernance.com.au" style="color:var(--brass)">hello@ethosaigovernance.com.au</a> and we will find a time.</p>';
+      grid.innerHTML = '<p class="booking-cal-loading">Availability is temporarily unavailable. Please email <a href="mailto:mike@ethosaigovernance.com.au" style="color:var(--brass)">mike@ethosaigovernance.com.au</a> and we will find a time.</p>';
     });
   }
 
@@ -471,7 +471,7 @@
         }
         error.textContent = (result.body && result.body.error && result.body.error !== 'slot_taken')
           ? result.body.error
-          : 'Something went wrong saving your booking. Please try again, or email hello@ethosaigovernance.com.au.';
+          : 'Something went wrong saving your booking. Please try again, or email mike@ethosaigovernance.com.au.';
         error.hidden = false;
       });
     });

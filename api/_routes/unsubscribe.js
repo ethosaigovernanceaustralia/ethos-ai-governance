@@ -77,7 +77,7 @@ module.exports = async function handler(req, res) {
   }
 
   if (missingEnvironment(['SUPABASE_URL', 'SUPABASE_SECRET_KEY']).length) {
-    return send(res, 503, page('Unsubscribe is temporarily unavailable. Please contact hello@ethosaigovernance.com.au.'));
+    return send(res, 503, page('Unsubscribe is temporarily unavailable. Please contact mike@ethosaigovernance.com.au.'));
   }
 
   if (!tokenMatches(email, token)) {
@@ -105,7 +105,7 @@ module.exports = async function handler(req, res) {
 
   if (error) {
     console.error('[unsubscribe] Failed to record suppression:', error.message);
-    return send(res, 500, page('Something went wrong processing your request. Please email hello@ethosaigovernance.com.au and we will remove you manually.'));
+    return send(res, 500, page('Something went wrong processing your request. Please email mike@ethosaigovernance.com.au and we will remove you manually.'));
   }
 
   return send(res, 200, page('You have been unsubscribed and will not receive further checkout reminder emails.'));
