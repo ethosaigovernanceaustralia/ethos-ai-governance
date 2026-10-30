@@ -13,6 +13,7 @@
   "assets/logo.svg",
   "assets/og-social-card.png",
   "booking.js",
+  "carousel-gestures.js",
   "contact-page.js",
   "contact.html",
   "dom-actions.js",
