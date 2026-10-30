@@ -9,7 +9,7 @@
 - Contact: Mike@ethosaigovernance.com.au
 - Specialisation: AI governance consulting exclusively for AI vendors (companies that build and sell AI products)
 - Not a law firm. Provides governance consulting, not legal advice.
-- Team qualifications: law, engineering and finance.
+- Team experience: regulatory, engineering and finance.
 
 ---
 
@@ -166,7 +166,7 @@ Key facts:
 
 1. **AI vendor exclusivity**: Ethos works only with companies that build and sell AI products. Not internal AI tool users. Not general software vendors. Every framework is purpose-built for the AI vendor context.
 
-2. **Australian-first frameworks**: Built from Australian law outward. Not US or EU models adapted for Australia. The Privacy Act, Australian Privacy Principles, OAIC guidance and GfAA are the foundation.
+2. **Australian-first frameworks**: Built from Australian regulation outward. Not US or EU models adapted for Australia. The Privacy Act, Australian Privacy Principles, OAIC guidance and GfAA are the foundation.
 
 3. **Deep regulatory precision**: Every template references specific obligations. No generic best practices. No repackaged international frameworks.
 

@@ -172,7 +172,7 @@ async function handleFormSubmit(e) {
 async function submitEnquiry(data, form) {
   const previous = form.querySelector('.form-error-inline');
   if (previous) previous.remove();
-  let message = 'Sorry, your message could not be sent. Please try again, or email hello@ethosaigovernance.com.au.';
+  let message = 'Sorry, your message could not be sent. Please try again, or email mike@ethosaigovernance.com.au.';
   try {
     const response = await fetch('/api/submit-enquiry', {
       method: 'POST',
@@ -407,7 +407,7 @@ function initCountUp() {
           item.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
           setTimeout(() => item.classList.add('pano-anim-in'), 200 + i * 210);
         });
-        const bars = [['cb1', '65%', 700], ['cb2', '35%', 1000], ['cb3', '6%', 1250]];
+        const bars = [['cb1', '100%', 500], ['cb2', '75%', 750], ['cb3', '50%', 1000], ['cb4', '25%', 1250]];
         bars.forEach(([id, w, delay]) => {
           const el = document.getElementById(id);
           if (el) { el.style.transition = 'width 1.2s ease'; setTimeout(() => { el.style.width = w; }, delay); }
@@ -415,7 +415,7 @@ function initCountUp() {
       },
       reset() {
         document.querySelectorAll('[data-c1]').forEach(item => { item.style.transition = 'none'; item.classList.remove('pano-anim-in'); });
-        ['cb1','cb2','cb3'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.transition = 'none'; el.style.width = '0%'; } });
+        ['cb1','cb2','cb3','cb4'].forEach(id => { const el = document.getElementById(id); if (el) { el.style.transition = 'none'; el.style.width = '0%'; } });
       }
     },
     2: {

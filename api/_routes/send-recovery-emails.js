@@ -147,7 +147,7 @@ module.exports = async function handler(req, res) {
           'Idempotency-Key': `recovery-${checkout.id}`,
         },
         body: JSON.stringify({
-          from:    'Ethos AI Governance <hello@ethosaigovernance.com.au>',
+          from:    'Ethos AI Governance <mike@ethosaigovernance.com.au>',
           to:      [checkout.customer_email],
           subject: 'Your AI governance documents are ready whenever you are',
           html,

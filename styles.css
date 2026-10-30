@@ -906,7 +906,22 @@ img { display: block; max-width: 100%; }
   font-family: var(--font-body);
 }
 
-/* — Clause tracker card — */
+/* — Buyer due diligence pack card — */
+.due-diligence-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.due-diligence-caption {
+  font-size: 10.5px;
+  font-style: italic;
+  color: var(--muted);
+}
+
+#pcard1 .clause-top { gap: 8px; }
+#pcard1 .clause-ref { flex-shrink: 0; }
+
 .clause-item {
   margin-bottom: 13px;
   opacity: 0;
@@ -1128,7 +1143,7 @@ img { display: block; max-width: 100%; }
 /* ===== PROBLEM SECTION ===== */
 .problem-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   margin-top: 3rem;
 }
